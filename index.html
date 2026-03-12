@@ -12,254 +12,128 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 input,button{-webkit-appearance:none;appearance:none;font-family:inherit;}
-
 :root{
   --bg:#0f1117;--s1:#1a1d2e;--s2:#252a40;
   --bd:rgba(255,255,255,0.08);
   --red:#e8394d;--blue:#6c7ce0;--org:#f5a623;--teal:#4ecdc4;
   --txt:#f0f2fc;--sub:#7a7f9a;--dim:#4a4f6a;
 }
-
-html,body{
-  width:100%;height:100%;
-  background:var(--bg);color:var(--txt);
-  font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
-  -webkit-font-smoothing:antialiased;
-  overflow:hidden;
-}
-
+html,body{width:100%;height:100%;background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;-webkit-font-smoothing:antialiased;overflow:hidden;}
 .screen{display:none;width:100%;height:100%;}
 .screen.active{display:flex;}
 
-#mLogin{
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  background:var(--bg);
-  padding:0 7vw;
-  overflow-y:auto;
-  -webkit-overflow-scrolling:touch;
-}
-
+/* 로그인 - 모바일 */
+#mLogin{flex-direction:column;align-items:center;justify-content:center;background:var(--bg);padding:0 7vw;overflow-y:auto;-webkit-overflow-scrolling:touch;}
 .m-brand{text-align:center;margin-bottom:9vw;}
-.m-brand-icon{
-  width:18vw;height:18vw;
-  background:linear-gradient(145deg,#e8394d,#b02030);
-  border-radius:4.5vw;
-  display:flex;align-items:center;justify-content:center;
-  margin:0 auto 4vw;
-  box-shadow:0 2vw 6vw rgba(232,57,77,0.4);
-}
+.m-brand-icon{width:18vw;height:18vw;background:linear-gradient(145deg,#e8394d,#b02030);border-radius:4.5vw;display:flex;align-items:center;justify-content:center;margin:0 auto 4vw;box-shadow:0 2vw 6vw rgba(232,57,77,0.4);}
 .m-brand-icon svg{width:9vw;height:9vw;}
 .m-brand h1{font-size:7vw;font-weight:700;letter-spacing:-0.03em;margin-bottom:2vw;}
 .m-brand p{font-size:4vw;color:var(--sub);line-height:1.5;}
-
-.m-field{
-  display:flex;align-items:center;
-  background:var(--s1);border:1.5px solid var(--bd);
-  border-radius:3.5vw;padding:0 4.5vw;
-  margin-bottom:3vw;
-  transition:border-color 0.2s;
-}
+.m-field{display:flex;align-items:center;background:var(--s1);border:1.5px solid var(--bd);border-radius:3.5vw;padding:0 4.5vw;margin-bottom:3vw;transition:border-color 0.2s;}
 .m-field:focus-within{border-color:rgba(108,124,224,0.6);}
 .m-field svg{width:5.5vw;height:5.5vw;opacity:0.4;flex-shrink:0;margin-right:3vw;}
-.m-field input{
-  flex:1;background:none;border:none;outline:none;
-  color:var(--txt);
-  font-size:16px;
-  padding:4.5vw 0;
-}
+.m-field input{flex:1;background:none;border:none;outline:none;color:var(--txt);font-size:16px;padding:4.5vw 0;}
 .m-field input::placeholder{color:var(--dim);}
-
-.m-btn{
-  width:100%;background:var(--red);border:none;
-  border-radius:3.5vw;color:#fff;
-  font-size:4.5vw;font-weight:700;
-  padding:4.5vw;cursor:pointer;margin-top:1vw;
-  box-shadow:0 1vw 4vw rgba(232,57,77,0.32);
-}
+.m-btn{width:100%;background:var(--red);border:none;border-radius:3.5vw;color:#fff;font-size:4.5vw;font-weight:700;padding:4.5vw;cursor:pointer;margin-top:1vw;box-shadow:0 1vw 4vw rgba(232,57,77,0.32);}
 .m-btn:active{opacity:0.8;}
 .m-err{font-size:3.5vw;color:#ff6b6b;text-align:center;margin-top:3vw;min-height:5vw;}
 
-#pLogin{
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  background:var(--bg);
-  padding:40px;
-  overflow-y:auto;
-}
-
-.p-login-card{
-  background:var(--s1);
-  border:1px solid var(--bd);
-  border-radius:20px;
-  padding:48px 40px;
-  width:400px;
-}
+/* 로그인 - PC */
+#pLogin{flex-direction:column;align-items:center;justify-content:center;background:var(--bg);padding:40px;overflow-y:auto;}
+.p-login-card{background:var(--s1);border:1px solid var(--bd);border-radius:20px;padding:48px 40px;width:400px;}
 .p-brand{text-align:center;margin-bottom:36px;}
-.p-brand-icon{
-  width:64px;height:64px;
-  background:linear-gradient(145deg,#e8394d,#b02030);
-  border-radius:16px;
-  display:flex;align-items:center;justify-content:center;
-  margin:0 auto 16px;
-  box-shadow:0 6px 24px rgba(232,57,77,0.35);
-}
+.p-brand-icon{width:64px;height:64px;background:linear-gradient(145deg,#e8394d,#b02030);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;box-shadow:0 6px 24px rgba(232,57,77,0.35);}
 .p-brand-icon svg{width:32px;height:32px;}
 .p-brand h1{font-size:24px;font-weight:700;letter-spacing:-0.5px;margin-bottom:6px;}
 .p-brand p{font-size:14px;color:var(--sub);line-height:1.5;}
-
-.p-field{
-  display:flex;align-items:center;
-  background:var(--bg);border:1.5px solid var(--bd);
-  border-radius:12px;padding:0 16px;
-  margin-bottom:12px;
-  transition:border-color 0.2s;
-}
+.p-field{display:flex;align-items:center;background:var(--bg);border:1.5px solid var(--bd);border-radius:12px;padding:0 16px;margin-bottom:12px;transition:border-color 0.2s;}
 .p-field:focus-within{border-color:rgba(108,124,224,0.6);}
 .p-field svg{width:18px;height:18px;opacity:0.4;flex-shrink:0;margin-right:10px;}
-.p-field input{
-  flex:1;background:none;border:none;outline:none;
-  color:var(--txt);font-size:15px;padding:14px 0;
-}
+.p-field input{flex:1;background:none;border:none;outline:none;color:var(--txt);font-size:15px;padding:14px 0;}
 .p-field input::placeholder{color:var(--dim);}
-.p-btn{
-  width:100%;background:var(--red);border:none;
-  border-radius:12px;color:#fff;
-  font-size:15px;font-weight:700;
-  padding:14px;cursor:pointer;margin-top:4px;
-  box-shadow:0 4px 16px rgba(232,57,77,0.3);
-  transition:opacity 0.15s,transform 0.1s;
-}
+.p-btn{width:100%;background:var(--red);border:none;border-radius:12px;color:#fff;font-size:15px;font-weight:700;padding:14px;cursor:pointer;margin-top:4px;box-shadow:0 4px 16px rgba(232,57,77,0.3);transition:opacity 0.15s,transform 0.1s;}
 .p-btn:active{opacity:0.8;transform:scale(0.98);}
 .p-err{font-size:13px;color:#ff6b6b;text-align:center;margin-top:12px;min-height:18px;}
 
-#mDash{
-  flex-direction:column;
-  background:var(--bg);
-  overflow:hidden;
-}
-
-.m-topbar{
+/* ── 반 선택 화면 - 모바일 ── */
+#mClassSelect{flex-direction:column;align-items:center;justify-content:center;background:var(--bg);padding:0 7vw;overflow-y:auto;}
+.m-cs-title{text-align:center;margin-bottom:8vw;}
+.m-cs-title h2{font-size:6vw;font-weight:700;margin-bottom:2vw;}
+.m-cs-title p{font-size:3.5vw;color:var(--sub);line-height:1.6;}
+.m-cs-btn{
+  width:100%;background:var(--s1);border:1.5px solid var(--bd);
+  border-radius:4vw;color:var(--txt);
+  font-size:4.5vw;font-weight:700;
+  padding:5vw 4vw;cursor:pointer;margin-bottom:3vw;
+  text-align:left;
   display:flex;align-items:center;justify-content:space-between;
-  padding:4vw 5vw;
-  background:rgba(15,17,23,0.95);
-  border-bottom:1px solid var(--bd);
-  flex-shrink:0;
+  transition:border-color 0.2s,background 0.2s;
 }
+.m-cs-btn:active{background:var(--s2);}
+.m-cs-btn .cs-name{font-size:4.5vw;font-weight:700;}
+.m-cs-btn .cs-arrow{font-size:5vw;color:var(--dim);}
+.m-cs-back{background:none;border:none;color:var(--sub);font-size:3.5vw;margin-top:2vw;cursor:pointer;text-decoration:underline;}
+
+/* ── 반 선택 화면 - PC ── */
+#pClassSelect{flex-direction:column;align-items:center;justify-content:center;background:var(--bg);padding:40px;overflow-y:auto;}
+.p-cs-card{background:var(--s1);border:1px solid var(--bd);border-radius:20px;padding:48px 40px;width:400px;}
+.p-cs-title{text-align:center;margin-bottom:28px;}
+.p-cs-title h2{font-size:20px;font-weight:700;margin-bottom:8px;}
+.p-cs-title p{font-size:14px;color:var(--sub);line-height:1.6;}
+.p-cs-btn{
+  width:100%;background:var(--bg);border:1.5px solid var(--bd);
+  border-radius:12px;color:var(--txt);
+  font-size:15px;font-weight:700;
+  padding:18px 20px;cursor:pointer;margin-bottom:12px;
+  text-align:left;
+  display:flex;align-items:center;justify-content:space-between;
+  transition:border-color 0.2s,background 0.2s;
+}
+.p-cs-btn:hover{border-color:rgba(108,124,224,0.5);background:var(--s2);}
+.p-cs-back{background:none;border:none;color:var(--sub);font-size:13px;margin-top:8px;cursor:pointer;text-decoration:underline;display:block;text-align:center;}
+
+/* 대시보드 - 모바일 */
+#mDash{flex-direction:column;background:var(--bg);overflow:hidden;}
+.m-topbar{display:flex;align-items:center;justify-content:space-between;padding:4vw 5vw;background:rgba(15,17,23,0.95);border-bottom:1px solid var(--bd);flex-shrink:0;}
 .m-top-name{font-size:4.5vw;font-weight:700;margin-bottom:0.8vw;}
 .m-top-cls{font-size:3.2vw;color:var(--sub);}
-.m-btn-out{
-  background:var(--s2);border:1px solid var(--bd);
-  border-radius:10vw;color:var(--sub);
-  font-size:3.2vw;font-weight:600;
-  padding:2vw 4vw;cursor:pointer;flex-shrink:0;
-}
-
-.m-body{
-  flex:1;
-  overflow-y:auto;
-  overflow-x:hidden;
-  -webkit-overflow-scrolling:touch;
-  overscroll-behavior:none;
-  padding:4vw 4vw 6vw;
-}
-
-.m-stat-row{
-  display:grid;grid-template-columns:1fr 1fr;
-  gap:2.5vw;margin-bottom:4vw;
-}
-.m-stat{
-  background:var(--s1);border:1px solid var(--bd);
-  border-radius:4vw;padding:4vw;
-}
+.m-topbar-right{display:flex;align-items:center;gap:2vw;}
+.m-btn-switch{background:var(--s2);border:1px solid rgba(108,124,224,0.3);border-radius:10vw;color:var(--blue);font-size:3vw;font-weight:600;padding:2vw 3.5vw;cursor:pointer;flex-shrink:0;}
+.m-btn-out{background:var(--s2);border:1px solid var(--bd);border-radius:10vw;color:var(--sub);font-size:3.2vw;font-weight:600;padding:2vw 4vw;cursor:pointer;flex-shrink:0;}
+.m-body{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:none;padding:4vw 4vw 6vw;}
+.m-stat-row{display:grid;grid-template-columns:1fr 1fr;gap:2.5vw;margin-bottom:4vw;}
+.m-stat{background:var(--s1);border:1px solid var(--bd);border-radius:4vw;padding:4vw;}
 .m-stat-lbl{font-size:2.8vw;font-weight:600;color:var(--dim);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:1.5vw;}
 .m-stat-val{font-size:8vw;font-weight:800;letter-spacing:-0.05em;line-height:1;}
-
-.m-tabs{
-  display:flex;background:var(--s1);border:1px solid var(--bd);
-  border-radius:3.5vw;padding:1vw;gap:1vw;margin-bottom:4vw;
-}
-.m-tab{
-  flex:1;background:none;border:none;
-  border-radius:2.8vw;color:var(--sub);
-  font-size:3.5vw;font-weight:700;
-  padding:3vw 1vw;cursor:pointer;text-align:center;white-space:nowrap;
-  transition:background 0.15s,color 0.15s;
-}
+.m-tabs{display:flex;background:var(--s1);border:1px solid var(--bd);border-radius:3.5vw;padding:1vw;gap:1vw;margin-bottom:4vw;}
+.m-tab{flex:1;background:none;border:none;border-radius:2.8vw;color:var(--sub);font-size:3.5vw;font-weight:700;padding:3vw 1vw;cursor:pointer;text-align:center;white-space:nowrap;transition:background 0.15s,color 0.15s;}
 .m-tab.on{background:var(--s2);color:var(--txt);}
-
-.m-chart-card{
-  background:var(--s1);border:1px solid var(--bd);
-  border-radius:4vw;padding:4.5vw 4vw 3.5vw;
-}
+.m-chart-card{background:var(--s1);border:1px solid var(--bd);border-radius:4vw;padding:4.5vw 4vw 3.5vw;}
 .m-chart-card h3{font-size:4vw;font-weight:700;letter-spacing:-0.03em;margin-bottom:1vw;}
 .m-chart-card p{font-size:3vw;color:var(--sub);line-height:1.5;margin-bottom:3.5vw;}
-
 .m-cw{position:relative;width:100%;height:55vw;}
 .m-cw canvas{position:absolute;inset:0;width:100%!important;height:100%!important;}
-
 .m-legend{display:flex;flex-wrap:wrap;gap:3vw;margin-top:3vw;}
 .m-legend span{display:flex;align-items:center;gap:1.5vw;font-size:3vw;color:var(--sub);}
 .m-legend i{display:inline-block;width:2vw;height:2vw;border-radius:50%;flex-shrink:0;}
 
-#pDash{
-  flex-direction:column;
-  background:var(--bg);
-  overflow:hidden;
-}
-
-.p-topbar{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:16px 32px;
-  background:rgba(15,17,23,0.95);
-  border-bottom:1px solid var(--bd);
-  flex-shrink:0;
-}
+/* 대시보드 - PC */
+#pDash{flex-direction:column;background:var(--bg);overflow:hidden;}
+.p-topbar{display:flex;align-items:center;justify-content:space-between;padding:16px 32px;background:rgba(15,17,23,0.95);border-bottom:1px solid var(--bd);flex-shrink:0;}
 .p-top-name{font-size:18px;font-weight:700;letter-spacing:-0.3px;margin-bottom:2px;}
 .p-top-cls{font-size:13px;color:var(--sub);}
-.p-btn-out{
-  background:var(--s2);border:1px solid var(--bd);
-  border-radius:20px;color:var(--sub);
-  font-size:13px;font-weight:600;
-  padding:8px 18px;cursor:pointer;flex-shrink:0;
-}
-
-.p-body{
-  flex:1;overflow-y:auto;overflow-x:hidden;
-  padding:24px 32px 32px;
-  max-width:960px;margin:0 auto;width:100%;
-}
-
-.p-stat-row{
-  display:grid;grid-template-columns:repeat(4,1fr);
-  gap:16px;margin-bottom:20px;
-}
-.p-stat{
-  background:var(--s1);border:1px solid var(--bd);
-  border-radius:16px;padding:20px;
-}
+.p-topbar-right{display:flex;align-items:center;gap:10px;}
+.p-btn-switch{background:var(--s2);border:1px solid rgba(108,124,224,0.3);border-radius:20px;color:var(--blue);font-size:13px;font-weight:600;padding:8px 16px;cursor:pointer;flex-shrink:0;}
+.p-btn-out{background:var(--s2);border:1px solid var(--bd);border-radius:20px;color:var(--sub);font-size:13px;font-weight:600;padding:8px 18px;cursor:pointer;flex-shrink:0;}
+.p-body{flex:1;overflow-y:auto;overflow-x:hidden;padding:24px 32px 32px;max-width:960px;margin:0 auto;width:100%;}
+.p-stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px;}
+.p-stat{background:var(--s1);border:1px solid var(--bd);border-radius:16px;padding:20px;}
 .p-stat-lbl{font-size:11px;font-weight:600;color:var(--dim);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;}
 .p-stat-val{font-size:32px;font-weight:800;letter-spacing:-1.5px;line-height:1;}
-
-.p-tabs{
-  display:flex;background:var(--s1);border:1px solid var(--bd);
-  border-radius:14px;padding:4px;gap:4px;margin-bottom:16px;
-}
-.p-tab{
-  flex:1;background:none;border:none;
-  border-radius:11px;color:var(--sub);
-  font-size:14px;font-weight:700;
-  padding:12px;cursor:pointer;text-align:center;white-space:nowrap;
-  transition:background 0.15s,color 0.15s;
-}
+.p-tabs{display:flex;background:var(--s1);border:1px solid var(--bd);border-radius:14px;padding:4px;gap:4px;margin-bottom:16px;}
+.p-tab{flex:1;background:none;border:none;border-radius:11px;color:var(--sub);font-size:14px;font-weight:700;padding:12px;cursor:pointer;text-align:center;white-space:nowrap;transition:background 0.15s,color 0.15s;}
 .p-tab.on{background:var(--s2);color:var(--txt);}
-
-.p-chart-card{
-  background:var(--s1);border:1px solid var(--bd);
-  border-radius:18px;padding:24px 24px 18px;
-}
+.p-chart-card{background:var(--s1);border:1px solid var(--bd);border-radius:18px;padding:24px 24px 18px;}
 .p-chart-card h3{font-size:16px;font-weight:700;letter-spacing:-0.3px;margin-bottom:6px;}
 .p-chart-card p{font-size:13px;color:var(--sub);line-height:1.5;margin-bottom:16px;}
 .p-cw{position:relative;width:100%;height:320px;}
@@ -268,21 +142,25 @@ html,body{
 .p-legend span{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--sub);}
 .p-legend i{display:inline-block;width:8px;height:8px;border-radius:50%;flex-shrink:0;}
 
-.ld{
-  display:none;position:fixed;inset:0;
-  background:rgba(10,12,20,0.85);
-  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
-  z-index:999;
-  flex-direction:column;align-items:center;justify-content:center;gap:16px;
-}
+/* 코멘트 - 모바일 */
+.m-comment-card{background:var(--s1);border:1px solid rgba(108,124,224,0.3);border-radius:4vw;padding:4.5vw 4vw;margin-top:4vw;border-left:3px solid var(--blue);}
+.m-comment-card .m-comment-title{font-size:3vw;font-weight:700;color:var(--blue);letter-spacing:0.05em;text-transform:uppercase;margin-bottom:2.5vw;}
+.m-comment-card .m-comment-badge{display:inline-flex;align-items:center;background:rgba(108,124,224,0.15);border:1px solid rgba(108,124,224,0.3);border-radius:10vw;padding:1vw 3vw;margin-bottom:3vw;}
+.m-comment-card .m-comment-badge span{font-size:3vw;color:var(--blue);font-weight:700;}
+.m-comment-card .m-comment-text{font-size:3.3vw;color:var(--txt);line-height:1.8;word-break:keep-all;}
+.m-comment-card .m-comment-meta{font-size:2.8vw;color:var(--dim);margin-top:3vw;padding-top:2.5vw;border-top:1px solid var(--bd);display:flex;gap:4vw;}
+
+/* 코멘트 - PC */
+.p-comment-card{background:var(--s1);border:1px solid rgba(108,124,224,0.3);border-radius:18px;padding:24px;margin-top:16px;border-left:3px solid var(--blue);}
+.p-comment-card .p-comment-title{font-size:11px;font-weight:700;color:var(--blue);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:12px;}
+.p-comment-card .p-comment-badge{display:inline-flex;align-items:center;background:rgba(108,124,224,0.15);border:1px solid rgba(108,124,224,0.3);border-radius:20px;padding:4px 12px;margin-bottom:14px;}
+.p-comment-card .p-comment-badge span{font-size:13px;color:var(--blue);font-weight:700;}
+.p-comment-card .p-comment-text{font-size:14px;color:var(--txt);line-height:1.9;word-break:keep-all;}
+.p-comment-card .p-comment-meta{font-size:12px;color:var(--dim);margin-top:14px;padding-top:12px;border-top:1px solid var(--bd);display:flex;gap:20px;}
+
+.ld{display:none;position:fixed;inset:0;background:rgba(10,12,20,0.85);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);z-index:999;flex-direction:column;align-items:center;justify-content:center;gap:16px;}
 .ld.show{display:flex;}
-.spin{
-  width:32px;height:32px;
-  border:3px solid rgba(255,255,255,0.1);
-  border-top-color:var(--red);
-  border-radius:50%;
-  animation:sp 0.7s linear infinite;
-}
+.spin{width:32px;height:32px;border:3px solid rgba(255,255,255,0.1);border-top-color:var(--red);border-radius:50%;animation:sp 0.7s linear infinite;}
 @keyframes sp{to{transform:rotate(360deg);}}
 .ld p{font-size:15px;color:var(--sub);}
 </style>
@@ -296,25 +174,17 @@ html,body{
   <div style="width:100%;max-width:100%;padding:0;">
     <div class="m-brand">
       <div class="m-brand-icon">
-        <svg viewBox="0 0 36 36" fill="none">
-          <path d="M7 27L13 16L20 21L27 9" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-          <circle cx="27" cy="9" r="3.5" fill="white"/>
-          <path d="M7 31H29" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.35"/>
-        </svg>
+        <svg viewBox="0 0 36 36" fill="none"><path d="M7 27L13 16L20 21L27 9" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="27" cy="9" r="3.5" fill="white"/><path d="M7 31H29" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.35"/></svg>
       </div>
       <h1>성적 조회</h1>
       <p>이름과 비밀번호로<br>내 성적을 확인하세요</p>
     </div>
     <div class="m-field">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
-      </svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
       <input type="text" id="m-nm" placeholder="이름" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
     </div>
     <div class="m-field">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-      </svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
       <input type="password" id="m-pw" placeholder="비밀번호" autocomplete="off">
     </div>
     <button class="m-btn" onclick="doLogin('m')">로그인</button>
@@ -327,29 +197,51 @@ html,body{
   <div class="p-login-card">
     <div class="p-brand">
       <div class="p-brand-icon">
-        <svg viewBox="0 0 36 36" fill="none">
-          <path d="M7 27L13 16L20 21L27 9" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-          <circle cx="27" cy="9" r="3.5" fill="white"/>
-          <path d="M7 31H29" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.35"/>
-        </svg>
+        <svg viewBox="0 0 36 36" fill="none"><path d="M7 27L13 16L20 21L27 9" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="27" cy="9" r="3.5" fill="white"/><path d="M7 31H29" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.35"/></svg>
       </div>
       <h1>성적 조회</h1>
       <p>이름과 비밀번호로 내 성적을 확인하세요</p>
     </div>
     <div class="p-field">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
-      </svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
       <input type="text" id="p-nm" placeholder="이름" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
     </div>
     <div class="p-field">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-      </svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
       <input type="password" id="p-pw" placeholder="비밀번호" autocomplete="off">
     </div>
     <button class="p-btn" onclick="doLogin('p')">로그인</button>
     <div class="p-err" id="p-err"></div>
+  </div>
+</div>
+
+<!-- 모바일 반 선택 -->
+<div class="screen" id="mClassSelect">
+  <div style="width:100%;max-width:100%;padding:0;">
+    <div class="m-cs-title">
+      <div class="m-brand-icon" style="margin-bottom:4vw;">
+        <svg viewBox="0 0 36 36" fill="none"><path d="M7 27L13 16L20 21L27 9" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="27" cy="9" r="3.5" fill="white"/><path d="M7 31H29" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.35"/></svg>
+      </div>
+      <h2 id="m-cs-name"></h2>
+      <p>수강 중인 반이 2개 이상입니다.<br>조회할 반을 선택하세요.</p>
+    </div>
+    <div id="m-cs-list"></div>
+    <button class="m-cs-back" onclick="doLogout()">← 로그아웃</button>
+  </div>
+</div>
+
+<!-- PC 반 선택 -->
+<div class="screen" id="pClassSelect">
+  <div class="p-cs-card">
+    <div class="p-cs-title">
+      <div class="p-brand-icon" style="margin:0 auto 16px;">
+        <svg viewBox="0 0 36 36" fill="none"><path d="M7 27L13 16L20 21L27 9" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="27" cy="9" r="3.5" fill="white"/><path d="M7 31H29" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.35"/></svg>
+      </div>
+      <h2 id="p-cs-name"></h2>
+      <p>수강 중인 반이 2개 이상입니다.<br>조회할 반을 선택하세요.</p>
+    </div>
+    <div id="p-cs-list"></div>
+    <button class="p-cs-back" onclick="doLogout()">← 로그아웃</button>
   </div>
 </div>
 
@@ -358,9 +250,12 @@ html,body{
   <div class="m-topbar">
     <div>
       <div class="m-top-name" id="m-uname"></div>
-      <div class="m-top-cls"  id="m-ucls"></div>
+      <div class="m-top-cls" id="m-ucls"></div>
     </div>
-    <button class="m-btn-out" onclick="doLogout()">로그아웃</button>
+    <div class="m-topbar-right">
+      <button class="m-btn-switch" id="m-btn-switch" onclick="goClassSelect()" style="display:none;">반 변경</button>
+      <button class="m-btn-out" onclick="doLogout()">로그아웃</button>
+    </div>
   </div>
   <div class="m-body">
     <div class="m-stat-row">
@@ -371,16 +266,13 @@ html,body{
     </div>
     <div class="m-tabs">
       <button class="m-tab on" id="mt0" onclick="mTab(0,this)">점수</button>
-      <button class="m-tab"    id="mt1" onclick="mTab(1,this)">상대평가</button>
-      <button class="m-tab"    id="mt2" onclick="mTab(2,this)">표준점수</button>
+      <button class="m-tab" id="mt1" onclick="mTab(1,this)">상대평가</button>
+      <button class="m-tab" id="mt2" onclick="mTab(2,this)">표준점수</button>
     </div>
     <div id="mp0" class="m-chart-card">
       <h3>점수 추이</h3><p>내 점수와 반 평균 비교. 결석은 선으로 연결됩니다.</p>
       <div class="m-cw"><canvas id="mc0"></canvas></div>
-      <div class="m-legend">
-        <span><i style="background:#e8394d"></i>내 점수</span>
-        <span><i style="background:#3a3f60"></i>반 평균</span>
-      </div>
+      <div class="m-legend"><span><i style="background:#e8394d"></i>내 점수</span><span><i style="background:#3a3f60"></i>반 평균</span></div>
     </div>
     <div id="mp1" class="m-chart-card" style="display:none">
       <h3>상대평가</h3><p>낮을수록 상위권. 1등 = 0%</p>
@@ -390,12 +282,9 @@ html,body{
     <div id="mp2" class="m-chart-card" style="display:none">
       <h3>표준점수</h3><p>수능 방식. 반 평균 = 100점 기준.</p>
       <div class="m-cw"><canvas id="mc2"></canvas></div>
-      <div class="m-legend">
-        <span><i style="background:#e8394d"></i>내 표준점수</span>
-        <span><i style="background:#f5a623"></i>만점</span>
-        <span><i style="background:rgba(255,255,255,0.2)"></i>기준선</span>
-      </div>
+      <div class="m-legend"><span><i style="background:#e8394d"></i>내 표준점수</span><span><i style="background:#f5a623"></i>만점</span><span><i style="background:rgba(255,255,255,0.2)"></i>기준선</span></div>
     </div>
+    <div id="m-comment-wrap"></div>
   </div>
 </div>
 
@@ -404,9 +293,12 @@ html,body{
   <div class="p-topbar">
     <div>
       <div class="p-top-name" id="p-uname"></div>
-      <div class="p-top-cls"  id="p-ucls"></div>
+      <div class="p-top-cls" id="p-ucls"></div>
     </div>
-    <button class="p-btn-out" onclick="doLogout()">로그아웃</button>
+    <div class="p-topbar-right">
+      <button class="p-btn-switch" id="p-btn-switch" onclick="goClassSelect()" style="display:none;">반 변경</button>
+      <button class="p-btn-out" onclick="doLogout()">로그아웃</button>
+    </div>
   </div>
   <div class="p-body">
     <div class="p-stat-row">
@@ -417,16 +309,13 @@ html,body{
     </div>
     <div class="p-tabs">
       <button class="p-tab on" id="pt0" onclick="pTab(0,this)">점수</button>
-      <button class="p-tab"    id="pt1" onclick="pTab(1,this)">상대평가</button>
-      <button class="p-tab"    id="pt2" onclick="pTab(2,this)">표준점수</button>
+      <button class="p-tab" id="pt1" onclick="pTab(1,this)">상대평가</button>
+      <button class="p-tab" id="pt2" onclick="pTab(2,this)">표준점수</button>
     </div>
     <div id="pp0" class="p-chart-card">
       <h3>점수 추이</h3><p>내 점수와 반 평균 비교. 결석 구간은 선으로 연결됩니다.</p>
       <div class="p-cw"><canvas id="pc0"></canvas></div>
-      <div class="p-legend">
-        <span><i style="background:#e8394d"></i>내 점수</span>
-        <span><i style="background:#3a3f60"></i>반 평균</span>
-      </div>
+      <div class="p-legend"><span><i style="background:#e8394d"></i>내 점수</span><span><i style="background:#3a3f60"></i>반 평균</span></div>
     </div>
     <div id="pp1" class="p-chart-card" style="display:none">
       <h3>상대평가</h3><p>낮을수록 상위권. 1등 = 0%</p>
@@ -436,12 +325,9 @@ html,body{
     <div id="pp2" class="p-chart-card" style="display:none">
       <h3>표준점수</h3><p>수능 방식. 반 평균 = 100점 기준.</p>
       <div class="p-cw"><canvas id="pc2"></canvas></div>
-      <div class="p-legend">
-        <span><i style="background:#e8394d"></i>내 표준점수</span>
-        <span><i style="background:#f5a623"></i>만점 표준점수</span>
-        <span><i style="background:rgba(255,255,255,0.2)"></i>기준선(100)</span>
-      </div>
+      <div class="p-legend"><span><i style="background:#e8394d"></i>내 표준점수</span><span><i style="background:#f5a623"></i>만점 표준점수</span><span><i style="background:rgba(255,255,255,0.2)"></i>기준선(100)</span></div>
     </div>
+    <div id="p-comment-wrap"></div>
   </div>
 </div>
 
@@ -451,16 +337,16 @@ const API_KEY    = 'AIzaSyADxuPBfoEYQVDj6mTPajjVlxRwWwkElEc';
 const SHEET_NAME = '시트1';
 
 var IS_MOBILE = window.innerWidth < 600;
-var D=null, MCH={}, PCH={};
+var D = null, RAW = null, MCH = {}, PCH = {};
 
-Chart.defaults.font.family="-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif";
-Chart.defaults.color='#5a5f7a';
-Chart.defaults.animation=false;
+Chart.defaults.font.family = "-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif";
+Chart.defaults.color = '#5a5f7a';
+Chart.defaults.animation = false;
 
 function setLd(v){document.getElementById('ld').className='ld'+(v?' show':'');}
 
 function show(id){
-  ['mLogin','pLogin','mDash','pDash'].forEach(function(s){
+  ['mLogin','pLogin','mClassSelect','pClassSelect','mDash','pDash'].forEach(function(s){
     var el=document.getElementById(s);
     el.classList.remove('active');
     el.style.display='none';
@@ -469,10 +355,8 @@ function show(id){
   t.style.display='flex';
   t.classList.add('active');
   if(IS_MOBILE){
-    t.style.width='100vw';
-    t.style.height='100vh';
-    t.style.position='fixed';
-    t.style.top='0';t.style.left='0';
+    t.style.width='100vw';t.style.height='100vh';
+    t.style.position='fixed';t.style.top='0';t.style.left='0';
   }
 }
 
@@ -491,100 +375,146 @@ function doLogin(mode){
   document.getElementById(pfx+'err').textContent='';
   if(!n||!p){document.getElementById(pfx+'err').textContent='이름과 비밀번호를 입력하세요.';return;}
   setLd(true);
-
   var url='https://sheets.googleapis.com/v4/spreadsheets/'+SHEET_ID+'/values/'+encodeURIComponent(SHEET_NAME)+'?key='+API_KEY;
-
   fetch(url)
   .then(function(r){return r.json();})
   .then(function(json){
     setLd(false);
-    if(json.error){
-      document.getElementById(pfx+'err').textContent='API 오류: '+json.error.message;
-      return;
-    }
+    if(json.error){document.getElementById(pfx+'err').textContent='API 오류: '+json.error.message;return;}
     var rows=json.values;
     if(!rows||rows.length<3){document.getElementById(pfx+'err').textContent='데이터가 없습니다.';return;}
 
+    // 날짜 헤더
     var dateRow=rows[1];
     var dates=[];
     for(var i=3;i<dateRow.length;i++){
-      if(dateRow[i]&&dateRow[i].trim()!==''){
-        dates.push({index:i,label:dateRow[i].trim()});
-      }
+      if(dateRow[i]&&dateRow[i].trim()!=='') dates.push({index:i,label:dateRow[i].trim()});
     }
 
     var dataRows=rows.slice(2);
 
-    var studentRow=null;
+    // 이름+비번 일치하는 행 전부 수집 (반이 여러 개일 수 있음)
+    var matchedRows=[];
     for(var r=0;r<dataRows.length;r++){
-      if(String(dataRows[r][0]||'').trim()===n&&
-         String(dataRows[r][1]||'').trim()===p){
-        studentRow=dataRows[r];break;
+      if(String(dataRows[r][0]||'').trim()===n&&String(dataRows[r][1]||'').trim()===p){
+        matchedRows.push(dataRows[r]);
       }
     }
-    if(!studentRow){document.getElementById(pfx+'err').textContent='이름 또는 비밀번호가 올바르지 않습니다.';return;}
 
-    var studentName=String(studentRow[0]).trim();
-    var studentClass=String(studentRow[2]).trim();
+    if(matchedRows.length===0){document.getElementById(pfx+'err').textContent='이름 또는 비밀번호가 올바르지 않습니다.';return;}
 
-    var classStudents=dataRows.filter(function(r){return String(r[2]||'').trim()===studentClass;});
+    // RAW 저장
+    RAW = {name:n, dataRows:dataRows, dates:dates, matchedRows:matchedRows};
 
-    var chartData=[];
-    for(var d=0;d<dates.length;d++){
-      var col=dates[d].index;
-      var classScores=classStudents.map(function(r){
-        var v=r[col];
-        return(v!==undefined&&v!==''&&!isNaN(Number(v)))?Number(v):null;
-      });
-      var validScores=classScores.filter(function(v){return v!==null;});
-      if(validScores.length===0)continue;
+    // 반이 1개면 바로 대시보드, 2개 이상이면 반 선택 화면
+    var classes = matchedRows.map(function(r){return String(r[2]||'').trim();});
+    // 중복 제거
+    var uniqueClasses = classes.filter(function(v,i,a){return a.indexOf(v)===i;});
 
-      var myRaw=studentRow[col];
-      var myScore=(myRaw!==undefined&&myRaw!==''&&!isNaN(Number(myRaw)))?Number(myRaw):null;
-
-      var mean=validScores.reduce(function(a,b){return a+b;},0)/validScores.length;
-
-      var percentile=null;
-      if(myScore!==null){
-        var above=validScores.filter(function(s){return s>myScore;}).length;
-        percentile=Math.round((above/validScores.length)*100);
-      }
-
-      var variance=validScores.length>1
-        ?validScores.reduce(function(sum,s){return sum+Math.pow(s-mean,2);},0)/validScores.length
-        :0;
-      var stdDev=Math.sqrt(variance);
-
-      var standardScore=null;
-      if(myScore!==null){
-        standardScore=stdDev<0.001?100:Math.round(20*(myScore-mean)/stdDev+100);
-      }
-      var maxRaw=Math.max.apply(null,validScores);
-      var maxStandardScore=stdDev<0.001?100:Math.round(20*(maxRaw-mean)/stdDev+100);
-
-      chartData.push({
-        date:dates[d].label,
-        myScore:myScore,
-        classAvg:Math.round(mean*100)/100,
-        percentile:percentile,
-        standardScore:standardScore,
-        maxStandardScore:maxStandardScore,
-        mean:Math.round(mean*10)/10,
-        stdDev:Math.round(stdDev*10)/10
-      });
+    if(uniqueClasses.length>=2){
+      showClassSelect(n, uniqueClasses);
+    } else {
+      buildDashData(matchedRows[0], dataRows, dates);
+      showDash();
     }
-
-    D={success:true,studentName:studentName,studentClass:studentClass,chartData:chartData};
-    showDash();
   })
-  .catch(function(e){
+  .catch(function(){
     setLd(false);
-    document.getElementById(pfx+'err').textContent='오류가 발생했습니다. 시트 공개 설정을 확인하세요.';
+    document.getElementById('m-err')?document.getElementById('m-err').textContent='오류가 발생했습니다. 시트 공개 설정을 확인하세요.':null;
+    document.getElementById('p-err')?document.getElementById('p-err').textContent='오류가 발생했습니다. 시트 공개 설정을 확인하세요.':null;
   });
 }
 
+function showClassSelect(name, classes){
+  if(IS_MOBILE){
+    document.getElementById('m-cs-name').textContent=name+'님';
+    var list=document.getElementById('m-cs-list');
+    list.innerHTML='';
+    classes.forEach(function(cls){
+      var btn=document.createElement('button');
+      btn.className='m-cs-btn';
+      btn.innerHTML='<span class="cs-name">'+cls+' 반</span><span class="cs-arrow">›</span>';
+      btn.onclick=function(){selectClass(cls);};
+      list.appendChild(btn);
+    });
+    show('mClassSelect');
+  } else {
+    document.getElementById('p-cs-name').textContent=name+'님';
+    var list=document.getElementById('p-cs-list');
+    list.innerHTML='';
+    classes.forEach(function(cls){
+      var btn=document.createElement('button');
+      btn.className='p-cs-btn';
+      btn.innerHTML='<span>'+cls+' 반</span><span>›</span>';
+      btn.onclick=function(){selectClass(cls);};
+      list.appendChild(btn);
+    });
+    show('pClassSelect');
+  }
+}
+
+function selectClass(cls){
+  // 선택한 반에 해당하는 행 찾기
+  var targetRow = RAW.matchedRows.filter(function(r){return String(r[2]||'').trim()===cls;})[0];
+  buildDashData(targetRow, RAW.dataRows, RAW.dates);
+  showDash();
+}
+
+function goClassSelect(){
+  // 반 변경 버튼 클릭 시 반 선택 화면으로
+  var classes = RAW.matchedRows.map(function(r){return String(r[2]||'').trim();}).filter(function(v,i,a){return a.indexOf(v)===i;});
+  showClassSelect(RAW.name, classes);
+}
+
+function buildDashData(studentRow, dataRows, dates){
+  var studentName = String(studentRow[0]).trim();
+  var studentClass = String(studentRow[2]).trim();
+  var classStudents = dataRows.filter(function(r){return String(r[2]||'').trim()===studentClass;});
+
+  var chartData=[];
+  for(var d=0;d<dates.length;d++){
+    var col=dates[d].index;
+    var classScores=classStudents.map(function(r){
+      var v=r[col];
+      return(v!==undefined&&v!==''&&!isNaN(Number(v)))?Number(v):null;
+    });
+    var validScores=classScores.filter(function(v){return v!==null;});
+    if(validScores.length===0)continue;
+
+    var myRaw=studentRow[col];
+    var myScore=(myRaw!==undefined&&myRaw!==''&&!isNaN(Number(myRaw)))?Number(myRaw):null;
+    var mean=validScores.reduce(function(a,b){return a+b;},0)/validScores.length;
+
+    var percentile=null;
+    if(myScore!==null){
+      var above=validScores.filter(function(s){return s>myScore;}).length;
+      percentile=Math.round((above/validScores.length)*100);
+    }
+
+    var variance=validScores.length>1?validScores.reduce(function(sum,s){return sum+Math.pow(s-mean,2);},0)/validScores.length:0;
+    var stdDev=Math.sqrt(variance);
+
+    var standardScore=null;
+    if(myScore!==null) standardScore=stdDev<0.001?100:Math.round(20*(myScore-mean)/stdDev+100);
+    var maxRaw=Math.max.apply(null,validScores);
+    var maxStandardScore=stdDev<0.001?100:Math.round(20*(maxRaw-mean)/stdDev+100);
+
+    chartData.push({
+      date:dates[d].label,myScore:myScore,
+      classAvg:Math.round(mean*100)/100,
+      percentile:percentile,
+      standardScore:standardScore,
+      maxStandardScore:maxStandardScore,
+      mean:Math.round(mean*10)/10,
+      stdDev:Math.round(stdDev*10)/10
+    });
+  }
+
+  D={success:true,studentName:studentName,studentClass:studentClass,chartData:chartData};
+}
+
 function doLogout(){
-  D=null;
+  D=null;RAW=null;
   killCH(MCH);killCH(PCH);
   document.getElementById('m-nm').value='';document.getElementById('m-pw').value='';document.getElementById('m-err').textContent='';
   document.getElementById('p-nm').value='';document.getElementById('p-pw').value='';document.getElementById('p-err').textContent='';
@@ -598,6 +528,107 @@ function avg(a){
   return v.length?v.reduce(function(a,b){return a+b;},0)/v.length:NaN;
 }
 
+/* ── 코멘트 엔진 ── */
+function analyzeAndComment(chartData){
+  var valid=chartData.filter(function(x){return x.standardScore!==null&&x.maxStandardScore!==null;});
+  if(valid.length<3) return null;
+  var myScores=valid.map(function(x){return x.standardScore;});
+  var maxScores=valid.map(function(x){return x.maxStandardScore;});
+  var n=valid.length;
+  var myAvg=myScores.reduce(function(a,b){return a+b;},0)/n;
+  var maxAvg=maxScores.reduce(function(a,b){return a+b;},0)/n;
+  var myMin=Math.min.apply(null,myScores);
+  var myMax=Math.max.apply(null,myScores);
+  var myRange=myMax-myMin;
+  var myStd=Math.sqrt(myScores.reduce(function(s,v){return s+Math.pow(v-myAvg,2);},0)/n);
+  function slope(arr,baseAvg){var xm=(arr.length-1)/2;var num=0,den=0;arr.forEach(function(v,i){num+=(i-xm)*(v-baseAvg);den+=(i-xm)*(i-xm);});return den===0?0:num/den;}
+  var mySlope=slope(myScores,myAvg);
+  var maxSlope=slope(maxScores,maxAvg);
+  var maxAvg2=maxScores.reduce(function(a,b){return a+b;},0)/n;
+  var corNum=0,corD1=0,corD2=0;
+  myScores.forEach(function(v,i){corNum+=(v-myAvg)*(maxScores[i]-maxAvg2);corD1+=Math.pow(v-myAvg,2);corD2+=Math.pow(maxScores[i]-maxAvg2,2);});
+  var corr=(corD1*corD2===0)?0:corNum/Math.sqrt(corD1*corD2);
+  var half=Math.floor(n/2);
+  var earlyAvg=myScores.slice(0,half).reduce(function(a,b){return a+b;},0)/half;
+  var lateAvg=myScores.slice(n-half).reduce(function(a,b){return a+b;},0)/half;
+  var recentTrend=lateAvg-earlyAvg;
+  var last3=myScores.slice(-3);
+  var last3Up=(last3[2]>last3[1]&&last3[1]>last3[0]);
+  var last3Down=(last3[2]<last3[1]&&last3[1]<last3[0]);
+  var HIGH=110,MID_H=103,MID=100,MID_L=97,LOW=90;
+  var SLOPE_UP=1.5,SLOPE_DOWN=-1.5;
+  var STD_STABLE=5,STD_UNSTABLE=12;
+  var CORR_POS=0.4,CORR_NEG=-0.4;
+  var MAX_HIGH=115,MAX_MID=105;
+  var myLv=myAvg>=HIGH?'HIGH':myAvg>=MID_H?'MID_H':myAvg>=MID?'MID':myAvg>=MID_L?'MID_L':myAvg>=LOW?'LOW':'VLOW';
+  var maxLv=maxAvg>=MAX_HIGH?'HIGH':maxAvg>=MAX_MID?'MID':'LOW';
+  var trendLv=mySlope>=SLOPE_UP?'UP':mySlope<=SLOPE_DOWN?'DOWN':'FLAT';
+  var stableLv=myStd<=STD_STABLE?'STABLE':myStd<=STD_UNSTABLE?'NORMAL':'UNSTABLE';
+  var corrLv=corr>=CORR_POS?'POS':corr<=CORR_NEG?'NEG':'NEUTRAL';
+  var recentLv=recentTrend>=5?'UP':recentTrend<=-5?'DOWN':'FLAT';
+  var myAvgStr=myAvg.toFixed(1);
+  var maxAvgStr=maxAvg.toFixed(1);
+  var rules=[
+    {c:myLv==='HIGH'&&maxLv==='HIGH'&&corrLv==='POS',tag:'압도적 상위권',text:'전체 표준점수 평균 '+myAvgStr+'점으로 반 최상위권에 해당하며, 시험 난이도가 높을수록 오히려 상대적 우위가 강화되는 패턴이 관측됨. 경쟁이 치열한 환경에서 실력이 더욱 발현되는 유형으로 추정됨. 현재 학습 방향을 유지하되, 심화 개념 선행 및 고난도 문항 위주의 훈련을 병행하여 수준을 더 끌어올릴 것을 권장함.'},
+    {c:myLv==='HIGH'&&maxLv==='HIGH'&&corrLv==='NEUTRAL',tag:'안정적 최상위',text:'전체 표준점수 평균 '+myAvgStr+'점으로 쉬운 시험과 어려운 시험 모두에서 일관되게 상위권을 유지하는 것으로 분석됨. 실력 자체가 탄탄하게 형성된 유형으로 추정됨. 현재 상태를 유지하면서 약점 과목 집중 보완을 통해 추가적인 성장을 도모할 것을 권장함.'},
+    {c:myLv==='HIGH'&&maxLv==='LOW'&&stableLv==='STABLE',tag:'쉬운 시험 특화',text:'전체 표준점수 평균 '+myAvgStr+'점으로 수치상 우수하나, 만점 표준점수 평균이 낮아 응시한 시험들이 전반적으로 평이한 난이도였던 것으로 분석됨. 난이도가 높은 시험에서의 실제 경쟁력은 현재 수치보다 낮을 가능성이 있음. 고난도 문항 풀이 훈련 및 실전 모의고사를 통해 어려운 환경에서의 대응력을 검증할 것을 권장함.'},
+    {c:myLv==='HIGH'&&trendLv==='DOWN'&&n>=5,tag:'하락 추세 경고',text:'표준점수 평균은 '+myAvgStr+'점으로 상위권이나, 전체적인 추세선이 하락 방향으로 형성되고 있음. 초반에 비해 후반부 성적이 저하되는 패턴이 관측됨. 학습 피로 누적 또는 방심에 의한 집중력 저하가 원인일 가능성이 있음. 학습 루틴을 점검하고 취약 단원을 즉시 재정비할 것을 강력히 권장함.'},
+    {c:myLv==='HIGH'&&trendLv==='UP',tag:'상승 중인 상위권',text:'표준점수 평균 '+myAvgStr+'점으로 이미 상위권이며, 추세가 지속적으로 상승하고 있음. 학습 효율이 높은 시기로 판단됨. 이 시기를 최대한 활용하여 취약 영역을 공략하면 더 높은 수준으로의 도약이 가능할 것으로 추정됨.'},
+    {c:myLv==='MID_H'&&trendLv==='UP'&&recentLv==='UP',tag:'빠른 성장세',text:'표준점수 평균 '+myAvgStr+'점으로 중상위권에 위치하며, 최근 시험들에서 연속적으로 점수가 상승하는 패턴이 관측됨. 학습이 효과적으로 누적되고 있는 것으로 추정됨. 현재 방향을 유지하되 오답 분석에 더 시간을 투자하면 단기간 내 상위권 진입이 가능할 것으로 판단됨.'},
+    {c:myLv==='MID_H'&&stableLv==='STABLE'&&corrLv==='NEG',tag:'안정적이나 난이도 취약',text:'표준점수 평균 '+myAvgStr+'점으로 안정적인 중상위권을 유지하고 있으나, 시험 난이도가 높아질수록 상대적 점수가 하락하는 경향이 분석됨. 기본기는 탄탄하나 고난도 문항에 대한 대응력이 부족한 유형으로 추정됨. 고난도 문항 비중을 높인 자체 훈련을 통해 어려운 환경에서의 경쟁력을 강화할 것을 권장함.'},
+    {c:myLv==='MID_H'&&stableLv==='UNSTABLE',tag:'실력 편차 큰 중상위권',text:'표준점수 평균은 '+myAvgStr+'점으로 중상위권이나, 시험별 편차가 매우 크게 나타남. 컨디션이나 시험 유형에 따라 결과가 크게 달라지는 불안정한 패턴으로 추정됨. 학습의 양보다 일관성과 복습 체계를 정비하는 데 집중할 것을 권장함.'},
+    {c:myLv==='MID_H'&&maxLv==='HIGH'&&corrLv==='POS',tag:'어려운 시험에 강한 잠재력',text:'표준점수 평균 '+myAvgStr+'점이나, 난이도 높은 시험에서 상대적으로 선전하는 패턴이 관측됨. 어려운 문제를 즐기거나 집중력이 높은 상황에서 역량이 발현되는 유형으로 추정됨. 쉬운 시험에서 방심하는 경향이 있을 수 있으므로, 기본 문제의 실수를 줄이는 훈련을 병행할 것을 권장함.'},
+    {c:myLv==='MID'&&trendLv==='FLAT'&&stableLv==='STABLE',tag:'정체된 중위권',text:'표준점수 평균 '+myAvgStr+'점으로 반 평균 수준에서 오랜 기간 정체되어 있는 것으로 분석됨. 학습은 하고 있으나 성적 변화로 이어지지 않는 상태로 추정됨. 단순 반복보다 이해 중심의 학습으로 전환하고, 취약 단원을 집중 공략하는 전략을 권장함.'},
+    {c:myLv==='MID'&&trendLv==='UP',tag:'성장 중인 중위권',text:'표준점수 평균 '+myAvgStr+'점으로 중위권에 위치하나 지속적인 상승 추세가 확인됨. 노력이 성과로 전환되고 있는 긍정적인 흐름으로 분석됨. 현재의 학습 방향을 유지하면서 오답 노트 관리와 반복 학습을 강화할 것을 권장함.'},
+    {c:myLv==='MID'&&trendLv==='DOWN',tag:'하락 중인 중위권',text:'표준점수 평균 '+myAvgStr+'점으로 중위권이나 점수가 지속적으로 하락하는 추세가 관측됨. 학습 의욕 저하 또는 누적된 개념 미이해가 원인일 가능성이 높음. 최근 시험에서 틀린 문제를 중심으로 기초 개념을 다시 정리하는 것을 최우선으로 권장함.'},
+    {c:myLv==='MID'&&corrLv==='NEG'&&maxLv==='HIGH',tag:'쉬울 때만 강한 중위권',text:'표준점수 평균 '+myAvgStr+'점이며, 시험 난이도가 높아질수록 점수가 하락하는 뚜렷한 패턴이 분석됨. 기본 문제는 풀어내나 응용 및 고난도 문항에서 어려움을 겪는 유형으로 추정됨. 개념 원리 중심의 학습과 고난도 문제 반복 훈련을 권장함.'},
+    {c:myLv==='MID'&&stableLv==='UNSTABLE',tag:'기복이 심한 중위권',text:'표준점수 평균 '+myAvgStr+'점이나 시험별 편차가 매우 불규칙하게 나타남. 꾸준한 학습 루틴이 형성되지 않은 상태일 가능성이 높음. 매일 일정한 시간의 학습 루틴을 구축하고, 시험 전 컨디션 관리에 주의할 것을 권장함.'},
+    {c:myLv==='MID'&&last3Up&&n>=5,tag:'최근 상승 징후',text:'표준점수 평균은 '+myAvgStr+'점으로 중위권이나, 최근 3회 연속 상승하는 패턴이 관측됨. 학습 효과가 나타나기 시작하는 시점으로 분석됨. 이 흐름을 이어가기 위해 현재 학습 방식을 유지하고 복습 주기를 단축하는 전략을 권장함.'},
+    {c:myLv==='MID_L'&&trendLv==='UP'&&recentLv==='UP',tag:'저점 탈출 시도',text:'표준점수 평균 '+myAvgStr+'점으로 중하위권에 위치하나, 최근 들어 점수가 상승하는 긍정적인 신호가 감지됨. 기초 개념 완성을 최우선 목표로 설정하고 매일 꾸준히 실천하는 것을 권장함.'},
+    {c:myLv==='MID_L'&&trendLv==='FLAT',tag:'장기 정체 중하위권',text:'표준점수 평균 '+myAvgStr+'점으로 중하위권에서 장기간 머물고 있는 것으로 분석됨. 현재 공부 방식을 전면 재검토하고, 기초부터 다시 쌓는 구조적 재정비가 필요함.'},
+    {c:myLv==='MID_L'&&corrLv==='NEG',tag:'난이도 상승 시 급락',text:'표준점수 평균 '+myAvgStr+'점이며, 시험이 어려워질수록 점수가 급격히 하락하는 패턴이 관측됨. 개념서를 처음부터 다시 정독하고 원리 이해 중심의 학습으로 전환할 것을 강력히 권장함.'},
+    {c:myLv==='MID_L'&&stableLv==='STABLE'&&trendLv==='DOWN',tag:'안정적 하락세',text:'표준점수 평균 '+myAvgStr+'점으로 일관되게 중하위권을 유지하면서도 점진적으로 하락하고 있음. 담당 선생님과의 상담을 통해 취약 부분을 정확히 파악하고 맞춤형 보완 계획을 수립할 것을 권장함.'},
+    {c:myLv==='MID_L'&&maxLv==='LOW',tag:'쉬운 시험도 힘든 중하위권',text:'표준점수 평균 '+myAvgStr+'점으로 시험 난이도가 낮은 상황에서도 중하위권에 머물고 있음. 기초 학습량 자체가 부족한 것으로 추정됨. 매일 최소 학습량을 정해 꾸준히 실천하는 습관 형성을 최우선으로 권장함.'},
+    {c:myLv==='LOW'&&trendLv==='UP'&&last3Up,tag:'반등 조짐',text:'표준점수 평균 '+myAvgStr+'점으로 하위권에 해당하나, 최근 연속 상승 패턴이 포착됨. 기초 개념 중심의 학습을 매일 일정 시간 실천하고, 작은 성취를 꾸준히 쌓아나가는 전략을 권장함.'},
+    {c:myLv==='LOW'&&corrLv==='POS'&&maxLv==='HIGH',tag:'어려운 시험에서만 분전',text:'표준점수 평균 '+myAvgStr+'점으로 하위권이나, 시험 난이도가 높을 때 오히려 상대적 순위가 올라가는 특이한 패턴이 관측됨. 장점을 살리되 기초 학습 시간을 대폭 늘려 전체 평균을 끌어올리는 것이 시급함.'},
+    {c:myLv==='LOW'&&trendLv==='FLAT',tag:'장기 하위권 정체',text:'표준점수 평균 '+myAvgStr+'점으로 하위권에서 장기간 변화 없이 머물고 있음. 선생님 또는 보호자와 즉시 학습 상황을 점검하고 기초부터 체계적으로 재정비할 것을 강력히 권장함.'},
+    {c:myLv==='LOW'&&trendLv==='DOWN',tag:'지속적 하락 경고',text:'표준점수 평균 '+myAvgStr+'점으로 하위권이며 점수가 지속적으로 하락하고 있음. 현재 수준에서 풀 수 있는 가장 기초적인 문제부터 시작하여 성공 경험을 쌓고, 학습 동기를 회복하는 것을 최우선 과제로 삼을 것을 권장함.'},
+    {c:myLv==='LOW'&&stableLv==='UNSTABLE',tag:'불안정한 하위권',text:'표준점수 평균 '+myAvgStr+'점으로 하위권이며 시험별 편차까지 매우 큼. 학습 계획을 세우고 매일 일정량을 실천하는 루틴 구축이 가장 시급함.'},
+    {c:myLv==='VLOW'&&trendLv==='UP',tag:'최하위권 상승 시도',text:'표준점수 평균 '+myAvgStr+'점으로 최하위권에 해당하나 상승 추세가 감지됨. 하루에 풀 수 있는 문제 수를 정해 반드시 실천하고, 틀린 문제는 반드시 이해하고 넘어가는 습관을 형성할 것을 권장함.'},
+    {c:myLv==='VLOW'&&trendLv!=='UP',tag:'긴급 개입 필요',text:'표준점수 평균 '+myAvgStr+'점으로 최하위권에 해당하며 개선 추세도 나타나지 않음. 담당 선생님과 즉시 면담하여 현재 이해 수준을 정확히 진단받고 1:1 보충 지도 등 추가적인 지원을 받을 것을 강력히 권장함.'},
+    {c:corrLv==='NEG'&&maxLv==='HIGH'&&stableLv!=='STABLE',tag:'난이도 민감형',text:'표준점수 평균 '+myAvgStr+'점이며, 시험 난이도가 높아질수록 점수가 하락하고 편차도 불규칙한 패턴이 관측됨. 고난도 문제를 많이 접하여 실패에 대한 내성을 키우고, 시험 전 루틴을 만들어 심리적 안정을 확보할 것을 권장함.'},
+    {c:last3Down&&myLv!=='VLOW'&&recentTrend<=-8,tag:'최근 급격한 하락',text:'전체 평균은 '+myAvgStr+'점이나 최근 3회 연속 하락하는 급격한 패턴이 포착됨. 최근 시험에서 틀린 개념을 즉시 복습하고 학습 루틴을 점검할 것을 권장함.'},
+    {c:last3Up&&recentTrend>=8&&myLv!=='HIGH',tag:'최근 급격한 상승',text:'전체 평균은 '+myAvgStr+'점이나 최근 3회 연속 점수가 급상승하고 있음. 현재 학습 방식이 본인에게 잘 맞는 방식임을 인지하고, 자만하지 않고 꾸준히 지속할 것을 권장함.'},
+    {c:stableLv==='UNSTABLE'&&myRange>=30,tag:'극단적 기복',text:'표준점수 범위가 '+myRange+'점에 달할 정도로 시험별 편차가 극단적으로 나타남. 점수의 천장을 높이기보다 바닥을 높이는 데 집중하는 전략을 권장함.'},
+    {c:stableLv==='STABLE'&&mySlope>=0&&myLv==='MID_H',tag:'안정적 우상향',text:'표준점수 평균 '+myAvgStr+'점으로 편차 없이 안정적으로 성장하고 있음. 이 안정성을 기반으로 취약한 유형에 집중 투자하면 상위권 진입이 충분히 가능함.'},
+    {c:maxLv==='HIGH'&&corrLv==='POS'&&myLv==='MID',tag:'어려운 시험에 강한 숨은 실력',text:'표준점수 평균 '+myAvgStr+'점으로 중위권이나, 난이도 높은 시험에서 상대적으로 선전하는 패턴이 관측됨. 기본 문제에서의 실수를 줄이는 훈련과 기초 문제 반복 풀이를 병행하면 평균 이상의 성과를 낼 수 있을 것으로 판단됨.'},
+    {c:myLv==='MID_H'&&trendLv==='FLAT'&&stableLv==='STABLE',tag:'안정적 중상위 정체',text:'표준점수 평균 '+myAvgStr+'점으로 중상위권을 안정적으로 유지하고 있으나 성장이 멈춘 상태로 분석됨. 학습의 난이도와 질을 한 단계 높이는 시도가 필요한 시점으로 판단됨.'},
+    {c:n>=7&&myLv==='MID'&&stableLv==='STABLE'&&trendLv==='FLAT',tag:'장기 중위권 고착',text:'7회 이상의 시험 데이터에서 표준점수 평균 '+myAvgStr+'점으로 중위권에 고착된 패턴이 명확히 관측됨. 학습 방법, 시간 배분, 우선순위 전략 전체를 재검토하고 외부 피드백을 적극적으로 받아들이는 자세가 필요함.'},
+    {c:maxSlope>=2&&corrLv==='NEG',tag:'시험이 점점 어려워지는 환경',text:'최근 시험들이 점점 어려워지는 추세임에도 불구하고 표준점수가 하락하고 있음. 단순 공부량을 늘리기보다 고난도 문항 중심의 질적 학습으로 전환하고, 실전과 유사한 환경에서 연습하는 것을 권장함.'},
+    {c:myLv==='HIGH'&&stableLv==='UNSTABLE'&&n>=4,tag:'실력은 있으나 불안정',text:'표준점수 평균 '+myAvgStr+'점으로 상위권이나 시험별 편차가 큰 것이 특징적으로 관측됨. 시험 당일 컨디션 관리, 시험 전 루틴 확립, 실수 유형 파악 및 제거에 집중하면 안정적인 최상위권 유지가 가능할 것으로 판단됨.'},
+    {c:myLv==='MID_L'&&last3Up,tag:'하위권 탈출 시도 중',text:'표준점수 평균 '+myAvgStr+'점으로 중하위권이나 최근 연속 상승 패턴이 감지됨. 복습 주기를 단축하고 오답을 반드시 이해하고 넘어가는 습관을 강화할 것을 권장함.'},
+    {c:myLv==='MID'&&maxLv==='LOW'&&corrLv==='NEUTRAL',tag:'평이한 시험 환경의 중위권',text:'표준점수 평균 '+myAvgStr+'점이나, 응시한 시험들의 전반적인 난이도가 낮아 현재 수치가 실제 실력을 과대평가하고 있을 가능성이 있음. 고난도 문제 풀이 경험을 늘려 실제 경쟁력을 파악하고 강화할 것을 권장함.'},
+    {c:myLv==='HIGH',tag:'상위권',text:'표준점수 평균 '+myAvgStr+'점으로 반 상위권에 해당함. 현재의 학습 방향을 유지하면서 심화 학습을 병행할 것을 권장함.'},
+    {c:myLv==='MID_H',tag:'중상위권',text:'표준점수 평균 '+myAvgStr+'점으로 중상위권에 위치함. 취약 단원을 집중 보완하면 상위권 진입이 가능한 수준으로 판단됨.'},
+    {c:myLv==='MID',tag:'중위권',text:'표준점수 평균 '+myAvgStr+'점으로 반 평균 수준에 위치함. 학습 방향을 점검하고 취약 부분을 파악하여 보완할 것을 권장함.'},
+    {c:myLv==='MID_L',tag:'중하위권',text:'표준점수 평균 '+myAvgStr+'점으로 중하위권에 해당함. 기초 개념 정리와 꾸준한 학습 루틴 구축이 필요한 시점으로 판단됨.'},
+    {c:true,tag:'하위권',text:'표준점수 평균 '+myAvgStr+'점으로 하위권에 해당함. 기초부터 체계적으로 재정비하고, 담당 선생님과 면담을 통해 구체적인 보완 계획을 수립할 것을 강력히 권장함.'}
+  ];
+  for(var i=0;i<rules.length;i++){
+    if(rules[i].c) return {tag:rules[i].tag,text:rules[i].text,myAvg:myAvg,maxAvg:maxAvg,myStd:myStd,n:n};
+  }
+  return null;
+}
+
+function renderComment(result,isMobile){
+  if(!result) return '';
+  if(isMobile){
+    return '<div class="m-comment-card"><div class="m-comment-title">AI 성적 분석</div><div class="m-comment-badge"><span>'+result.tag+'</span></div><div class="m-comment-text">'+result.text+'</div><div class="m-comment-meta"><span>분석 기준: '+result.n+'회 시험</span><span>표준점수 평균: '+result.myAvg.toFixed(1)+'</span><span>만점 평균: '+result.maxAvg.toFixed(1)+'</span></div></div>';
+  } else {
+    return '<div class="p-comment-card"><div class="p-comment-title">AI 성적 분석</div><div class="p-comment-badge"><span>'+result.tag+'</span></div><div class="p-comment-text">'+result.text+'</div><div class="p-comment-meta"><span>분석 기준: '+result.n+'회 시험</span><span>표준점수 평균: '+result.myAvg.toFixed(1)+'</span><span>만점 평균: '+result.maxAvg.toFixed(1)+'</span></div></div>';
+  }
+}
+
 function showDash(){
   var ms=D.chartData.map(function(x){return x.myScore;}).filter(function(v){return v!==null&&!isNaN(+v);});
   var cs=D.chartData.map(function(x){return x.classAvg;}).filter(function(v){return v!==null&&!isNaN(+v);});
@@ -607,6 +638,10 @@ function showDash(){
   var sC=isNaN(avg(cs))?'-':avg(cs).toFixed(2);
   var sB=isNaN(b)?'-':b;
   var sP=isNaN(avg(ps))?'-':Math.round(avg(ps))+'%';
+  var commentResult=analyzeAndComment(D.chartData);
+
+  // 반 변경 버튼: 반이 2개 이상일 때만 표시
+  var multiClass = RAW && RAW.matchedRows.map(function(r){return String(r[2]||'').trim();}).filter(function(v,i,a){return a.indexOf(v)===i;}).length>=2;
 
   if(IS_MOBILE){
     document.getElementById('m-uname').textContent=D.studentName+'님';
@@ -615,6 +650,8 @@ function showDash(){
     document.getElementById('m-sC').textContent=sC;
     document.getElementById('m-sB').textContent=sB;
     document.getElementById('m-sP').textContent=sP;
+    document.getElementById('m-btn-switch').style.display=multiClass?'':'none';
+    document.getElementById('m-comment-wrap').innerHTML=renderComment(commentResult,true);
     show('mDash');
     requestAnimationFrame(function(){mDraw0();mDraw1();mDraw2();});
   } else {
@@ -624,6 +661,8 @@ function showDash(){
     document.getElementById('p-sC').textContent=sC;
     document.getElementById('p-sB').textContent=sB;
     document.getElementById('p-sP').textContent=sP;
+    document.getElementById('p-btn-switch').style.display=multiClass?'':'none';
+    document.getElementById('p-comment-wrap').innerHTML=renderComment(commentResult,false);
     show('pDash');
     requestAnimationFrame(function(){pDraw0();pDraw1();pDraw2();});
   }
@@ -643,36 +682,20 @@ function killCH(ch){[0,1,2].forEach(function(k){if(ch[k]){ch[k].destroy();delete
 
 function baseOpts(yLbl,yMin,yMax,rev,fs){
   fs=fs||11;
-  var o={
-    responsive:true,maintainAspectRatio:false,
-    interaction:{mode:'index',intersect:false},
-    plugins:{
-      legend:{display:false},
-      tooltip:{
-        backgroundColor:'rgba(18,22,40,0.97)',
-        borderColor:'rgba(255,255,255,0.08)',borderWidth:1,
-        titleColor:'#f0f2fc',bodyColor:'#7a7f9a',
-        padding:12,cornerRadius:10,
-        titleFont:{size:fs+1,weight:'700'},bodyFont:{size:fs}
-      }
-    },
+  var o={responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+    plugins:{legend:{display:false},tooltip:{backgroundColor:'rgba(18,22,40,0.97)',borderColor:'rgba(255,255,255,0.08)',borderWidth:1,titleColor:'#f0f2fc',bodyColor:'#7a7f9a',padding:12,cornerRadius:10,titleFont:{size:fs+1,weight:'700'},bodyFont:{size:fs}}},
     scales:{
-      x:{grid:{color:'rgba(255,255,255,0.04)',drawBorder:false},border:{display:false},
-         ticks:{font:{size:fs},maxRotation:40,minRotation:0,color:'#5a5f7a',maxTicksLimit:8}},
-      y:{reverse:!!rev,grid:{color:'rgba(255,255,255,0.04)',drawBorder:false},border:{display:false},
-         ticks:{font:{size:fs},color:'#5a5f7a'},
-         title:yLbl?{display:true,text:yLbl,font:{size:fs},color:'#5a5f7a'}:{display:false}}
+      x:{grid:{color:'rgba(255,255,255,0.04)',drawBorder:false},border:{display:false},ticks:{font:{size:fs},maxRotation:40,minRotation:0,color:'#5a5f7a',maxTicksLimit:8}},
+      y:{reverse:!!rev,grid:{color:'rgba(255,255,255,0.04)',drawBorder:false},border:{display:false},ticks:{font:{size:fs},color:'#5a5f7a'},title:yLbl?{display:true,text:yLbl,font:{size:fs},color:'#5a5f7a'}:{display:false}}
     }
   };
   if(yMin!=null)o.scales.y.min=yMin;
   if(yMax!=null)o.scales.y.max=yMax;
   return o;
 }
-
 function makeScore(ctx,h,lb,my,cl,chObj,key,fs){
   if(chObj[key])chObj[key].destroy();
-  var g=ctx.createLinearGradient(0,0,0,h);
-  g.addColorStop(0,'rgba(232,57,77,0.18)');g.addColorStop(1,'rgba(232,57,77,0)');
+  var g=ctx.createLinearGradient(0,0,0,h);g.addColorStop(0,'rgba(232,57,77,0.18)');g.addColorStop(1,'rgba(232,57,77,0)');
   var o=baseOpts('점수',0,null,false,fs);
   o.plugins.tooltip.callbacks={label:function(i){var v=i.parsed.y;return(v===null||v===undefined)?' '+i.dataset.label+': 결석':' '+i.dataset.label+': '+v+'점';}};
   chObj[key]=new Chart(ctx,{type:'line',data:{labels:lb,datasets:[
@@ -680,11 +703,9 @@ function makeScore(ctx,h,lb,my,cl,chObj,key,fs){
     {label:'반 평균',data:cl,borderColor:'#3a3f60',backgroundColor:'transparent',borderWidth:2,pointRadius:3,pointHoverRadius:5,pointBackgroundColor:'#3a3f60',pointBorderColor:'#0f1117',pointBorderWidth:1,tension:0.35,spanGaps:true,borderDash:[5,3]}
   ]},options:o});
 }
-
 function makePct(ctx,h,lb,pc,chObj,key,fs){
   if(chObj[key])chObj[key].destroy();
-  var g=ctx.createLinearGradient(0,0,0,h);
-  g.addColorStop(0,'rgba(108,124,224,0.22)');g.addColorStop(1,'rgba(108,124,224,0)');
+  var g=ctx.createLinearGradient(0,0,0,h);g.addColorStop(0,'rgba(108,124,224,0.22)');g.addColorStop(1,'rgba(108,124,224,0)');
   var o=baseOpts('순위(%)',0,100,true,fs);
   o.scales.y.ticks={font:{size:fs},color:'#5a5f7a',callback:function(v){return v+'%';}};
   o.plugins.tooltip.callbacks={label:function(i){var v=i.parsed.y;if(v===null||isNaN(v))return ' 결석';return ' 순위: '+(v===0?'1등 (최상위)':v+'%');}};
@@ -692,7 +713,6 @@ function makePct(ctx,h,lb,pc,chObj,key,fs){
     {label:'순위',data:pc,borderColor:'#6c7ce0',backgroundColor:g,borderWidth:2.5,pointRadius:4,pointHoverRadius:6,pointBackgroundColor:'#6c7ce0',pointBorderColor:'#0f1117',pointBorderWidth:2,tension:0.35,fill:true,spanGaps:true}
   ]},options:o});
 }
-
 function makeStd(ctx,lb,vd,chObj,key,fs){
   if(chObj[key])chObj[key].destroy();
   var my=vd.map(function(x){return x.standardScore;});
@@ -711,45 +731,12 @@ function makeStd(ctx,lb,vd,chObj,key,fs){
     {label:'기준선',data:bl,borderColor:'rgba(255,255,255,0.1)',backgroundColor:'transparent',borderWidth:1,pointRadius:0,tension:0,borderDash:[2,6],order:3}
   ]},options:o});
 }
-
-function mDraw0(){
-  var lb=D.chartData.map(function(x){return x.date.slice(5);});
-  var my=D.chartData.map(function(x){return x.myScore;});
-  var cl=D.chartData.map(function(x){return x.classAvg;});
-  var c=document.getElementById('mc0');
-  makeScore(c.getContext('2d'),c.parentElement.offsetHeight||200,lb,my,cl,MCH,0,10);
-}
-function mDraw1(){
-  var lb=D.chartData.map(function(x){return x.date.slice(5);});
-  var pc=D.chartData.map(function(x){return x.percentile;});
-  var c=document.getElementById('mc1');
-  makePct(c.getContext('2d'),c.parentElement.offsetHeight||200,lb,pc,MCH,1,10);
-}
-function mDraw2(){
-  var vd=D.chartData.filter(function(x){return x.stdDev>=0.01;});
-  if(!vd.length)return;
-  var lb=vd.map(function(x){return x.date.slice(5);});
-  makeStd(document.getElementById('mc2').getContext('2d'),lb,vd,MCH,2,10);
-}
-function pDraw0(){
-  var lb=D.chartData.map(function(x){return x.date.slice(5);});
-  var my=D.chartData.map(function(x){return x.myScore;});
-  var cl=D.chartData.map(function(x){return x.classAvg;});
-  var c=document.getElementById('pc0');
-  makeScore(c.getContext('2d'),c.parentElement.offsetHeight||300,lb,my,cl,PCH,0,12);
-}
-function pDraw1(){
-  var lb=D.chartData.map(function(x){return x.date.slice(5);});
-  var pc=D.chartData.map(function(x){return x.percentile;});
-  var c=document.getElementById('pc1');
-  makePct(c.getContext('2d'),c.parentElement.offsetHeight||300,lb,pc,PCH,1,12);
-}
-function pDraw2(){
-  var vd=D.chartData.filter(function(x){return x.stdDev>=0.01;});
-  if(!vd.length)return;
-  var lb=vd.map(function(x){return x.date.slice(5);});
-  makeStd(document.getElementById('pc2').getContext('2d'),lb,vd,PCH,2,12);
-}
+function mDraw0(){var lb=D.chartData.map(function(x){return x.date.slice(5);});var my=D.chartData.map(function(x){return x.myScore;});var cl=D.chartData.map(function(x){return x.classAvg;});var c=document.getElementById('mc0');makeScore(c.getContext('2d'),c.parentElement.offsetHeight||200,lb,my,cl,MCH,0,10);}
+function mDraw1(){var lb=D.chartData.map(function(x){return x.date.slice(5);});var pc=D.chartData.map(function(x){return x.percentile;});var c=document.getElementById('mc1');makePct(c.getContext('2d'),c.parentElement.offsetHeight||200,lb,pc,MCH,1,10);}
+function mDraw2(){var vd=D.chartData.filter(function(x){return x.stdDev>=0.01;});if(!vd.length)return;var lb=vd.map(function(x){return x.date.slice(5);});makeStd(document.getElementById('mc2').getContext('2d'),lb,vd,MCH,2,10);}
+function pDraw0(){var lb=D.chartData.map(function(x){return x.date.slice(5);});var my=D.chartData.map(function(x){return x.myScore;});var cl=D.chartData.map(function(x){return x.classAvg;});var c=document.getElementById('pc0');makeScore(c.getContext('2d'),c.parentElement.offsetHeight||300,lb,my,cl,PCH,0,12);}
+function pDraw1(){var lb=D.chartData.map(function(x){return x.date.slice(5);});var pc=D.chartData.map(function(x){return x.percentile;});var c=document.getElementById('pc1');makePct(c.getContext('2d'),c.parentElement.offsetHeight||300,lb,pc,PCH,1,12);}
+function pDraw2(){var vd=D.chartData.filter(function(x){return x.stdDev>=0.01;});if(!vd.length)return;var lb=vd.map(function(x){return x.date.slice(5);});makeStd(document.getElementById('pc2').getContext('2d'),lb,vd,PCH,2,12);}
 </script>
 </body>
 </html>
