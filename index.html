@@ -1,0 +1,307 @@
+<script>
+const SHEET_ID = '1L6vm03FksK8R8GSyuibN_esZ7ohJdFoYoCWCPMOlEfY';
+const API_KEY  = 'AIzaSyADxuPBfoEYQVDj6mTPajjVlxRwWwkElEc';
+const SHEET_NAME = '시트1';
+
+var IS_MOBILE = window.innerWidth < 600;
+
+function show(id){
+  ['mLogin','pLogin','mDash','pDash'].forEach(function(s){
+    var el=document.getElementById(s);
+    el.classList.remove('active');
+    el.style.display='none';
+  });
+  var t=document.getElementById(id);
+  t.style.display='flex';
+  t.classList.add('active');
+  if(IS_MOBILE){
+    t.style.width='100vw';
+    t.style.height='100vh';
+    t.style.position='fixed';
+    t.style.top='0';t.style.left='0';
+  }
+}
+
+show(IS_MOBILE ? 'mLogin' : 'pLogin');
+
+document.getElementById('m-nm').addEventListener('keydown',function(e){if(e.key==='Enter')document.getElementById('m-pw').focus();});
+document.getElementById('m-pw').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin('m');});
+document.getElementById('p-nm').addEventListener('keydown',function(e){if(e.key==='Enter')document.getElementById('p-pw').focus();});
+document.getElementById('p-pw').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin('p');});
+
+var D=null, MCH={}, PCH={};
+
+Chart.defaults.font.family="-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif";
+Chart.defaults.color='#5a5f7a';
+Chart.defaults.animation=false;
+
+function setLd(v){document.getElementById('ld').className='ld'+(v?' show':'');}
+
+function doLogin(mode){
+  var pfx=mode+'-';
+  var n=document.getElementById(pfx+'nm').value.trim();
+  var p=document.getElementById(pfx+'pw').value.trim();
+  document.getElementById(pfx+'err').textContent='';
+  if(!n||!p){document.getElementById(pfx+'err').textContent='이름과 비밀번호를 입력하세요.';return;}
+  setLd(true);
+
+  var url='https://sheets.googleapis.com/v4/spreadsheets/'+SHEET_ID+'/values/'+encodeURIComponent(SHEET_NAME)+'?key='+API_KEY;
+
+  fetch(url)
+  .then(function(r){return r.json();})
+  .then(function(json){
+    setLd(false);
+    var rows=json.values;
+    if(!rows||rows.length<3){document.getElementById(pfx+'err').textContent='데이터가 없습니다.';return;}
+
+    /* 날짜 헤더 (2행, D열부터 = index 3~) */
+    var dateRow=rows[1];
+    var dates=[];
+    for(var i=3;i<dateRow.length;i++){
+      if(dateRow[i]&&dateRow[i].trim()!==''){
+        dates.push({index:i,label:dateRow[i].trim()});
+      }
+    }
+
+    /* 3행~: 학생 데이터 */
+    var dataRows=rows.slice(2);
+
+    /* 로그인 확인 */
+    var studentRow=null;
+    for(var r=0;r<dataRows.length;r++){
+      if(String(dataRows[r][0]||'').trim()===n&&
+         String(dataRows[r][1]||'').trim()===p){
+        studentRow=dataRows[r];break;
+      }
+    }
+    if(!studentRow){document.getElementById(pfx+'err').textContent='이름 또는 비밀번호가 올바르지 않습니다.';return;}
+
+    var studentName=String(studentRow[0]).trim();
+    var studentClass=String(studentRow[2]).trim();
+
+    /* 같은 반 학생들 */
+    var classStudents=dataRows.filter(function(r){return String(r[2]||'').trim()===studentClass;});
+
+    /* 날짜별 데이터 */
+    var chartData=[];
+    for(var d=0;d<dates.length;d++){
+      var col=dates[d].index;
+      var classScores=classStudents.map(function(r){
+        var v=r[col];
+        return(v!==undefined&&v!==''&&!isNaN(Number(v)))?Number(v):null;
+      });
+      var validScores=classScores.filter(function(v){return v!==null;});
+      if(validScores.length===0)continue;
+
+      var myRaw=studentRow[col];
+      var myScore=(myRaw!==undefined&&myRaw!==''&&!isNaN(Number(myRaw)))?Number(myRaw):null;
+
+      var mean=validScores.reduce(function(a,b){return a+b;},0)/validScores.length;
+
+      var percentile=null;
+      if(myScore!==null){
+        var above=validScores.filter(function(s){return s>myScore;}).length;
+        percentile=Math.round((above/validScores.length)*100);
+      }
+
+      var variance=validScores.length>1
+        ?validScores.reduce(function(sum,s){return sum+Math.pow(s-mean,2);},0)/validScores.length
+        :0;
+      var stdDev=Math.sqrt(variance);
+
+      var standardScore=null;
+      if(myScore!==null){
+        standardScore=stdDev<0.001?100:Math.round(20*(myScore-mean)/stdDev+100);
+      }
+      var maxRaw=Math.max.apply(null,validScores);
+      var maxStandardScore=stdDev<0.001?100:Math.round(20*(maxRaw-mean)/stdDev+100);
+
+      chartData.push({
+        date:dates[d].label,
+        myScore:myScore,
+        classAvg:Math.round(mean*100)/100,
+        percentile:percentile,
+        standardScore:standardScore,
+        maxStandardScore:maxStandardScore,
+        mean:Math.round(mean*10)/10,
+        stdDev:Math.round(stdDev*10)/10
+      });
+    }
+
+    D={success:true,studentName:studentName,studentClass:studentClass,chartData:chartData};
+    showDash();
+  })
+  .catch(function(){
+    setLd(false);
+    document.getElementById(pfx+'err').textContent='오류가 발생했습니다. API 키 또는 시트 설정을 확인하세요.';
+  });
+}
+
+function doLogout(){
+  D=null;
+  killCH(MCH);killCH(PCH);
+  document.getElementById('m-nm').value='';document.getElementById('m-pw').value='';document.getElementById('m-err').textContent='';
+  document.getElementById('p-nm').value='';document.getElementById('p-pw').value='';document.getElementById('p-err').textContent='';
+  show(IS_MOBILE?'mLogin':'pLogin');
+  mTab(0,document.getElementById('mt0'));
+  pTab(0,document.getElementById('pt0'));
+}
+
+function avg(a){
+  var v=(a||[]).filter(function(x){return x!==null&&x!==undefined&&!isNaN(+x);}).map(Number);
+  return v.length?v.reduce(function(a,b){return a+b;},0)/v.length:NaN;
+}
+
+function showDash(){
+  var ms=D.chartData.map(function(x){return x.myScore;}).filter(function(v){return v!==null&&!isNaN(+v);});
+  var cs=D.chartData.map(function(x){return x.classAvg;}).filter(function(v){return v!==null&&!isNaN(+v);});
+  var ps=D.chartData.map(function(x){return x.percentile;}).filter(function(v){return v!==null&&!isNaN(+v);});
+  var b=ms.length?Math.max.apply(null,ms):NaN;
+  var sA=isNaN(avg(ms))?'-':avg(ms).toFixed(2);
+  var sC=isNaN(avg(cs))?'-':avg(cs).toFixed(2);
+  var sB=isNaN(b)?'-':b;
+  var sP=isNaN(avg(ps))?'-':Math.round(avg(ps))+'%';
+
+  if(IS_MOBILE){
+    document.getElementById('m-uname').textContent=D.studentName+'님';
+    document.getElementById('m-ucls').textContent=D.studentClass+' 반';
+    document.getElementById('m-sA').textContent=sA;
+    document.getElementById('m-sC').textContent=sC;
+    document.getElementById('m-sB').textContent=sB;
+    document.getElementById('m-sP').textContent=sP;
+    show('mDash');
+    requestAnimationFrame(function(){mDraw0();mDraw1();mDraw2();});
+  } else {
+    document.getElementById('p-uname').textContent=D.studentName+'님';
+    document.getElementById('p-ucls').textContent=D.studentClass+' 반';
+    document.getElementById('p-sA').textContent=sA;
+    document.getElementById('p-sC').textContent=sC;
+    document.getElementById('p-sB').textContent=sB;
+    document.getElementById('p-sP').textContent=sP;
+    show('pDash');
+    requestAnimationFrame(function(){pDraw0();pDraw1();pDraw2();});
+  }
+}
+
+function mTab(n,btn){
+  [0,1,2].forEach(function(i){document.getElementById('mp'+i).style.display='none';document.getElementById('mt'+i).className='m-tab';});
+  document.getElementById('mp'+n).style.display='block';btn.className='m-tab on';
+  setTimeout(function(){if(MCH[n])MCH[n].resize();},60);
+}
+function pTab(n,btn){
+  [0,1,2].forEach(function(i){document.getElementById('pp'+i).style.display='none';document.getElementById('pt'+i).className='p-tab';});
+  document.getElementById('pp'+n).style.display='block';btn.className='p-tab on';
+  setTimeout(function(){if(PCH[n])PCH[n].resize();},60);
+}
+function killCH(ch){[0,1,2].forEach(function(k){if(ch[k]){ch[k].destroy();delete ch[k];}});}
+
+function baseOpts(yLbl,yMin,yMax,rev,fs){
+  fs=fs||11;
+  var o={
+    responsive:true,maintainAspectRatio:false,
+    interaction:{mode:'index',intersect:false},
+    plugins:{
+      legend:{display:false},
+      tooltip:{
+        backgroundColor:'rgba(18,22,40,0.97)',
+        borderColor:'rgba(255,255,255,0.08)',borderWidth:1,
+        titleColor:'#f0f2fc',bodyColor:'#7a7f9a',
+        padding:12,cornerRadius:10,
+        titleFont:{size:fs+1,weight:'700'},bodyFont:{size:fs}
+      }
+    },
+    scales:{
+      x:{grid:{color:'rgba(255,255,255,0.04)',drawBorder:false},border:{display:false},
+         ticks:{font:{size:fs},maxRotation:40,minRotation:0,color:'#5a5f7a',maxTicksLimit:8}},
+      y:{reverse:!!rev,grid:{color:'rgba(255,255,255,0.04)',drawBorder:false},border:{display:false},
+         ticks:{font:{size:fs},color:'#5a5f7a'},
+         title:yLbl?{display:true,text:yLbl,font:{size:fs},color:'#5a5f7a'}:{display:false}}
+    }
+  };
+  if(yMin!=null)o.scales.y.min=yMin;
+  if(yMax!=null)o.scales.y.max=yMax;
+  return o;
+}
+
+function makeScore(ctx,h,lb,my,cl,chObj,key,fs){
+  if(chObj[key])chObj[key].destroy();
+  var g=ctx.createLinearGradient(0,0,0,h);
+  g.addColorStop(0,'rgba(232,57,77,0.18)');g.addColorStop(1,'rgba(232,57,77,0)');
+  var o=baseOpts('점수',0,null,false,fs);
+  o.plugins.tooltip.callbacks={label:function(i){var v=i.parsed.y;return(v===null||v===undefined)?' '+i.dataset.label+': 결석':' '+i.dataset.label+': '+v+'점';}};
+  chObj[key]=new Chart(ctx,{type:'line',data:{labels:lb,datasets:[
+    {label:'내 점수',data:my,borderColor:'#e8394d',backgroundColor:g,borderWidth:2.5,pointRadius:4,pointHoverRadius:6,pointBackgroundColor:'#e8394d',pointBorderColor:'#0f1117',pointBorderWidth:2,tension:0.35,spanGaps:true,fill:true},
+    {label:'반 평균',data:cl,borderColor:'#3a3f60',backgroundColor:'transparent',borderWidth:2,pointRadius:3,pointHoverRadius:5,pointBackgroundColor:'#3a3f60',pointBorderColor:'#0f1117',pointBorderWidth:1,tension:0.35,spanGaps:true,borderDash:[5,3]}
+  ]},options:o});
+}
+
+function makePct(ctx,h,lb,pc,chObj,key,fs){
+  if(chObj[key])chObj[key].destroy();
+  var g=ctx.createLinearGradient(0,0,0,h);
+  g.addColorStop(0,'rgba(108,124,224,0.22)');g.addColorStop(1,'rgba(108,124,224,0)');
+  var o=baseOpts('순위(%)',0,100,true,fs);
+  o.scales.y.ticks={font:{size:fs},color:'#5a5f7a',callback:function(v){return v+'%';}};
+  o.plugins.tooltip.callbacks={label:function(i){var v=i.parsed.y;if(v===null||isNaN(v))return ' 결석';return ' 순위: '+(v===0?'1등 (최상위)':v+'%');}};
+  chObj[key]=new Chart(ctx,{type:'line',data:{labels:lb,datasets:[
+    {label:'순위',data:pc,borderColor:'#6c7ce0',backgroundColor:g,borderWidth:2.5,pointRadius:4,pointHoverRadius:6,pointBackgroundColor:'#6c7ce0',pointBorderColor:'#0f1117',pointBorderWidth:2,tension:0.35,fill:true,spanGaps:true}
+  ]},options:o});
+}
+
+function makeStd(ctx,lb,vd,chObj,key,fs){
+  if(chObj[key])chObj[key].destroy();
+  var my=vd.map(function(x){return x.standardScore;});
+  var mx=vd.map(function(x){return x.maxStandardScore;});
+  var bl=vd.map(function(){return 100;});
+  var o=baseOpts('표준점수',null,null,false,fs);
+  o.plugins.tooltip.callbacks={
+    title:function(it){return vd[it[0].dataIndex].date;},
+    label:function(i){var v=i.parsed.y,l=i.dataset.label;if(l==='기준선')return null;if(v===null||isNaN(v))return l==='내 표준점수'?' 결석':null;return ' '+l+': '+v+'점';},
+    afterBody:function(it){var inf=vd[it[0].dataIndex];return[' ────────',' 반 평균: '+inf.mean+'점',' 표준편차: '+inf.stdDev];},
+    filter:function(i){return i.dataset.label!=='기준선';}
+  };
+  chObj[key]=new Chart(ctx,{type:'line',data:{labels:lb,datasets:[
+    {label:'내 표준점수',data:my,borderColor:'#e8394d',backgroundColor:'rgba(232,57,77,0.07)',borderWidth:2.5,pointRadius:4,pointHoverRadius:6,pointBackgroundColor:'#e8394d',pointBorderColor:'#0f1117',pointBorderWidth:2,tension:0.35,spanGaps:true,fill:false,order:1},
+    {label:'만점 표준점수',data:mx,borderColor:'#f5a623',backgroundColor:'transparent',borderWidth:1.8,pointRadius:3,pointHoverRadius:5,pointBackgroundColor:'#f5a623',pointBorderColor:'#0f1117',pointBorderWidth:1,tension:0.35,spanGaps:true,borderDash:[5,3],order:2},
+    {label:'기준선',data:bl,borderColor:'rgba(255,255,255,0.1)',backgroundColor:'transparent',borderWidth:1,pointRadius:0,tension:0,borderDash:[2,6],order:3}
+  ]},options:o});
+}
+
+function mDraw0(){
+  var lb=D.chartData.map(function(x){return x.date.slice(5);});
+  var my=D.chartData.map(function(x){return x.myScore;});
+  var cl=D.chartData.map(function(x){return x.classAvg;});
+  var c=document.getElementById('mc0');
+  makeScore(c.getContext('2d'),c.parentElement.offsetHeight||200,lb,my,cl,MCH,0,10);
+}
+function mDraw1(){
+  var lb=D.chartData.map(function(x){return x.date.slice(5);});
+  var pc=D.chartData.map(function(x){return x.percentile;});
+  var c=document.getElementById('mc1');
+  makePct(c.getContext('2d'),c.parentElement.offsetHeight||200,lb,pc,MCH,1,10);
+}
+function mDraw2(){
+  var vd=D.chartData.filter(function(x){return x.stdDev>=0.01;});
+  if(!vd.length)return;
+  var lb=vd.map(function(x){return x.date.slice(5);});
+  makeStd(document.getElementById('mc2').getContext('2d'),lb,vd,MCH,2,10);
+}
+function pDraw0(){
+  var lb=D.chartData.map(function(x){return x.date.slice(5);});
+  var my=D.chartData.map(function(x){return x.myScore;});
+  var cl=D.chartData.map(function(x){return x.classAvg;});
+  var c=document.getElementById('pc0');
+  makeScore(c.getContext('2d'),c.parentElement.offsetHeight||300,lb,my,cl,PCH,0,12);
+}
+function pDraw1(){
+  var lb=D.chartData.map(function(x){return x.date.slice(5);});
+  var pc=D.chartData.map(function(x){return x.percentile;});
+  var c=document.getElementById('pc1');
+  makePct(c.getContext('2d'),c.parentElement.offsetHeight||300,lb,pc,PCH,1,12);
+}
+function pDraw2(){
+  var vd=D.chartData.filter(function(x){return x.stdDev>=0.01;});
+  if(!vd.length)return;
+  var lb=vd.map(function(x){return x.date.slice(5);});
+  makeStd(document.getElementById('pc2').getContext('2d'),lb,vd,PCH,2,12);
+}
+</script>
