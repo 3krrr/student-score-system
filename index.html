@@ -4,112 +4,133 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#0f1117">
 <title>성적 조회</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-input,button{-webkit-appearance:none;appearance:none;font-family:inherit;}
+input,button,select{-webkit-appearance:none;appearance:none;font-family:inherit;}
+
+/* ── 라이트(기본) ── */
 :root{
-  --bg:#0f1117;--s1:#1a1d2e;--s2:#252a40;
-  --bd:rgba(255,255,255,0.08);
-  --red:#e8394d;--blue:#6c7ce0;--org:#f5a623;--teal:#4ecdc4;
-  --txt:#f0f2fc;--sub:#7a7f9a;--dim:#4a4f6a;
+  --bg:#f4f6fb;--s1:#ffffff;--s2:#eef0f7;--s3:#e2e5f0;
+  --bd:rgba(0,0,0,0.09);--bd2:rgba(0,0,0,0.18);
+  --red:#d93248;--blue:#4f5fc4;--org:#c97a00;--teal:#0d7a74;--green:#158a3e;
+  --txt:#1a1d2e;--sub:#6b7280;--dim:#adb5bd;
+  --shadow:0 2px 16px rgba(0,0,0,0.07);
+  --card-bg:#ffffff;
+  --warn-bg:rgba(217,50,72,0.07);--warn-bd:rgba(217,50,72,0.22);--warn-txt:#b91c1c;
+  --alert-bg:rgba(201,122,0,0.07);--alert-bd:rgba(201,122,0,0.22);--alert-txt:#92400e;
+  --ok-bg:rgba(21,138,62,0.07);--ok-bd:rgba(21,138,62,0.2);--ok-txt:#14532d;
+  --neu-bg:var(--s2);--neu-bd:var(--bd);
+  --exit-bg:rgba(107,114,128,0.07);--exit-bd:rgba(107,114,128,0.22);--exit-txt:#4b5563;
 }
-html,body{width:100%;height:100%;background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;-webkit-font-smoothing:antialiased;overflow:hidden;}
+html.dark{
+  --bg:#0f1117;--s1:#1a1d2e;--s2:#252a40;--s3:#2e3450;
+  --bd:rgba(255,255,255,0.08);--bd2:rgba(255,255,255,0.15);
+  --red:#e8394d;--blue:#6c7ce0;--org:#f5a623;--teal:#4ecdc4;--green:#4ade80;
+  --txt:#f0f2fc;--sub:#7a7f9a;--dim:#4a4f6a;
+  --shadow:0 8px 32px rgba(0,0,0,0.45);
+  --card-bg:#1a1d2e;
+  --warn-bg:rgba(232,57,77,0.12);--warn-bd:rgba(232,57,77,0.32);--warn-txt:#ff8a8a;
+  --alert-bg:rgba(245,166,35,0.12);--alert-bd:rgba(245,166,35,0.32);--alert-txt:#ffc96b;
+  --ok-bg:rgba(74,222,128,0.1);--ok-bd:rgba(74,222,128,0.28);--ok-txt:#6ee7b0;
+  --exit-bg:rgba(100,116,139,0.12);--exit-bd:rgba(100,116,139,0.3);--exit-txt:#94a3b8;
+}
+
+html,body{width:100%;height:100%;background:var(--bg);color:var(--txt);
+  font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+  -webkit-font-smoothing:antialiased;overflow:hidden;transition:background .25s,color .25s;}
 .screen{display:none;width:100%;height:100%;}
 .screen.active{display:flex;}
 
-/* 로그인 - 모바일 */
-#mLogin{flex-direction:column;align-items:center;justify-content:center;background:var(--bg);padding:0 7vw;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+/* ══ 로그인 공통 ══ */
+#mLogin{flex-direction:column;align-items:center;justify-content:center;padding:0 7vw;overflow-y:auto;}
 .m-brand{text-align:center;margin-bottom:9vw;}
-.m-brand-icon{width:18vw;height:18vw;background:linear-gradient(145deg,#e8394d,#b02030);border-radius:4.5vw;display:flex;align-items:center;justify-content:center;margin:0 auto 4vw;box-shadow:0 2vw 6vw rgba(232,57,77,0.4);}
+.m-brand-icon{width:18vw;height:18vw;background:linear-gradient(145deg,var(--red),#901a2a);border-radius:4.5vw;
+  display:flex;align-items:center;justify-content:center;margin:0 auto 4vw;box-shadow:0 2vw 6vw rgba(217,50,72,.35);}
 .m-brand-icon svg{width:9vw;height:9vw;}
-.m-brand h1{font-size:7vw;font-weight:700;letter-spacing:-0.03em;margin-bottom:2vw;}
+.m-brand h1{font-size:7vw;font-weight:800;letter-spacing:-.03em;margin-bottom:2vw;}
 .m-brand p{font-size:4vw;color:var(--sub);line-height:1.5;}
-.m-field{display:flex;align-items:center;background:var(--s1);border:1.5px solid var(--bd);border-radius:3.5vw;padding:0 4.5vw;margin-bottom:3vw;transition:border-color 0.2s;}
-.m-field:focus-within{border-color:rgba(108,124,224,0.6);}
-.m-field svg{width:5.5vw;height:5.5vw;opacity:0.4;flex-shrink:0;margin-right:3vw;}
+.m-field{display:flex;align-items:center;background:var(--card-bg);border:1.5px solid var(--bd);
+  border-radius:3.5vw;padding:0 4.5vw;margin-bottom:3vw;transition:border-color .2s;}
+.m-field:focus-within{border-color:rgba(79,95,196,.6);}
+.m-field svg{width:5.5vw;height:5.5vw;opacity:.4;flex-shrink:0;margin-right:3vw;}
 .m-field input{flex:1;background:none;border:none;outline:none;color:var(--txt);font-size:16px;padding:4.5vw 0;}
 .m-field input::placeholder{color:var(--dim);}
-.m-btn{width:100%;background:var(--red);border:none;border-radius:3.5vw;color:#fff;font-size:4.5vw;font-weight:700;padding:4.5vw;cursor:pointer;margin-top:1vw;box-shadow:0 1vw 4vw rgba(232,57,77,0.32);}
-.m-btn:active{opacity:0.8;}
-.m-err{font-size:3.5vw;color:#ff6b6b;text-align:center;margin-top:3vw;min-height:5vw;}
+.m-login-btn{width:100%;background:var(--red);border:none;border-radius:3.5vw;color:#fff;
+  font-size:4.5vw;font-weight:800;padding:4.5vw;cursor:pointer;margin-top:1vw;}
+.m-login-btn:active{opacity:.8;}
+.m-err{font-size:3.5vw;color:var(--red);text-align:center;margin-top:3vw;min-height:5vw;}
 
-/* 로그인 - PC */
-#pLogin{flex-direction:column;align-items:center;justify-content:center;background:var(--bg);padding:40px;overflow-y:auto;}
-.p-login-card{background:var(--s1);border:1px solid var(--bd);border-radius:20px;padding:48px 40px;width:400px;}
+#pLogin{flex-direction:column;align-items:center;justify-content:center;padding:40px;overflow-y:auto;}
+.p-login-card{background:var(--card-bg);border:1px solid var(--bd);border-radius:20px;
+  padding:48px 40px;width:400px;box-shadow:var(--shadow);}
 .p-brand{text-align:center;margin-bottom:36px;}
-.p-brand-icon{width:64px;height:64px;background:linear-gradient(145deg,#e8394d,#b02030);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;box-shadow:0 6px 24px rgba(232,57,77,0.35);}
+.p-brand-icon{width:64px;height:64px;background:linear-gradient(145deg,var(--red),#901a2a);border-radius:16px;
+  display:flex;align-items:center;justify-content:center;margin:0 auto 16px;box-shadow:0 6px 24px rgba(217,50,72,.3);}
 .p-brand-icon svg{width:32px;height:32px;}
-.p-brand h1{font-size:24px;font-weight:700;letter-spacing:-0.5px;margin-bottom:6px;}
+.p-brand h1{font-size:24px;font-weight:800;letter-spacing:-.5px;margin-bottom:6px;}
 .p-brand p{font-size:14px;color:var(--sub);line-height:1.5;}
-.p-field{display:flex;align-items:center;background:var(--bg);border:1.5px solid var(--bd);border-radius:12px;padding:0 16px;margin-bottom:12px;transition:border-color 0.2s;}
-.p-field:focus-within{border-color:rgba(108,124,224,0.6);}
-.p-field svg{width:18px;height:18px;opacity:0.4;flex-shrink:0;margin-right:10px;}
+.p-field{display:flex;align-items:center;background:var(--bg);border:1.5px solid var(--bd);
+  border-radius:12px;padding:0 16px;margin-bottom:12px;transition:border-color .2s;}
+.p-field:focus-within{border-color:rgba(79,95,196,.6);}
+.p-field svg{width:18px;height:18px;opacity:.4;flex-shrink:0;margin-right:10px;}
 .p-field input{flex:1;background:none;border:none;outline:none;color:var(--txt);font-size:15px;padding:14px 0;}
 .p-field input::placeholder{color:var(--dim);}
-.p-btn{width:100%;background:var(--red);border:none;border-radius:12px;color:#fff;font-size:15px;font-weight:700;padding:14px;cursor:pointer;margin-top:4px;box-shadow:0 4px 16px rgba(232,57,77,0.3);transition:opacity 0.15s,transform 0.1s;}
-.p-btn:active{opacity:0.8;transform:scale(0.98);}
-.p-err{font-size:13px;color:#ff6b6b;text-align:center;margin-top:12px;min-height:18px;}
+.p-login-btn{width:100%;background:var(--red);border:none;border-radius:12px;color:#fff;
+  font-size:15px;font-weight:800;padding:14px;cursor:pointer;margin-top:4px;
+  box-shadow:0 4px 16px rgba(217,50,72,.28);transition:opacity .15s,transform .1s;}
+.p-login-btn:active{opacity:.8;transform:scale(.98);}
+.p-err{font-size:13px;color:var(--red);text-align:center;margin-top:12px;min-height:18px;}
 
-/* ── 반 선택 화면 - 모바일 ── */
-#mClassSelect{flex-direction:column;align-items:center;justify-content:center;background:var(--bg);padding:0 7vw;overflow-y:auto;}
+/* ══ 반 선택 공통 ══ */
+#mClassSelect{flex-direction:column;align-items:center;justify-content:center;padding:0 7vw;overflow-y:auto;}
 .m-cs-title{text-align:center;margin-bottom:8vw;}
-.m-cs-title h2{font-size:6vw;font-weight:700;margin-bottom:2vw;}
+.m-cs-title h2{font-size:6vw;font-weight:800;margin-bottom:2vw;}
 .m-cs-title p{font-size:3.5vw;color:var(--sub);line-height:1.6;}
-.m-cs-btn{
-  width:100%;background:var(--s1);border:1.5px solid var(--bd);
-  border-radius:4vw;color:var(--txt);
-  font-size:4.5vw;font-weight:700;
-  padding:5vw 4vw;cursor:pointer;margin-bottom:3vw;
-  text-align:left;
-  display:flex;align-items:center;justify-content:space-between;
-  transition:border-color 0.2s,background 0.2s;
-}
+.m-cs-btn{width:100%;background:var(--card-bg);border:1.5px solid var(--bd);border-radius:4vw;
+  color:var(--txt);font-size:4.5vw;font-weight:700;padding:5vw 4vw;cursor:pointer;margin-bottom:3vw;
+  text-align:left;display:flex;align-items:center;justify-content:space-between;}
 .m-cs-btn:active{background:var(--s2);}
-.m-cs-btn .cs-name{font-size:4.5vw;font-weight:700;}
-.m-cs-btn .cs-arrow{font-size:5vw;color:var(--dim);}
 .m-cs-back{background:none;border:none;color:var(--sub);font-size:3.5vw;margin-top:2vw;cursor:pointer;text-decoration:underline;}
-
-/* ── 반 선택 화면 - PC ── */
-#pClassSelect{flex-direction:column;align-items:center;justify-content:center;background:var(--bg);padding:40px;overflow-y:auto;}
-.p-cs-card{background:var(--s1);border:1px solid var(--bd);border-radius:20px;padding:48px 40px;width:400px;}
+#pClassSelect{flex-direction:column;align-items:center;justify-content:center;padding:40px;overflow-y:auto;}
+.p-cs-card{background:var(--card-bg);border:1px solid var(--bd);border-radius:20px;padding:48px 40px;width:400px;box-shadow:var(--shadow);}
 .p-cs-title{text-align:center;margin-bottom:28px;}
-.p-cs-title h2{font-size:20px;font-weight:700;margin-bottom:8px;}
+.p-cs-title h2{font-size:20px;font-weight:800;margin-bottom:8px;}
 .p-cs-title p{font-size:14px;color:var(--sub);line-height:1.6;}
-.p-cs-btn{
-  width:100%;background:var(--bg);border:1.5px solid var(--bd);
-  border-radius:12px;color:var(--txt);
-  font-size:15px;font-weight:700;
-  padding:18px 20px;cursor:pointer;margin-bottom:12px;
-  text-align:left;
-  display:flex;align-items:center;justify-content:space-between;
-  transition:border-color 0.2s,background 0.2s;
-}
-.p-cs-btn:hover{border-color:rgba(108,124,224,0.5);background:var(--s2);}
+.p-cs-btn{width:100%;background:var(--bg);border:1.5px solid var(--bd);border-radius:12px;
+  color:var(--txt);font-size:15px;font-weight:700;padding:18px 20px;cursor:pointer;margin-bottom:12px;
+  text-align:left;display:flex;align-items:center;justify-content:space-between;transition:border-color .2s,background .2s;}
+.p-cs-btn:hover{border-color:rgba(79,95,196,.5);background:var(--s2);}
 .p-cs-back{background:none;border:none;color:var(--sub);font-size:13px;margin-top:8px;cursor:pointer;text-decoration:underline;display:block;text-align:center;}
 
-/* 대시보드 - 모바일 */
-#mDash{flex-direction:column;background:var(--bg);overflow:hidden;}
-.m-topbar{display:flex;align-items:center;justify-content:space-between;padding:4vw 5vw;background:rgba(15,17,23,0.95);border-bottom:1px solid var(--bd);flex-shrink:0;}
-.m-top-name{font-size:4.5vw;font-weight:700;margin-bottom:0.8vw;}
-.m-top-cls{font-size:3.2vw;color:var(--sub);}
-.m-topbar-right{display:flex;align-items:center;gap:2vw;}
-.m-btn-switch{background:var(--s2);border:1px solid rgba(108,124,224,0.3);border-radius:10vw;color:var(--blue);font-size:3vw;font-weight:600;padding:2vw 3.5vw;cursor:pointer;flex-shrink:0;}
-.m-btn-out{background:var(--s2);border:1px solid var(--bd);border-radius:10vw;color:var(--sub);font-size:3.2vw;font-weight:600;padding:2vw 4vw;cursor:pointer;flex-shrink:0;}
-.m-body{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:none;padding:4vw 4vw 6vw;}
+/* ══ 학생 대시보드 모바일 ══ */
+#mDash{flex-direction:column;overflow:hidden;}
+.m-topbar{display:flex;align-items:center;justify-content:space-between;padding:3.5vw 4vw;
+  background:var(--card-bg);border-bottom:1px solid var(--bd);flex-shrink:0;gap:2vw;}
+.m-topbar-left{flex:1;min-width:0;}
+.m-top-name{font-size:4.5vw;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.m-top-cls{font-size:3.2vw;color:var(--sub);margin-top:.5vw;}
+.m-topbar-right{display:flex;align-items:center;gap:1.5vw;flex-shrink:0;}
+.m-btn-xs{background:var(--s2);border:1px solid var(--bd);border-radius:2vw;color:var(--sub);
+  font-size:3vw;font-weight:700;padding:1.8vw 3vw;cursor:pointer;white-space:nowrap;}
+.m-btn-theme{background:var(--s2);border:1px solid var(--bd2);border-radius:2vw;
+  color:var(--txt);font-size:2.8vw;font-weight:800;padding:1.8vw 2.8vw;cursor:pointer;white-space:nowrap;}
+.m-body{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;
+  overscroll-behavior:none;padding:4vw 4vw 8vw;}
 .m-stat-row{display:grid;grid-template-columns:1fr 1fr;gap:2.5vw;margin-bottom:4vw;}
-.m-stat{background:var(--s1);border:1px solid var(--bd);border-radius:4vw;padding:4vw;}
-.m-stat-lbl{font-size:2.8vw;font-weight:600;color:var(--dim);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:1.5vw;}
-.m-stat-val{font-size:8vw;font-weight:800;letter-spacing:-0.05em;line-height:1;}
-.m-tabs{display:flex;background:var(--s1);border:1px solid var(--bd);border-radius:3.5vw;padding:1vw;gap:1vw;margin-bottom:4vw;}
-.m-tab{flex:1;background:none;border:none;border-radius:2.8vw;color:var(--sub);font-size:3.5vw;font-weight:700;padding:3vw 1vw;cursor:pointer;text-align:center;white-space:nowrap;transition:background 0.15s,color 0.15s;}
+.m-stat{background:var(--card-bg);border:1px solid var(--bd);border-radius:4vw;padding:4vw;}
+.m-stat-lbl{font-size:2.8vw;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:.05em;margin-bottom:1.5vw;}
+.m-stat-val{font-size:8vw;font-weight:900;letter-spacing:-.05em;line-height:1;}
+.m-tabs{display:flex;background:var(--card-bg);border:1px solid var(--bd);border-radius:3.5vw;
+  padding:1vw;gap:1vw;margin-bottom:4vw;}
+.m-tab{flex:1;background:none;border:none;border-radius:2.8vw;color:var(--sub);
+  font-size:3.5vw;font-weight:700;padding:3vw 1vw;cursor:pointer;text-align:center;
+  white-space:nowrap;transition:background .15s,color .15s;}
 .m-tab.on{background:var(--s2);color:var(--txt);}
-.m-chart-card{background:var(--s1);border:1px solid var(--bd);border-radius:4vw;padding:4.5vw 4vw 3.5vw;}
-.m-chart-card h3{font-size:4vw;font-weight:700;letter-spacing:-0.03em;margin-bottom:1vw;}
+.m-chart-card{background:var(--card-bg);border:1px solid var(--bd);border-radius:4vw;padding:4.5vw 4vw 3.5vw;}
+.m-chart-card h3{font-size:4vw;font-weight:800;letter-spacing:-.03em;margin-bottom:1vw;}
 .m-chart-card p{font-size:3vw;color:var(--sub);line-height:1.5;margin-bottom:3.5vw;}
 .m-cw{position:relative;width:100%;height:55vw;}
 .m-cw canvas{position:absolute;inset:0;width:100%!important;height:100%!important;}
@@ -117,64 +138,224 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--txt);font-fami
 .m-legend span{display:flex;align-items:center;gap:1.5vw;font-size:3vw;color:var(--sub);}
 .m-legend i{display:inline-block;width:2vw;height:2vw;border-radius:50%;flex-shrink:0;}
 
-/* 대시보드 - PC */
-#pDash{flex-direction:column;background:var(--bg);overflow:hidden;}
-.p-topbar{display:flex;align-items:center;justify-content:space-between;padding:16px 32px;background:rgba(15,17,23,0.95);border-bottom:1px solid var(--bd);flex-shrink:0;}
-.p-top-name{font-size:18px;font-weight:700;letter-spacing:-0.3px;margin-bottom:2px;}
-.p-top-cls{font-size:13px;color:var(--sub);}
-.p-topbar-right{display:flex;align-items:center;gap:10px;}
-.p-btn-switch{background:var(--s2);border:1px solid rgba(108,124,224,0.3);border-radius:20px;color:var(--blue);font-size:13px;font-weight:600;padding:8px 16px;cursor:pointer;flex-shrink:0;}
-.p-btn-out{background:var(--s2);border:1px solid var(--bd);border-radius:20px;color:var(--sub);font-size:13px;font-weight:600;padding:8px 18px;cursor:pointer;flex-shrink:0;}
-.p-body{flex:1;overflow-y:auto;overflow-x:hidden;padding:24px 32px 32px;max-width:960px;margin:0 auto;width:100%;}
-.p-stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px;}
-.p-stat{background:var(--s1);border:1px solid var(--bd);border-radius:16px;padding:20px;}
-.p-stat-lbl{font-size:11px;font-weight:600;color:var(--dim);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;}
-.p-stat-val{font-size:32px;font-weight:800;letter-spacing:-1.5px;line-height:1;}
-.p-tabs{display:flex;background:var(--s1);border:1px solid var(--bd);border-radius:14px;padding:4px;gap:4px;margin-bottom:16px;}
-.p-tab{flex:1;background:none;border:none;border-radius:11px;color:var(--sub);font-size:14px;font-weight:700;padding:12px;cursor:pointer;text-align:center;white-space:nowrap;transition:background 0.15s,color 0.15s;}
+/* ══ 학생 대시보드 PC ══ */
+#pDash{flex-direction:column;overflow:hidden;}
+.p-topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;
+  background:var(--card-bg);border-bottom:1px solid var(--bd);flex-shrink:0;gap:12px;}
+.p-topbar-left{flex:1;min-width:0;}
+.p-top-name{font-size:17px;font-weight:800;letter-spacing:-.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.p-top-cls{font-size:12px;color:var(--sub);margin-top:2px;}
+.p-topbar-right{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.p-btn-sm{background:var(--s2);border:1px solid var(--bd);border-radius:8px;color:var(--sub);
+  font-size:13px;font-weight:600;padding:7px 14px;cursor:pointer;white-space:nowrap;transition:background .15s;}
+.p-btn-sm:hover{background:var(--s3);}
+.p-btn-blue{border-color:rgba(79,95,196,.3);color:var(--blue);}
+.p-btn-theme{background:var(--s2);border:1px solid var(--bd2);border-radius:8px;
+  color:var(--txt);font-size:12px;font-weight:800;padding:7px 13px;cursor:pointer;
+  white-space:nowrap;letter-spacing:.2px;transition:background .15s;}
+.p-btn-theme:hover{background:var(--s3);}
+.p-body{flex:1;overflow-y:auto;overflow-x:hidden;padding:24px 28px 32px;max-width:960px;margin:0 auto;width:100%;}
+.p-stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px;}
+.p-stat{background:var(--card-bg);border:1px solid var(--bd);border-radius:14px;padding:18px 20px;}
+.p-stat-lbl{font-size:11px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;}
+.p-stat-val{font-size:30px;font-weight:900;letter-spacing:-1.5px;line-height:1;}
+.p-tabs{display:flex;background:var(--card-bg);border:1px solid var(--bd);border-radius:12px;
+  padding:4px;gap:4px;margin-bottom:16px;}
+.p-tab{flex:1;background:none;border:none;border-radius:9px;color:var(--sub);
+  font-size:13px;font-weight:700;padding:11px;cursor:pointer;text-align:center;
+  white-space:nowrap;transition:background .15s,color .15s;}
 .p-tab.on{background:var(--s2);color:var(--txt);}
-.p-chart-card{background:var(--s1);border:1px solid var(--bd);border-radius:18px;padding:24px 24px 18px;}
-.p-chart-card h3{font-size:16px;font-weight:700;letter-spacing:-0.3px;margin-bottom:6px;}
-.p-chart-card p{font-size:13px;color:var(--sub);line-height:1.5;margin-bottom:16px;}
-.p-cw{position:relative;width:100%;height:320px;}
+.p-chart-card{background:var(--card-bg);border:1px solid var(--bd);border-radius:16px;padding:22px 22px 16px;}
+.p-chart-card h3{font-size:15px;font-weight:800;letter-spacing:-.3px;margin-bottom:5px;}
+.p-chart-card p{font-size:12px;color:var(--sub);line-height:1.5;margin-bottom:14px;}
+.p-cw{position:relative;width:100%;height:300px;}
 .p-cw canvas{position:absolute;inset:0;width:100%!important;height:100%!important;}
-.p-legend{display:flex;flex-wrap:wrap;gap:16px;margin-top:14px;}
-.p-legend span{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--sub);}
+.p-legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:12px;}
+.p-legend span{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--sub);}
 .p-legend i{display:inline-block;width:8px;height:8px;border-radius:50%;flex-shrink:0;}
 
-/* 코멘트 - 모바일 */
-.m-comment-card{background:var(--s1);border:1px solid rgba(108,124,224,0.3);border-radius:4vw;padding:4.5vw 4vw;margin-top:4vw;border-left:3px solid var(--blue);}
-.m-comment-card .m-comment-title{font-size:3vw;font-weight:700;color:var(--blue);letter-spacing:0.05em;text-transform:uppercase;margin-bottom:2.5vw;}
-.m-comment-card .m-comment-badge{display:inline-flex;align-items:center;background:rgba(108,124,224,0.15);border:1px solid rgba(108,124,224,0.3);border-radius:10vw;padding:1vw 3vw;margin-bottom:3vw;}
-.m-comment-card .m-comment-badge span{font-size:3vw;color:var(--blue);font-weight:700;}
-.m-comment-card .m-comment-text{font-size:3.3vw;color:var(--txt);line-height:1.8;word-break:keep-all;}
-.m-comment-card .m-comment-meta{font-size:2.8vw;color:var(--dim);margin-top:3vw;padding-top:2.5vw;border-top:1px solid var(--bd);display:flex;gap:4vw;}
+/* ══ 코멘트 ══ */
+.comment-card{background:var(--card-bg);border:1px solid rgba(79,95,196,.25);border-left:3px solid var(--blue);
+  border-radius:14px;padding:20px 22px;margin-top:16px;}
+.comment-label{font-size:11px;font-weight:800;color:var(--blue);letter-spacing:.5px;text-transform:uppercase;margin-bottom:10px;}
+.comment-tag{display:inline-flex;align-items:center;background:rgba(79,95,196,.1);
+  border:1px solid rgba(79,95,196,.25);border-radius:20px;padding:4px 12px;margin-bottom:12px;}
+.comment-tag span{font-size:13px;color:var(--blue);font-weight:700;}
+.comment-body{font-size:14px;color:var(--txt);line-height:2;word-break:keep-all;}
+.comment-body p{margin-bottom:8px;}
+.comment-body p:last-child{margin-bottom:0;}
+.comment-meta{font-size:11px;color:var(--dim);margin-top:12px;padding-top:10px;
+  border-top:1px solid var(--bd);display:flex;flex-wrap:wrap;gap:14px;}
+/* 모바일 코멘트 */
+.m-comment-card{background:var(--card-bg);border:1px solid rgba(79,95,196,.25);border-left:3px solid var(--blue);
+  border-radius:4vw;padding:4.5vw 4vw;margin-top:4vw;}
+.m-comment-label{font-size:3vw;font-weight:800;color:var(--blue);letter-spacing:.05em;text-transform:uppercase;margin-bottom:2.5vw;}
+.m-comment-tag{display:inline-flex;align-items:center;background:rgba(79,95,196,.1);
+  border:1px solid rgba(79,95,196,.25);border-radius:10vw;padding:1vw 3vw;margin-bottom:3vw;}
+.m-comment-tag span{font-size:3vw;color:var(--blue);font-weight:700;}
+.m-comment-body{font-size:3.3vw;color:var(--txt);line-height:1.9;word-break:keep-all;}
+.m-comment-body p{margin-bottom:2vw;}
+.m-comment-meta{font-size:2.8vw;color:var(--dim);margin-top:3vw;padding-top:2.5vw;
+  border-top:1px solid var(--bd);display:flex;flex-wrap:wrap;gap:4vw;}
 
-/* 코멘트 - PC */
-.p-comment-card{background:var(--s1);border:1px solid rgba(108,124,224,0.3);border-radius:18px;padding:24px;margin-top:16px;border-left:3px solid var(--blue);}
-.p-comment-card .p-comment-title{font-size:11px;font-weight:700;color:var(--blue);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:12px;}
-.p-comment-card .p-comment-badge{display:inline-flex;align-items:center;background:rgba(108,124,224,0.15);border:1px solid rgba(108,124,224,0.3);border-radius:20px;padding:4px 12px;margin-bottom:14px;}
-.p-comment-card .p-comment-badge span{font-size:13px;color:var(--blue);font-weight:700;}
-.p-comment-card .p-comment-text{font-size:14px;color:var(--txt);line-height:1.9;word-break:keep-all;}
-.p-comment-card .p-comment-meta{font-size:12px;color:var(--dim);margin-top:14px;padding-top:12px;border-top:1px solid var(--bd);display:flex;gap:20px;}
+/* ══ 관리자 패널 ══ */
+#adminPanel{flex-direction:column;overflow:hidden;}
+.admin-topbar{display:flex;align-items:center;justify-content:space-between;padding:13px 24px;
+  background:var(--card-bg);border-bottom:1px solid var(--bd);flex-shrink:0;gap:10px;}
+.admin-topbar-left{display:flex;align-items:center;gap:10px;min-width:0;}
+.admin-badge{background:linear-gradient(135deg,var(--red),#901a2a);color:#fff;
+  font-size:10px;font-weight:900;letter-spacing:.5px;padding:3px 9px;border-radius:20px;
+  text-transform:uppercase;flex-shrink:0;}
+.admin-topbar-title{font-size:15px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.admin-topbar-right{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.admin-body{flex:1;overflow-y:auto;overflow-x:hidden;padding:22px 24px 40px;}
 
-.ld{display:none;position:fixed;inset:0;background:rgba(10,12,20,0.85);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);z-index:999;flex-direction:column;align-items:center;justify-content:center;gap:16px;}
+/* 반 목록 */
+.admin-class-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:13px;margin-bottom:24px;}
+.admin-class-card{background:var(--card-bg);border:1px solid var(--bd);border-radius:14px;padding:18px 20px;
+  cursor:pointer;position:relative;overflow:hidden;transition:border-color .2s,transform .15s,box-shadow .2s;}
+.admin-class-card::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--red),var(--blue));opacity:0;transition:opacity .2s;}
+.admin-class-card:hover{border-color:var(--bd2);transform:translateY(-2px);box-shadow:var(--shadow);}
+.admin-class-card:hover::after{opacity:1;}
+.admin-class-card h3{font-size:16px;font-weight:800;letter-spacing:-.3px;margin-bottom:5px;}
+.admin-class-meta{font-size:12px;color:var(--sub);display:flex;gap:12px;flex-wrap:wrap;}
+.admin-class-period{font-size:11px;color:var(--blue);font-weight:700;
+  background:rgba(79,95,196,.08);border:1px solid rgba(79,95,196,.18);
+  border-radius:6px;padding:3px 8px;margin-top:9px;display:inline-block;}
+
+/* 반 상세 컨트롤바 */
+.admin-ctrl-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;
+  background:var(--card-bg);border:1px solid var(--bd);border-radius:14px;
+  padding:16px 18px;margin-bottom:16px;}
+.admin-ctrl-group{display:flex;flex-direction:column;gap:5px;}
+.admin-ctrl-label{font-size:10px;font-weight:800;color:var(--dim);text-transform:uppercase;letter-spacing:.4px;}
+.admin-ctrl-select,.admin-ctrl-input{background:var(--bg);border:1.5px solid var(--bd);
+  border-radius:7px;color:var(--txt);font-size:13px;padding:7px 11px;
+  min-width:110px;cursor:pointer;transition:border-color .2s;}
+.admin-ctrl-select:focus,.admin-ctrl-input:focus{outline:none;border-color:rgba(79,95,196,.5);}
+.admin-ctrl-apply{background:var(--blue);border:none;border-radius:7px;color:#fff;
+  font-size:13px;font-weight:800;padding:8px 18px;cursor:pointer;transition:opacity .15s;align-self:flex-end;}
+.admin-ctrl-apply:hover{opacity:.85;}
+.admin-ctrl-divider{width:1px;background:var(--bd);margin:0 4px;align-self:stretch;}
+.ctrl-hint{font-size:11px;color:var(--dim);width:100%;margin-top:2px;line-height:1.5;}
+
+/* 통계 카드 */
+.admin-stats-row{display:grid;grid-template-columns:repeat(5,1fr);gap:11px;margin-bottom:16px;}
+.admin-stat-card{background:var(--card-bg);border:1px solid var(--bd);border-radius:11px;padding:14px 16px;}
+.admin-stat-card .lbl{font-size:10px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px;}
+.admin-stat-card .val{font-size:24px;font-weight:900;letter-spacing:-1px;line-height:1;}
+
+/* 테이블 */
+.admin-table-wrap{background:var(--card-bg);border:1px solid var(--bd);border-radius:14px;overflow:hidden;}
+.admin-legend-row{display:flex;gap:14px;padding:10px 18px;border-bottom:1px solid var(--bd);flex-wrap:wrap;}
+.admin-legend-item{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--sub);}
+.admin-legend-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+.admin-table{width:100%;border-collapse:collapse;}
+.admin-table th{font-size:11px;font-weight:800;color:var(--dim);text-transform:uppercase;
+  letter-spacing:.4px;padding:10px 14px;text-align:left;border-bottom:1px solid var(--bd);
+  background:var(--s2);cursor:pointer;user-select:none;white-space:nowrap;}
+.admin-table th:hover{color:var(--txt);}
+.admin-table th.sort-asc::after{content:' ↑';color:var(--blue);}
+.admin-table th.sort-desc::after{content:' ↓';color:var(--blue);}
+.admin-table td{font-size:13px;padding:10px 14px;border-bottom:1px solid var(--bd);vertical-align:middle;}
+.admin-table tr:last-child td{border-bottom:none;}
+.admin-table tbody tr:hover td{background:var(--s2);}
+tr.row-danger td{background:var(--warn-bg);}
+tr.row-danger:hover td{background:rgba(217,50,72,.12);}
+tr.row-danger td:first-child{border-left:3px solid var(--red);}
+tr.row-warn td{background:var(--alert-bg);}
+tr.row-warn:hover td{background:rgba(201,122,0,.12);}
+tr.row-warn td:first-child{border-left:3px solid var(--org);}
+tr.row-good td{background:var(--ok-bg);}
+tr.row-good:hover td{background:rgba(21,138,62,.12);}
+tr.row-good td:first-child{border-left:3px solid var(--green);}
+tr.row-exit td{background:var(--exit-bg);opacity:.72;}
+tr.row-exit td:first-child{border-left:3px solid var(--dim);}
+
+.student-link{background:none;border:none;color:var(--blue);font-size:13px;font-weight:700;
+  cursor:pointer;text-decoration:underline;padding:0;}
+.student-link:hover{color:var(--txt);}
+.score-badge{display:inline-block;font-size:11px;font-weight:700;padding:2px 7px;border-radius:6px;}
+.badge-hi{background:var(--ok-bg);color:var(--ok-txt);border:1px solid var(--ok-bd);}
+.badge-mid{background:var(--neu-bg);color:var(--sub);border:1px solid var(--neu-bd);}
+.badge-lo{background:var(--warn-bg);color:var(--warn-txt);border:1px solid var(--warn-bd);}
+.badge-alert{background:var(--alert-bg);color:var(--alert-txt);border:1px solid var(--alert-bd);}
+.badge-exit{background:var(--exit-bg);color:var(--exit-txt);border:1px solid var(--exit-bd);font-style:italic;}
+
+/* 모달 */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(5,7,15,.72);
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);z-index:900;
+  align-items:center;justify-content:center;padding:16px;}
+.modal-overlay.show{display:flex;}
+.modal-box{background:var(--card-bg);border:1px solid var(--bd2);border-radius:18px;
+  width:100%;max-width:780px;max-height:90vh;overflow-y:auto;
+  box-shadow:0 24px 80px rgba(0,0,0,.4);}
+.modal-head{display:flex;align-items:center;justify-content:space-between;
+  padding:18px 22px;border-bottom:1px solid var(--bd);position:sticky;top:0;
+  background:var(--card-bg);z-index:1;}
+.modal-head h3{font-size:16px;font-weight:800;letter-spacing:-.3px;}
+.modal-close-btn{background:var(--s2);border:1px solid var(--bd);border-radius:8px;
+  color:var(--sub);font-size:13px;font-weight:600;padding:6px 13px;cursor:pointer;}
+.modal-body{padding:18px 22px 26px;}
+.modal-stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px;}
+.modal-stat{background:var(--s2);border-radius:10px;padding:12px 14px;}
+.modal-stat .lbl{font-size:10px;font-weight:700;color:var(--dim);text-transform:uppercase;margin-bottom:5px;}
+.modal-stat .val{font-size:20px;font-weight:900;letter-spacing:-.8px;line-height:1;}
+.modal-chart-wrap{position:relative;width:100%;height:200px;margin-bottom:14px;}
+.modal-comment-box{background:var(--s2);border-radius:11px;padding:14px 16px;font-size:13px;
+  color:var(--sub);line-height:1.8;}
+.modal-comment-box strong{color:var(--txt);font-weight:800;display:block;margin-bottom:6px;}
+
+/* 로딩 */
+.ld{display:none;position:fixed;inset:0;background:rgba(10,12,20,.82);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);z-index:999;
+  flex-direction:column;align-items:center;justify-content:center;gap:14px;}
 .ld.show{display:flex;}
-.spin{width:32px;height:32px;border:3px solid rgba(255,255,255,0.1);border-top-color:var(--red);border-radius:50%;animation:sp 0.7s linear infinite;}
+.spin{width:30px;height:30px;border:3px solid rgba(255,255,255,.12);
+  border-top-color:var(--red);border-radius:50%;animation:sp .7s linear infinite;}
 @keyframes sp{to{transform:rotate(360deg);}}
-.ld p{font-size:15px;color:var(--sub);}
+.ld p{font-size:14px;color:var(--sub);}
+
+/* 반응형 */
+@media(max-width:700px){
+  .admin-class-grid{grid-template-columns:1fr 1fr;}
+  .admin-stats-row{grid-template-columns:1fr 1fr;}
+  .admin-body{padding:14px 12px 40px;}
+  .admin-ctrl-bar{gap:8px;}
+  .admin-ctrl-select,.admin-ctrl-input{min-width:90px;font-size:12px;}
+  .modal-stat-row{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:480px){
+  .admin-class-grid{grid-template-columns:1fr;}
+}
 </style>
 </head>
 <body>
 
 <div class="ld" id="ld"><div class="spin"></div><p>불러오는 중...</p></div>
 
+<!-- 모달 -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3 id="modal-title"></h3>
+      <button class="modal-close-btn" onclick="closeModal()">닫기</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-stat-row" id="modal-stats"></div>
+      <div class="modal-chart-wrap"><canvas id="modal-chart"></canvas></div>
+      <div class="modal-comment-box" id="modal-comment"></div>
+    </div>
+  </div>
+</div>
+
 <!-- 모바일 로그인 -->
 <div class="screen" id="mLogin">
-  <div style="width:100%;max-width:100%;padding:0;">
+  <div style="width:100%;padding:0;">
     <div class="m-brand">
       <div class="m-brand-icon">
-        <svg viewBox="0 0 36 36" fill="none"><path d="M7 27L13 16L20 21L27 9" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="27" cy="9" r="3.5" fill="white"/><path d="M7 31H29" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.35"/></svg>
+        <svg viewBox="0 0 36 36" fill="none"><path d="M7 27L13 16L20 21L27 9" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="27" cy="9" r="3.5" fill="white"/><path d="M7 31H29" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity=".35"/></svg>
       </div>
       <h1>성적 조회</h1>
       <p>이름과 비밀번호로<br>내 성적을 확인하세요</p>
@@ -187,7 +368,7 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--txt);font-fami
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
       <input type="password" id="m-pw" placeholder="비밀번호" autocomplete="off">
     </div>
-    <button class="m-btn" onclick="doLogin('m')">로그인</button>
+    <button class="m-login-btn" onclick="doLogin('m')">로그인</button>
     <div class="m-err" id="m-err"></div>
   </div>
 </div>
@@ -197,7 +378,7 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--txt);font-fami
   <div class="p-login-card">
     <div class="p-brand">
       <div class="p-brand-icon">
-        <svg viewBox="0 0 36 36" fill="none"><path d="M7 27L13 16L20 21L27 9" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="27" cy="9" r="3.5" fill="white"/><path d="M7 31H29" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.35"/></svg>
+        <svg viewBox="0 0 36 36" fill="none"><path d="M7 27L13 16L20 21L27 9" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="27" cy="9" r="3.5" fill="white"/><path d="M7 31H29" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity=".35"/></svg>
       </div>
       <h1>성적 조회</h1>
       <p>이름과 비밀번호로 내 성적을 확인하세요</p>
@@ -210,20 +391,20 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--txt);font-fami
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
       <input type="password" id="p-pw" placeholder="비밀번호" autocomplete="off">
     </div>
-    <button class="p-btn" onclick="doLogin('p')">로그인</button>
+    <button class="p-login-btn" onclick="doLogin('p')">로그인</button>
     <div class="p-err" id="p-err"></div>
   </div>
 </div>
 
 <!-- 모바일 반 선택 -->
 <div class="screen" id="mClassSelect">
-  <div style="width:100%;max-width:100%;padding:0;">
+  <div style="width:100%;padding:0;">
     <div class="m-cs-title">
       <div class="m-brand-icon" style="margin-bottom:4vw;">
-        <svg viewBox="0 0 36 36" fill="none"><path d="M7 27L13 16L20 21L27 9" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="27" cy="9" r="3.5" fill="white"/><path d="M7 31H29" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.35"/></svg>
+        <svg viewBox="0 0 36 36" fill="none"><path d="M7 27L13 16L20 21L27 9" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="27" cy="9" r="3.5" fill="white"/><path d="M7 31H29" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity=".35"/></svg>
       </div>
       <h2 id="m-cs-name"></h2>
-      <p>수강 중인 반이 2개 이상입니다.<br>조회할 반을 선택하세요.</p>
+      <p>조회할 반을 선택하세요.</p>
     </div>
     <div id="m-cs-list"></div>
     <button class="m-cs-back" onclick="doLogout()">← 로그아웃</button>
@@ -235,10 +416,10 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--txt);font-fami
   <div class="p-cs-card">
     <div class="p-cs-title">
       <div class="p-brand-icon" style="margin:0 auto 16px;">
-        <svg viewBox="0 0 36 36" fill="none"><path d="M7 27L13 16L20 21L27 9" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="27" cy="9" r="3.5" fill="white"/><path d="M7 31H29" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.35"/></svg>
+        <svg viewBox="0 0 36 36" fill="none"><path d="M7 27L13 16L20 21L27 9" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="27" cy="9" r="3.5" fill="white"/><path d="M7 31H29" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity=".35"/></svg>
       </div>
       <h2 id="p-cs-name"></h2>
-      <p>수강 중인 반이 2개 이상입니다.<br>조회할 반을 선택하세요.</p>
+      <p>조회할 반을 선택하세요.</p>
     </div>
     <div id="p-cs-list"></div>
     <button class="p-cs-back" onclick="doLogout()">← 로그아웃</button>
@@ -248,13 +429,14 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--txt);font-fami
 <!-- 모바일 대시보드 -->
 <div class="screen" id="mDash">
   <div class="m-topbar">
-    <div>
+    <div class="m-topbar-left">
       <div class="m-top-name" id="m-uname"></div>
       <div class="m-top-cls" id="m-ucls"></div>
     </div>
     <div class="m-topbar-right">
-      <button class="m-btn-switch" id="m-btn-switch" onclick="goClassSelect()" style="display:none;">반 변경</button>
-      <button class="m-btn-out" onclick="doLogout()">로그아웃</button>
+      <button class="m-btn-theme" id="m-btn-theme" onclick="toggleTheme()">다크</button>
+      <button class="m-btn-xs" id="m-btn-switch" onclick="goClassSelect()" style="display:none;">반 변경</button>
+      <button class="m-btn-xs" onclick="doLogout()">로그아웃</button>
     </div>
   </div>
   <div class="m-body">
@@ -270,19 +452,19 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--txt);font-fami
       <button class="m-tab" id="mt2" onclick="mTab(2,this)">표준점수</button>
     </div>
     <div id="mp0" class="m-chart-card">
-      <h3>점수 추이</h3><p>내 점수와 반 평균 비교. 결석은 선으로 연결됩니다.</p>
+      <h3>점수 추이</h3><p>내 점수 vs 반 평균. 결석은 선으로 연결됩니다.</p>
       <div class="m-cw"><canvas id="mc0"></canvas></div>
-      <div class="m-legend"><span><i style="background:#e8394d"></i>내 점수</span><span><i style="background:#3a3f60"></i>반 평균</span></div>
+      <div class="m-legend"><span><i style="background:var(--red)"></i>내 점수</span><span><i style="background:var(--dim)"></i>반 평균</span></div>
     </div>
     <div id="mp1" class="m-chart-card" style="display:none">
-      <h3>상대평가</h3><p>낮을수록 상위권. 1등 = 0%</p>
+      <h3>상대평가</h3><p>낮을수록 상위권. 1등=0%</p>
       <div class="m-cw"><canvas id="mc1"></canvas></div>
-      <div class="m-legend"><span><i style="background:#6c7ce0"></i>반 내 순위(%)</span></div>
+      <div class="m-legend"><span><i style="background:var(--blue)"></i>반 내 순위(%)</span></div>
     </div>
     <div id="mp2" class="m-chart-card" style="display:none">
-      <h3>표준점수</h3><p>수능 방식. 반 평균 = 100점 기준.</p>
+      <h3>표준점수</h3><p>수능 방식. 반 평균=100 기준.</p>
       <div class="m-cw"><canvas id="mc2"></canvas></div>
-      <div class="m-legend"><span><i style="background:#e8394d"></i>내 표준점수</span><span><i style="background:#f5a623"></i>만점</span><span><i style="background:rgba(255,255,255,0.2)"></i>기준선</span></div>
+      <div class="m-legend"><span><i style="background:var(--red)"></i>내 표준점수</span><span><i style="background:var(--org)"></i>만점</span></div>
     </div>
     <div id="m-comment-wrap"></div>
   </div>
@@ -291,13 +473,14 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--txt);font-fami
 <!-- PC 대시보드 -->
 <div class="screen" id="pDash">
   <div class="p-topbar">
-    <div>
+    <div class="p-topbar-left">
       <div class="p-top-name" id="p-uname"></div>
       <div class="p-top-cls" id="p-ucls"></div>
     </div>
     <div class="p-topbar-right">
-      <button class="p-btn-switch" id="p-btn-switch" onclick="goClassSelect()" style="display:none;">반 변경</button>
-      <button class="p-btn-out" onclick="doLogout()">로그아웃</button>
+      <button class="p-btn-theme" id="p-btn-theme" onclick="toggleTheme()">다크 모드</button>
+      <button class="p-btn-sm p-btn-blue" id="p-btn-switch" onclick="goClassSelect()" style="display:none;">반 변경</button>
+      <button class="p-btn-sm" onclick="doLogout()">로그아웃</button>
     </div>
   </div>
   <div class="p-body">
@@ -313,55 +496,156 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--txt);font-fami
       <button class="p-tab" id="pt2" onclick="pTab(2,this)">표준점수</button>
     </div>
     <div id="pp0" class="p-chart-card">
-      <h3>점수 추이</h3><p>내 점수와 반 평균 비교. 결석 구간은 선으로 연결됩니다.</p>
+      <h3>점수 추이</h3><p>내 점수 vs 반 평균. 결석 구간은 선으로 연결됩니다.</p>
       <div class="p-cw"><canvas id="pc0"></canvas></div>
-      <div class="p-legend"><span><i style="background:#e8394d"></i>내 점수</span><span><i style="background:#3a3f60"></i>반 평균</span></div>
+      <div class="p-legend"><span><i style="background:var(--red)"></i>내 점수</span><span><i style="background:var(--dim)"></i>반 평균</span></div>
     </div>
     <div id="pp1" class="p-chart-card" style="display:none">
-      <h3>상대평가</h3><p>낮을수록 상위권. 1등 = 0%</p>
+      <h3>상대평가</h3><p>낮을수록 상위권. 1등=0%</p>
       <div class="p-cw"><canvas id="pc1"></canvas></div>
-      <div class="p-legend"><span><i style="background:#6c7ce0"></i>반 내 순위(%)</span></div>
+      <div class="p-legend"><span><i style="background:var(--blue)"></i>반 내 순위(%)</span></div>
     </div>
     <div id="pp2" class="p-chart-card" style="display:none">
-      <h3>표준점수</h3><p>수능 방식. 반 평균 = 100점 기준.</p>
+      <h3>표준점수</h3><p>수능 방식. 반 평균=100 기준.</p>
       <div class="p-cw"><canvas id="pc2"></canvas></div>
-      <div class="p-legend"><span><i style="background:#e8394d"></i>내 표준점수</span><span><i style="background:#f5a623"></i>만점 표준점수</span><span><i style="background:rgba(255,255,255,0.2)"></i>기준선(100)</span></div>
+      <div class="p-legend"><span><i style="background:var(--red)"></i>내 표준점수</span><span><i style="background:var(--org)"></i>만점 표준점수</span></div>
     </div>
     <div id="p-comment-wrap"></div>
   </div>
 </div>
 
+<!-- 관리자 패널 -->
+<div class="screen" id="adminPanel">
+  <div class="admin-topbar">
+    <div class="admin-topbar-left">
+      <div class="admin-badge">관리자</div>
+      <div class="admin-topbar-title" id="admin-title">반 목록</div>
+    </div>
+    <div class="admin-topbar-right">
+      <button class="p-btn-theme" id="a-btn-theme" onclick="toggleTheme()">다크 모드</button>
+      <button class="p-btn-sm" onclick="doLogout()">로그아웃</button>
+    </div>
+  </div>
+  <div class="admin-body" id="admin-body"></div>
+</div>
+
 <script>
-const SHEET_ID   = '1L6vm03FksK8R8GSyuibN_esZ7ohJdFoYoCWCPMOlEfY';
-const API_KEY    = 'AIzaSyADxuPBfoEYQVDj6mTPajjVlxRwWwkElEc';
-const SHEET_NAME = '시트1';
+/* ════════════════════════════════════════
+   설정
+════════════════════════════════════════ */
+var SHEET_ID   = '1L6vm03FksK8R8GSyuibN_esZ7ohJdFoYoCWCPMOlEfY';
+var API_KEY    = 'AIzaSyADxuPBfoEYQVDj6mTPajjVlxRwWwkElEc';
+var SHEET_NAME = '시트1';
+
+// 관리자 필터 기본값
+var FILTER = {
+  dangerMode: 'std',  // std | raw
+  dangerLow: 90,
+  warnLow: 97,
+  downSlope: -1.5,
+  downRecent: -5,
+  minTests: 2,
+  showMode: 'all',    // all | issue | good
+  // 기간 필터 (인덱스)
+  dateFrom: null,
+  dateTo: null,
+  // 퇴원생 설정
+  exitMode: 'blank',  // blank=최근N회 공백, score=N회 연속결석, none=사용안함
+  exitBlankCount: 3,  // 최근 N회 모두 공백
+  exitScoreCount: 3   // N회 연속 결석
+};
+
+// 관리자 정렬 상태
+var SORT = { col: 'status', dir: 'asc' };
 
 var IS_MOBILE = window.innerWidth < 600;
 var D = null, RAW = null, MCH = {}, PCH = {};
+var MODAL_CH = null;
+var ADMIN_DATA = null;
+var ADMIN_CLS  = null;
+var IS_ADMIN   = false;
 
 Chart.defaults.font.family = "-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif";
-Chart.defaults.color = '#5a5f7a';
-Chart.defaults.animation = false;
+Chart.defaults.animation   = false;
 
-function setLd(v){document.getElementById('ld').className='ld'+(v?' show':'');}
+/* ════════════════════════════════════════
+   테마 (기본: 라이트)
+════════════════════════════════════════ */
+(function(){
+  var t = localStorage.getItem('theme') || 'light';
+  if(t === 'dark') document.documentElement.classList.add('dark');
+  syncThemeBtns(t);
+})();
 
-function show(id){
-  ['mLogin','pLogin','mClassSelect','pClassSelect','mDash','pDash'].forEach(function(s){
-    var el=document.getElementById(s);
-    el.classList.remove('active');
-    el.style.display='none';
+function syncThemeBtns(t){
+  var label = t === 'dark' ? '라이트 모드' : '다크 모드';
+  var mLabel = t === 'dark' ? '라이트' : '다크';
+  ['p-btn-theme','a-btn-theme'].forEach(function(id){
+    var el = document.getElementById(id);
+    if(el) el.textContent = label;
   });
-  var t=document.getElementById(id);
-  t.style.display='flex';
-  t.classList.add('active');
-  if(IS_MOBILE){
-    t.style.width='100vw';t.style.height='100vh';
-    t.style.position='fixed';t.style.top='0';t.style.left='0';
+  var mEl = document.getElementById('m-btn-theme');
+  if(mEl) mEl.textContent = mLabel;
+}
+
+function toggleTheme(){
+  var isDark = document.documentElement.classList.toggle('dark');
+  var t = isDark ? 'dark' : 'light';
+  localStorage.setItem('theme', t);
+  syncThemeBtns(t);
+  // 차트 재그리기
+  if(D){
+    killCH(MCH); killCH(PCH);
+    if(IS_MOBILE) requestAnimationFrame(function(){mDraw0();mDraw1();mDraw2();});
+    else           requestAnimationFrame(function(){pDraw0();pDraw1();pDraw2();});
   }
 }
 
-document.addEventListener('DOMContentLoaded',function(){
-  show(IS_MOBILE?'mLogin':'pLogin');
+/* ════════════════════════════════════════
+   유틸
+════════════════════════════════════════ */
+function setLd(v){ document.getElementById('ld').className = 'ld' + (v?' show':''); }
+
+function show(id){
+  ['mLogin','pLogin','mClassSelect','pClassSelect','mDash','pDash','adminPanel'].forEach(function(s){
+    var el = document.getElementById(s);
+    el.classList.remove('active');
+    el.style.display = 'none';
+  });
+  var t = document.getElementById(id);
+  t.style.display = 'flex';
+  t.classList.add('active');
+  if(IS_MOBILE && id !== 'adminPanel'){
+    t.style.cssText += ';width:100vw;height:100vh;position:fixed;top:0;left:0;';
+  }
+}
+
+function avg(a){
+  var v = (a||[]).filter(function(x){ return x!==null&&!isNaN(+x); }).map(Number);
+  return v.length ? v.reduce(function(a,b){ return a+b; },0)/v.length : NaN;
+}
+
+function shortDate(s){
+  if(!s) return '';
+  var m = s.match(/(\d{1,4})[\/\-](\d{1,2})[\/\-](\d{1,2})/);
+  if(m) return parseInt(m[2]) + '/' + parseInt(m[3]);
+  var m2 = s.match(/(\d{1,2})\/(\d{1,2})/);
+  if(m2) return m2[1] + '/' + m2[2];
+  return s;
+}
+
+function esc(s){
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+function isDark(){ return document.documentElement.classList.contains('dark'); }
+
+/* ════════════════════════════════════════
+   로그인
+════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', function(){
+  show(IS_MOBILE ? 'mLogin' : 'pLogin');
   document.getElementById('m-nm').addEventListener('keydown',function(e){if(e.key==='Enter')document.getElementById('m-pw').focus();});
   document.getElementById('m-pw').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin('m');});
   document.getElementById('p-nm').addEventListener('keydown',function(e){if(e.key==='Enter')document.getElementById('p-pw').focus();});
@@ -369,84 +653,80 @@ document.addEventListener('DOMContentLoaded',function(){
 });
 
 function doLogin(mode){
-  var pfx=mode+'-';
-  var n=document.getElementById(pfx+'nm').value.trim();
-  var p=document.getElementById(pfx+'pw').value.trim();
-  document.getElementById(pfx+'err').textContent='';
-  if(!n||!p){document.getElementById(pfx+'err').textContent='이름과 비밀번호를 입력하세요.';return;}
+  var pfx = mode + '-';
+  var n = document.getElementById(pfx+'nm').value.trim();
+  var p = document.getElementById(pfx+'pw').value.trim();
+  document.getElementById(pfx+'err').textContent = '';
+  if(!n||!p){ document.getElementById(pfx+'err').textContent='이름과 비밀번호를 입력하세요.'; return; }
   setLd(true);
-  var url='https://sheets.googleapis.com/v4/spreadsheets/'+SHEET_ID+'/values/'+encodeURIComponent(SHEET_NAME)+'?key='+API_KEY;
-  fetch(url)
-  .then(function(r){return r.json();})
-  .then(function(json){
+  var url = 'https://sheets.googleapis.com/v4/spreadsheets/'+SHEET_ID+'/values/'+encodeURIComponent(SHEET_NAME)+'?key='+API_KEY;
+  fetch(url).then(function(r){ return r.json(); }).then(function(json){
     setLd(false);
-    if(json.error){document.getElementById(pfx+'err').textContent='API 오류: '+json.error.message;return;}
-    var rows=json.values;
-    if(!rows||rows.length<3){document.getElementById(pfx+'err').textContent='데이터가 없습니다.';return;}
+    if(json.error){ document.getElementById(pfx+'err').textContent='API 오류: '+json.error.message; return; }
+    var rows = json.values;
+    if(!rows||rows.length<2){ document.getElementById(pfx+'err').textContent='데이터가 없습니다.'; return; }
 
-    // 날짜 헤더
-    var dateRow=rows[1];
-    var dates=[];
-    for(var i=3;i<dateRow.length;i++){
-      if(dateRow[i]&&dateRow[i].trim()!=='') dates.push({index:i,label:dateRow[i].trim()});
-    }
-
-    var dataRows=rows.slice(2);
-
-    // 이름+비번 일치하는 행 전부 수집 (반이 여러 개일 수 있음)
-    var matchedRows=[];
-    for(var r=0;r<dataRows.length;r++){
-      if(String(dataRows[r][0]||'').trim()===n&&String(dataRows[r][1]||'').trim()===p){
-        matchedRows.push(dataRows[r]);
+    // 관리자 체크 (E1=index4, F1=index5)
+    var hdr = rows[0]||[];
+    var adminId = String(hdr[4]||'').trim();
+    var adminPw = String(hdr[5]||'').trim();
+    if(adminId && adminPw && n===adminId && p===adminPw){
+      IS_ADMIN = true;
+      var dateRow = rows[1]||[];
+      var dates = [];
+      for(var i=3;i<dateRow.length;i++){
+        if(dateRow[i]&&dateRow[i].trim()) dates.push({index:i,label:dateRow[i].trim()});
       }
+      ADMIN_DATA = {dates:dates, dataRows:rows.slice(2)};
+      RAW = null; D = null;
+      showAdminClassList();
+      return;
     }
 
-    if(matchedRows.length===0){document.getElementById(pfx+'err').textContent='이름 또는 비밀번호가 올바르지 않습니다.';return;}
-
-    // RAW 저장
-    RAW = {name:n, dataRows:dataRows, dates:dates, matchedRows:matchedRows};
-
-    // 반이 1개면 바로 대시보드, 2개 이상이면 반 선택 화면
-    var classes = matchedRows.map(function(r){return String(r[2]||'').trim();});
-    // 중복 제거
-    var uniqueClasses = classes.filter(function(v,i,a){return a.indexOf(v)===i;});
-
-    if(uniqueClasses.length>=2){
-      showClassSelect(n, uniqueClasses);
-    } else {
-      buildDashData(matchedRows[0], dataRows, dates);
-      showDash();
+    // 일반 학생
+    IS_ADMIN = false;
+    var dateRow = rows[1];
+    var dates = [];
+    for(var i=3;i<dateRow.length;i++){
+      if(dateRow[i]&&dateRow[i].trim()) dates.push({index:i,label:dateRow[i].trim()});
     }
-  })
-  .catch(function(){
+    var dataRows = rows.slice(2);
+    var matched = dataRows.filter(function(r){
+      return String(r[0]||'').trim()===n && String(r[1]||'').trim()===p;
+    });
+    if(!matched.length){ document.getElementById(pfx+'err').textContent='이름 또는 비밀번호가 올바르지 않습니다.'; return; }
+    RAW = {name:n, dataRows:dataRows, dates:dates, matchedRows:matched};
+    var classes = matched.map(function(r){ return String(r[2]||'').trim(); })
+                         .filter(function(v,i,a){ return a.indexOf(v)===i; });
+    if(classes.length>=2) showClassSelect(n, classes);
+    else { buildDashData(matched[0],dataRows,dates); showDash(); }
+  }).catch(function(){
     setLd(false);
-    document.getElementById('m-err')?document.getElementById('m-err').textContent='오류가 발생했습니다. 시트 공개 설정을 확인하세요.':null;
-    document.getElementById('p-err')?document.getElementById('p-err').textContent='오류가 발생했습니다. 시트 공개 설정을 확인하세요.':null;
+    document.getElementById(pfx+'err').textContent='오류가 발생했습니다.';
   });
 }
 
+/* ════════════════════════════════════════
+   반 선택 (학생)
+════════════════════════════════════════ */
 function showClassSelect(name, classes){
   if(IS_MOBILE){
-    document.getElementById('m-cs-name').textContent=name+'님';
-    var list=document.getElementById('m-cs-list');
-    list.innerHTML='';
+    document.getElementById('m-cs-name').textContent = name;
+    var list = document.getElementById('m-cs-list'); list.innerHTML='';
     classes.forEach(function(cls){
-      var btn=document.createElement('button');
-      btn.className='m-cs-btn';
-      btn.innerHTML='<span class="cs-name">'+cls+' 반</span><span class="cs-arrow">›</span>';
-      btn.onclick=function(){selectClass(cls);};
+      var btn=document.createElement('button'); btn.className='m-cs-btn';
+      btn.innerHTML='<span>'+esc(cls)+'</span><span style="color:var(--dim);font-size:5vw;">›</span>';
+      btn.onclick=function(){ selectClass(cls); };
       list.appendChild(btn);
     });
     show('mClassSelect');
   } else {
-    document.getElementById('p-cs-name').textContent=name+'님';
-    var list=document.getElementById('p-cs-list');
-    list.innerHTML='';
+    document.getElementById('p-cs-name').textContent = name;
+    var list = document.getElementById('p-cs-list'); list.innerHTML='';
     classes.forEach(function(cls){
-      var btn=document.createElement('button');
-      btn.className='p-cs-btn';
-      btn.innerHTML='<span>'+cls+' 반</span><span>›</span>';
-      btn.onclick=function(){selectClass(cls);};
+      var btn=document.createElement('button'); btn.className='p-cs-btn';
+      btn.innerHTML='<span>'+esc(cls)+'</span><span style="color:var(--dim)">›</span>';
+      btn.onclick=function(){ selectClass(cls); };
       list.appendChild(btn);
     });
     show('pClassSelect');
@@ -454,215 +734,805 @@ function showClassSelect(name, classes){
 }
 
 function selectClass(cls){
-  // 선택한 반에 해당하는 행 찾기
-  var targetRow = RAW.matchedRows.filter(function(r){return String(r[2]||'').trim()===cls;})[0];
-  buildDashData(targetRow, RAW.dataRows, RAW.dates);
+  var row = RAW.matchedRows.filter(function(r){ return String(r[2]||'').trim()===cls; })[0];
+  buildDashData(row, RAW.dataRows, RAW.dates);
   showDash();
 }
 
 function goClassSelect(){
-  // 반 변경 버튼 클릭 시 반 선택 화면으로
-  var classes = RAW.matchedRows.map(function(r){return String(r[2]||'').trim();}).filter(function(v,i,a){return a.indexOf(v)===i;});
+  var classes = RAW.matchedRows.map(function(r){ return String(r[2]||'').trim(); })
+                               .filter(function(v,i,a){ return a.indexOf(v)===i; });
   showClassSelect(RAW.name, classes);
 }
 
+/* ════════════════════════════════════════
+   데이터 빌드 (학생)
+════════════════════════════════════════ */
 function buildDashData(studentRow, dataRows, dates){
-  var studentName = String(studentRow[0]).trim();
-  var studentClass = String(studentRow[2]).trim();
-  var classStudents = dataRows.filter(function(r){return String(r[2]||'').trim()===studentClass;});
-
-  var chartData=[];
+  var name = String(studentRow[0]).trim();
+  var cls  = String(studentRow[2]).trim();
+  var classStudents = dataRows.filter(function(r){ return String(r[2]||'').trim()===cls; });
+  var chartData = [];
   for(var d=0;d<dates.length;d++){
-    var col=dates[d].index;
-    var classScores=classStudents.map(function(r){
-      var v=r[col];
-      return(v!==undefined&&v!==''&&!isNaN(Number(v)))?Number(v):null;
+    var col = dates[d].index;
+    var clsScores = classStudents.map(function(r){
+      var v=r[col]; return(v!==undefined&&v!==''&&!isNaN(Number(v)))?Number(v):null;
     });
-    var validScores=classScores.filter(function(v){return v!==null;});
-    if(validScores.length===0)continue;
-
-    var myRaw=studentRow[col];
-    var myScore=(myRaw!==undefined&&myRaw!==''&&!isNaN(Number(myRaw)))?Number(myRaw):null;
-    var mean=validScores.reduce(function(a,b){return a+b;},0)/validScores.length;
-
-    var percentile=null;
+    var valid = clsScores.filter(function(v){ return v!==null; });
+    if(!valid.length) continue;
+    var myRaw = studentRow[col];
+    var myScore = (myRaw!==undefined&&myRaw!==''&&!isNaN(Number(myRaw)))?Number(myRaw):null;
+    var mean = valid.reduce(function(a,b){return a+b;},0)/valid.length;
+    var pct = null;
     if(myScore!==null){
-      var above=validScores.filter(function(s){return s>myScore;}).length;
-      percentile=Math.round((above/validScores.length)*100);
+      var above = valid.filter(function(s){return s>myScore;}).length;
+      pct = Math.round((above/valid.length)*100);
     }
-
-    var variance=validScores.length>1?validScores.reduce(function(sum,s){return sum+Math.pow(s-mean,2);},0)/validScores.length:0;
-    var stdDev=Math.sqrt(variance);
-
-    var standardScore=null;
-    if(myScore!==null) standardScore=stdDev<0.001?100:Math.round(20*(myScore-mean)/stdDev+100);
-    var maxRaw=Math.max.apply(null,validScores);
-    var maxStandardScore=stdDev<0.001?100:Math.round(20*(maxRaw-mean)/stdDev+100);
-
-    chartData.push({
-      date:dates[d].label,myScore:myScore,
-      classAvg:Math.round(mean*100)/100,
-      percentile:percentile,
-      standardScore:standardScore,
-      maxStandardScore:maxStandardScore,
-      mean:Math.round(mean*10)/10,
-      stdDev:Math.round(stdDev*10)/10
-    });
+    var variance = valid.length>1 ? valid.reduce(function(s,v){return s+Math.pow(v-mean,2);},0)/valid.length : 0;
+    var sd = Math.sqrt(variance);
+    var ss = (myScore!==null) ? (sd<0.001 ? 100 : Math.round(20*(myScore-mean)/sd+100)) : null;
+    var maxSS = sd<0.001 ? 100 : Math.round(20*(Math.max.apply(null,valid)-mean)/sd+100);
+    chartData.push({date:dates[d].label, myScore:myScore, classAvg:Math.round(mean*100)/100,
+      percentile:pct, standardScore:ss, maxStandardScore:maxSS,
+      mean:Math.round(mean*10)/10, stdDev:Math.round(sd*10)/10});
   }
-
-  D={success:true,studentName:studentName,studentClass:studentClass,chartData:chartData};
+  D = {studentName:name, studentClass:cls, chartData:chartData};
 }
 
 function doLogout(){
-  D=null;RAW=null;
-  killCH(MCH);killCH(PCH);
-  document.getElementById('m-nm').value='';document.getElementById('m-pw').value='';document.getElementById('m-err').textContent='';
-  document.getElementById('p-nm').value='';document.getElementById('p-pw').value='';document.getElementById('p-err').textContent='';
+  D=null; RAW=null; IS_ADMIN=false; ADMIN_DATA=null; ADMIN_CLS=null;
+  killCH(MCH); killCH(PCH);
+  if(MODAL_CH){ MODAL_CH.destroy(); MODAL_CH=null; }
+  ['m-nm','m-pw','p-nm','p-pw'].forEach(function(id){ document.getElementById(id).value=''; });
+  ['m-err','p-err'].forEach(function(id){ document.getElementById(id).textContent=''; });
   show(IS_MOBILE?'mLogin':'pLogin');
   mTab(0,document.getElementById('mt0'));
   pTab(0,document.getElementById('pt0'));
 }
 
-function avg(a){
-  var v=(a||[]).filter(function(x){return x!==null&&x!==undefined&&!isNaN(+x);}).map(Number);
-  return v.length?v.reduce(function(a,b){return a+b;},0)/v.length:NaN;
+/* ════════════════════════════════════════
+   관리자 – 반 목록
+════════════════════════════════════════ */
+function showAdminClassList(){
+  ADMIN_CLS = null;
+  document.getElementById('admin-title').textContent = '반 목록';
+  show('adminPanel');
+  var dataRows = ADMIN_DATA.dataRows, dates = ADMIN_DATA.dates;
+
+  // 반별 그룹핑
+  var classMap = {};
+  dataRows.forEach(function(r){
+    var cls = String(r[2]||'').trim();
+    if(!cls) return;
+    if(!classMap[cls]) classMap[cls] = [];
+    classMap[cls].push(r);
+  });
+
+  var cards = Object.keys(classMap).sort().map(function(cls){
+    var students = classMap[cls];
+    var vDates = dates.filter(function(d){
+      return students.some(function(r){ var v=r[d.index]; return v!==undefined&&v!==''&&!isNaN(Number(v)); });
+    });
+    var allScores = [];
+    students.forEach(function(r){
+      dates.forEach(function(d){ var v=r[d.index]; if(v!==undefined&&v!==''&&!isNaN(Number(v)))allScores.push(Number(v)); });
+    });
+    var period = '';
+    if(vDates.length){
+      period = shortDate(vDates[0].label);
+      if(vDates.length>1) period += '~'+shortDate(vDates[vDates.length-1].label);
+    }
+    return {cls:cls, cnt:students.length, testCount:vDates.length, period:period,
+      classAvg:allScores.length?Math.round(allScores.reduce(function(a,b){return a+b;},0)/allScores.length*10)/10:'-'};
+  });
+
+  var html = '<div style="margin-bottom:18px;"><h3 style="font-size:19px;font-weight:900;letter-spacing:-.4px;margin-bottom:5px;">전체 반 현황</h3>'
+    + '<p style="font-size:13px;color:var(--sub);">반을 클릭하면 학생별 성적 현황을 볼 수 있습니다.</p></div>'
+    + '<div class="admin-class-grid">';
+  cards.forEach(function(c){
+    html += '<div class="admin-class-card" onclick="showAdminClassDetail(\''+esc(c.cls)+'\')">'
+      + '<h3>'+esc(c.cls)+'</h3>'
+      + '<div class="admin-class-meta"><span>'+c.cnt+'명</span><span>시험 '+c.testCount+'회</span><span>평균 '+c.classAvg+'점</span></div>'
+      + (c.period ? '<div class="admin-class-period">'+esc(c.period)+'</div>' : '')
+      + '</div>';
+  });
+  html += '</div>';
+  document.getElementById('admin-body').innerHTML = html;
 }
 
-/* ── 코멘트 엔진 ── */
+/* ════════════════════════════════════════
+   관리자 – 반 상세
+════════════════════════════════════════ */
+function showAdminClassDetail(cls, keepFilter){
+  ADMIN_CLS = cls;
+  document.getElementById('admin-title').textContent = cls;
+  show('adminPanel');
+
+  var dataRows = ADMIN_DATA.dataRows, allDates = ADMIN_DATA.dates;
+  var students = dataRows.filter(function(r){ return String(r[2]||'').trim()===cls; });
+
+  // 이 반의 유효 날짜만
+  var validDates = allDates.filter(function(d){
+    return students.some(function(r){ var v=r[d.index]; return v!==undefined&&v!==''&&!isNaN(Number(v)); });
+  });
+
+  if(!keepFilter){
+    FILTER.dateFrom = validDates.length ? validDates[0].label : null;
+    FILTER.dateTo   = validDates.length ? validDates[validDates.length-1].label : null;
+  }
+
+  // 기간 범위 적용
+  var fromIdx = FILTER.dateFrom ? validDates.findIndex(function(d){ return d.label===FILTER.dateFrom; }) : 0;
+  var toIdx   = FILTER.dateTo   ? validDates.findIndex(function(d){ return d.label===FILTER.dateTo; })   : validDates.length-1;
+  if(fromIdx<0) fromIdx=0;
+  if(toIdx<0)   toIdx=validDates.length-1;
+  var filteredDates = validDates.slice(fromIdx, toIdx+1);
+
+  // 퇴원생 판정 함수 (전체 날짜 기준)
+  function isExited(row){
+    if(FILTER.exitMode==='none') return false;
+    if(FILTER.exitMode==='blank'){
+      var n = FILTER.exitBlankCount;
+      var recentDates = validDates.slice(-n);
+      if(recentDates.length<n) return false;
+      return recentDates.every(function(d){ var v=row[d.index]; return v===undefined||v===''||isNaN(Number(v)); });
+    }
+    if(FILTER.exitMode==='score'){
+      var n = FILTER.exitScoreCount;
+      var recentDates = validDates.slice(-n);
+      if(recentDates.length<n) return false;
+      return recentDates.every(function(d){ var v=row[d.index]; return v===undefined||v===''||isNaN(Number(v)); });
+    }
+    if(FILTER.exitMode==='ratio'){
+      // 전체 시험 중 결석 비율이 특정 수치 이상
+      var threshold = FILTER.exitRatio || 0.7;
+      var totalT = validDates.length;
+      if(totalT===0) return false;
+      var blanks = validDates.filter(function(d){ var v=row[d.index]; return v===undefined||v===''||isNaN(Number(v)); }).length;
+      return blanks/totalT >= threshold;
+    }
+    return false;
+  }
+
+  var studentStats = students.map(function(r){
+    return calcStudentStats(r, students, filteredDates, allDates, isExited(r));
+  });
+
+  renderAdminClassView(cls, studentStats, validDates, filteredDates);
+}
+
+function calcStudentStats(studentRow, classStudents, dates, allDates, exited){
+  var name = String(studentRow[0]).trim();
+  var chartData = [];
+  for(var d=0;d<dates.length;d++){
+    var col = dates[d].index;
+    var clsScores = classStudents.map(function(r){ var v=r[col]; return(v!==undefined&&v!==''&&!isNaN(Number(v)))?Number(v):null; });
+    var valid = clsScores.filter(function(v){ return v!==null; });
+    if(!valid.length) continue;
+    var myRaw = studentRow[col];
+    var myScore = (myRaw!==undefined&&myRaw!==''&&!isNaN(Number(myRaw)))?Number(myRaw):null;
+    var mean = valid.reduce(function(a,b){return a+b;},0)/valid.length;
+    var variance = valid.length>1?valid.reduce(function(s,v){return s+Math.pow(v-mean,2);},0)/valid.length:0;
+    var sd = Math.sqrt(variance);
+    var ss = (myScore!==null)?(sd<0.001?100:Math.round(20*(myScore-mean)/sd+100)):null;
+    var pct = null;
+    if(myScore!==null){ var above=valid.filter(function(s){return s>myScore;}).length; pct=Math.round((above/valid.length)*100); }
+    var maxSS = sd<0.001?100:Math.round(20*(Math.max.apply(null,valid)-mean)/sd+100);
+    chartData.push({date:dates[d].label, myScore:myScore, classAvg:Math.round(mean*100)/100,
+      percentile:pct, standardScore:ss, maxStandardScore:maxSS,
+      mean:Math.round(mean*10)/10, stdDev:Math.round(sd*10)/10});
+  }
+  var vSS  = chartData.filter(function(x){return x.standardScore!==null;}).map(function(x){return x.standardScore;});
+  var vRaw = chartData.filter(function(x){return x.myScore!==null;}).map(function(x){return x.myScore;});
+  var ssAvg  = vSS.length  ? vSS.reduce(function(a,b){return a+b;},0)/vSS.length   : NaN;
+  var rawAvg = vRaw.length ? vRaw.reduce(function(a,b){return a+b;},0)/vRaw.length  : NaN;
+  var n = vSS.length, slope = 0, recentTrend = 0;
+  if(n>=2){
+    var xm=(n-1)/2, num=0, den=0;
+    vSS.forEach(function(v,i){ num+=(i-xm)*(v-ssAvg); den+=(i-xm)*(i-xm); });
+    slope = den===0?0:num/den;
+    var half = Math.floor(n/2);
+    var eAvg = vSS.slice(0,half).reduce(function(a,b){return a+b;},0)/half;
+    var lAvg = vSS.slice(n-half).reduce(function(a,b){return a+b;},0)/(n-half);
+    recentTrend = lAvg - eAvg;
+  }
+  var pcts = chartData.filter(function(x){return x.percentile!==null;}).map(function(x){return x.percentile;});
+  var avgPct = pcts.length ? Math.round(pcts.reduce(function(a,b){return a+b;},0)/pcts.length) : null;
+
+  // 상태 판정
+  var status = 'normal';
+  if(exited){
+    status = 'exit';
+  } else if(n >= FILTER.minTests){
+    var cv  = FILTER.dangerMode==='raw' ? rawAvg : ssAvg;
+    var wLo = FILTER.dangerMode==='raw' ? FILTER.warnLow-10   : FILTER.warnLow;
+    var dLo = FILTER.dangerMode==='raw' ? FILTER.dangerLow-10 : FILTER.dangerLow;
+    if(!isNaN(cv)){
+      if(cv<dLo || (slope<=FILTER.downSlope && cv<wLo))             status='danger';
+      else if(cv<wLo || slope<=FILTER.downSlope || recentTrend<=FILTER.downRecent) status='warn';
+    }
+    if(status==='normal' && !isNaN(ssAvg) && ssAvg>=110) status='good';
+  }
+
+  return {name:name, row:studentRow, chartData:chartData, ssAvg:ssAvg, rawAvg:rawAvg,
+    slope:slope, recentTrend:recentTrend, avgPct:avgPct, n:n, status:status, exited:exited};
+}
+
+/* ════════════════════════════════════════
+   관리자 – 반 뷰 렌더링
+════════════════════════════════════════ */
+function renderAdminClassView(cls, studentStats, validDates, filteredDates){
+  var total   = studentStats.filter(function(s){ return !s.exited; }).length;
+  var exitCnt = studentStats.filter(function(s){ return s.exited; }).length;
+  var dCnt    = studentStats.filter(function(s){ return s.status==='danger'; }).length;
+  var wCnt    = studentStats.filter(function(s){ return s.status==='warn'; }).length;
+  var gCnt    = studentStats.filter(function(s){ return s.status==='good'; }).length;
+
+  var html = '';
+
+  /* ── 뒤로가기 ── */
+  html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px;">'
+    + '<button class="p-btn-sm" onclick="showAdminClassList()" style="display:flex;align-items:center;gap:5px;">← 반 목록</button>'
+    + '<span style="font-size:13px;color:var(--sub);">기간: '+esc(shortDate(filteredDates[0]&&filteredDates[0].label||''))
+    + (filteredDates.length>1?'~'+esc(shortDate(filteredDates[filteredDates.length-1]&&filteredDates[filteredDates.length-1].label||'')):'')+'</span>'
+    + '</div>';
+
+  /* ── 통계 카드 ── */
+  html += '<div class="admin-stats-row">'
+    + '<div class="admin-stat-card"><div class="lbl">재원생</div><div class="val">'+total+'</div></div>'
+    + '<div class="admin-stat-card"><div class="lbl">위험</div><div class="val" style="color:var(--red)">'+dCnt+'</div></div>'
+    + '<div class="admin-stat-card"><div class="lbl">주의</div><div class="val" style="color:var(--org)">'+wCnt+'</div></div>'
+    + '<div class="admin-stat-card"><div class="lbl">우수</div><div class="val" style="color:var(--green)">'+gCnt+'</div></div>'
+    + '<div class="admin-stat-card"><div class="lbl">퇴원(숨김)</div><div class="val" style="color:var(--dim)">'+exitCnt+'</div></div>'
+    + '</div>';
+
+  /* ── 컨트롤바 (기간 + 필터 + 퇴원 설정) ── */
+  // 날짜 드롭다운 옵션 생성
+  var fromOpts = '', toOpts = '';
+  validDates.forEach(function(d){
+    var sel = d.label===FILTER.dateFrom ? ' selected' : '';
+    fromOpts += '<option value="'+esc(d.label)+'"'+sel+'>'+esc(shortDate(d.label))+'</option>';
+  });
+  validDates.forEach(function(d){
+    var sel = d.label===FILTER.dateTo ? ' selected' : '';
+    toOpts += '<option value="'+esc(d.label)+'"'+sel+'>'+esc(shortDate(d.label))+'</option>';
+  });
+
+  html += '<div class="admin-ctrl-bar">'
+    /* 기간 */
+    + '<div class="admin-ctrl-group"><div class="admin-ctrl-label">기간 시작</div>'
+    + '<select class="admin-ctrl-select" id="f-from">'+fromOpts+'</select></div>'
+    + '<div class="admin-ctrl-group"><div class="admin-ctrl-label">기간 종료</div>'
+    + '<select class="admin-ctrl-select" id="f-to">'+toOpts+'</select></div>'
+    + '<div class="admin-ctrl-divider"></div>'
+    /* 필터 */
+    + '<div class="admin-ctrl-group"><div class="admin-ctrl-label">기준 점수</div>'
+    + '<select class="admin-ctrl-select" id="f-mode"><option value="std"'+(FILTER.dangerMode==='std'?' selected':'')+'>표준점수</option><option value="raw"'+(FILTER.dangerMode==='raw'?' selected':'')+'>원점수</option></select></div>'
+    + '<div class="admin-ctrl-group"><div class="admin-ctrl-label">위험 하한</div>'
+    + '<input class="admin-ctrl-input" type="number" id="f-danger" value="'+FILTER.dangerLow+'" min="50" max="120" style="width:80px;"></div>'
+    + '<div class="admin-ctrl-group"><div class="admin-ctrl-label">주의 하한</div>'
+    + '<input class="admin-ctrl-input" type="number" id="f-warn" value="'+FILTER.warnLow+'" min="50" max="120" style="width:80px;"></div>'
+    + '<div class="admin-ctrl-group"><div class="admin-ctrl-label">하락 기울기</div>'
+    + '<input class="admin-ctrl-input" type="number" id="f-slope" value="'+FILTER.downSlope+'" step="0.5" min="-10" max="0" style="width:80px;"></div>'
+    + '<div class="admin-ctrl-group"><div class="admin-ctrl-label">최근 하락폭</div>'
+    + '<input class="admin-ctrl-input" type="number" id="f-recent" value="'+FILTER.downRecent+'" step="1" style="width:80px;"></div>'
+    + '<div class="admin-ctrl-divider"></div>'
+    /* 퇴원생 */
+    + '<div class="admin-ctrl-group"><div class="admin-ctrl-label">퇴원 기준</div>'
+    + '<select class="admin-ctrl-select" id="f-exit-mode" onchange="toggleExitInput()">'
+    + '<option value="none"'+(FILTER.exitMode==='none'?' selected':'')+'>사용 안함</option>'
+    + '<option value="blank"'+(FILTER.exitMode==='blank'?' selected':'')+'>최근 N회 전부 공백</option>'
+    + '<option value="ratio"'+(FILTER.exitMode==='ratio'?' selected':'')+'>결석 비율 N% 이상</option>'
+    + '</select></div>'
+    + '<div class="admin-ctrl-group" id="exit-input-wrap"><div class="admin-ctrl-label" id="exit-input-label">최근 횟수 N</div>'
+    + '<input class="admin-ctrl-input" type="number" id="f-exit-val" value="'+(FILTER.exitMode==='ratio'?Math.round((FILTER.exitRatio||0.7)*100):FILTER.exitBlankCount)+'" min="1" max="20" style="width:80px;"></div>'
+    /* 표시 */
+    + '<div class="admin-ctrl-group"><div class="admin-ctrl-label">표시 범위</div>'
+    + '<select class="admin-ctrl-select" id="f-show">'
+    + '<option value="all"'+(FILTER.showMode==='all'?' selected':'')+'>전체</option>'
+    + '<option value="issue"'+(FILTER.showMode==='issue'?' selected':'')+'>위험+주의</option>'
+    + '<option value="good"'+(FILTER.showMode==='good'?' selected':'')+'>우수만</option>'
+    + '<option value="noexit"'+(FILTER.showMode==='noexit'?' selected':'')+'>퇴원 제외</option>'
+    + '</select></div>'
+    + '<button class="admin-ctrl-apply" onclick="applyFilter(\''+esc(cls)+'\')">적용</button>'
+    + '<div class="ctrl-hint">위험(빨강): 표준점수 평균 &lt; 위험 하한값, 또는 하락기울기 초과 &amp; 주의하한 미만 | 주의(주황): 주의하한 미만 또는 하락폭 초과 | 퇴원: 기준 충족 시 회색으로 숨김처리</div>'
+    + '</div>';
+
+  /* ── 테이블 ── */
+  html += '<div class="admin-table-wrap">'
+    + '<div class="admin-legend-row">'
+    + '<div class="admin-legend-item"><div class="admin-legend-dot" style="background:var(--red)"></div>위험</div>'
+    + '<div class="admin-legend-item"><div class="admin-legend-dot" style="background:var(--org)"></div>주의</div>'
+    + '<div class="admin-legend-item"><div class="admin-legend-dot" style="background:var(--green)"></div>우수</div>'
+    + '<div class="admin-legend-item"><div class="admin-legend-dot" style="background:var(--dim)"></div>퇴원/숨김</div>'
+    + '</div>'
+    + '<table class="admin-table"><thead><tr>'
+    + '<th onclick="sortTable(\'name\')">이름</th>'
+    + '<th onclick="sortTable(\'status\')">상태</th>'
+    + '<th onclick="sortTable(\'ssAvg\')">표준점수 평균</th>'
+    + '<th onclick="sortTable(\'rawAvg\')">원점수 평균</th>'
+    + '<th onclick="sortTable(\'slope\')">추세(기울기)</th>'
+    + '<th onclick="sortTable(\'recentTrend\')">최근 변화폭</th>'
+    + '<th onclick="sortTable(\'avgPct\')">평균 순위</th>'
+    + '<th onclick="sortTable(\'n\')">시험수</th>'
+    + '<th>최근 점수</th>'
+    + '</tr></thead><tbody>';
+
+  // 정렬 헤더 표시
+  ['이름','상태','표준점수 평균','원점수 평균','추세(기울기)','최근 변화폭','평균 순위','시험수'].forEach(function(t,i){
+    var keys=['name','status','ssAvg','rawAvg','slope','recentTrend','avgPct','n'];
+    var key=keys[i];
+  });
+
+  // 정렬 적용
+  var sortedStats = studentStats.slice().sort(function(a,b){
+    // 퇴원생은 항상 하단
+    if(a.exited!==b.exited) return a.exited?1:-1;
+    var av, bv;
+    if(SORT.col==='name'){
+      av=a.name; bv=b.name;
+      return SORT.dir==='asc' ? av.localeCompare(bv,'ko') : bv.localeCompare(av,'ko');
+    }
+    if(SORT.col==='status'){
+      var order={danger:0,warn:1,normal:2,good:3,exit:4};
+      av=order[a.status]||0; bv=order[b.status]||0;
+    } else {
+      av = isNaN(a[SORT.col]) ? (SORT.dir==='asc'?Infinity:-Infinity) : a[SORT.col];
+      bv = isNaN(b[SORT.col]) ? (SORT.dir==='asc'?Infinity:-Infinity) : b[SORT.col];
+    }
+    if(av===bv) return 0;
+    // 표준점수·원점수·순위·시험수는 낮은 순이 기본 asc
+    return SORT.dir==='asc' ? (av<bv?-1:1) : (av>bv?-1:1);
+  });
+
+  sortedStats.forEach(function(s){
+    // 표시 필터
+    if(FILTER.showMode==='issue' && s.status!=='danger' && s.status!=='warn' && !s.exited) return;
+    if(FILTER.showMode==='good'  && s.status!=='good') return;
+    if(FILTER.showMode==='noexit' && s.exited) return;
+
+    var rowCls = s.status==='danger'?'row-danger':s.status==='warn'?'row-warn':s.status==='good'?'row-good':s.exited?'row-exit':'';
+    var ssBadge = isNaN(s.ssAvg) ? '-' :
+      s.ssAvg>=110 ? '<span class="score-badge badge-hi">'+s.ssAvg.toFixed(1)+'</span>' :
+      s.ssAvg>=100 ? '<span class="score-badge badge-mid">'+s.ssAvg.toFixed(1)+'</span>' :
+      s.ssAvg>=90  ? '<span class="score-badge badge-alert">'+s.ssAvg.toFixed(1)+'</span>' :
+                     '<span class="score-badge badge-lo">'+s.ssAvg.toFixed(1)+'</span>';
+    var statusLabel = s.exited?'<span class="score-badge badge-exit">퇴원</span>':
+      s.status==='danger'?'<span class="score-badge badge-lo">위험</span>':
+      s.status==='warn'?'<span class="score-badge badge-alert">주의</span>':
+      s.status==='good'?'<span class="score-badge badge-hi">우수</span>':'<span style="color:var(--dim)">-</span>';
+    var trendIcon = s.n<2?'<span style="color:var(--dim)">-</span>' :
+      s.slope>=2?'▲▲':s.slope>=0.5?'▲':s.slope<=-2?'▼▼':s.slope<=-0.5?'▼':'→';
+    var trendColor = s.slope>=0.5?'var(--green)':s.slope<=-0.5?'var(--red)':'var(--dim)';
+    var recent = s.chartData.filter(function(x){return x.myScore!==null;}).slice(-3).map(function(x){return x.myScore;}).join(' → ');
+
+    html += '<tr class="'+rowCls+'">'
+      + '<td><button class="student-link" onclick="openStudentModal(\''+esc(s.name)+'\')">'+esc(s.name)+'</button>'+(s.exited?'<span style="font-size:11px;color:var(--dim);margin-left:4px;">(퇴원)</span>':'')+'</td>'
+      + '<td>'+statusLabel+'</td>'
+      + '<td>'+ssBadge+'</td>'
+      + '<td>'+(isNaN(s.rawAvg)?'-':s.rawAvg.toFixed(1))+'</td>'
+      + '<td><span style="color:'+trendColor+';font-weight:700;">'+trendIcon+'</span> <span style="font-size:11px;color:var(--dim);">'+(s.n>=2?s.slope.toFixed(2):'')+'</span></td>'
+      + '<td style="color:'+(s.recentTrend>0?'var(--green)':s.recentTrend<0?'var(--red)':'var(--dim)')+';">'+(s.n>=2?(s.recentTrend>0?'+':'')+s.recentTrend.toFixed(1):'-')+'</td>'
+      + '<td>'+(s.avgPct!==null?s.avgPct+'%':'-')+'</td>'
+      + '<td>'+s.n+'</td>'
+      + '<td style="font-size:12px;color:var(--sub);">'+(recent||'-')+'</td>'
+      + '</tr>';
+  });
+
+  html += '</tbody></table></div>';
+  document.getElementById('admin-body').innerHTML = html;
+
+  // 정렬 헤더 표시 업데이트
+  updateSortHeaders();
+
+  // 퇴원 입력창 초기화
+  toggleExitInput();
+
+  // 저장
+  window._adminStudents = sortedStats;
+}
+
+function updateSortHeaders(){
+  var keys = ['name','status','ssAvg','rawAvg','slope','recentTrend','avgPct','n'];
+  var ths = document.querySelectorAll('.admin-table th');
+  ths.forEach(function(th, i){
+    if(i>=keys.length) return;
+    th.classList.remove('sort-asc','sort-desc');
+    if(keys[i]===SORT.col) th.classList.add(SORT.dir==='asc'?'sort-asc':'sort-desc');
+  });
+}
+
+function sortTable(col){
+  if(SORT.col===col) SORT.dir = SORT.dir==='asc'?'desc':'asc';
+  else { SORT.col=col; SORT.dir='asc'; }
+  showAdminClassDetail(ADMIN_CLS, true);
+}
+
+function applyFilter(cls){
+  FILTER.dateFrom    = document.getElementById('f-from').value;
+  FILTER.dateTo      = document.getElementById('f-to').value;
+  FILTER.dangerMode  = document.getElementById('f-mode').value;
+  FILTER.dangerLow   = parseFloat(document.getElementById('f-danger').value)||90;
+  FILTER.warnLow     = parseFloat(document.getElementById('f-warn').value)||97;
+  FILTER.downSlope   = parseFloat(document.getElementById('f-slope').value)||-1.5;
+  FILTER.downRecent  = parseFloat(document.getElementById('f-recent').value)||-5;
+  FILTER.exitMode    = document.getElementById('f-exit-mode').value;
+  var exitVal = parseFloat(document.getElementById('f-exit-val').value)||3;
+  if(FILTER.exitMode==='ratio') FILTER.exitRatio = exitVal/100;
+  else FILTER.exitBlankCount = exitVal;
+  FILTER.showMode    = document.getElementById('f-show').value;
+  showAdminClassDetail(cls, true);
+}
+
+function toggleExitInput(){
+  var mode = document.getElementById('f-exit-mode');
+  if(!mode) return;
+  var wrap  = document.getElementById('exit-input-wrap');
+  var label = document.getElementById('exit-input-label');
+  var val   = mode.value;
+  if(val==='none'){ wrap.style.display='none'; }
+  else { wrap.style.display='';
+    label.textContent = val==='ratio' ? '결석 비율 N(%)' : '최근 N회';
+  }
+}
+
+/* ════════════════════════════════════════
+   관리자 – 학생 모달
+════════════════════════════════════════ */
+function openStudentModal(name){
+  var list = window._adminStudents||[];
+  var s = null;
+  for(var i=0;i<list.length;i++){ if(list[i].name===name){s=list[i];break;} }
+  if(!s) return;
+  var ms = s.chartData.filter(function(x){return x.myScore!==null;}).map(function(x){return x.myScore;});
+  document.getElementById('modal-title').textContent = s.name + (s.exited?' (퇴원)':'');
+  document.getElementById('modal-stats').innerHTML =
+    '<div class="modal-stat"><div class="lbl">표준점수 평균</div><div class="val" style="color:var(--red)">'+(isNaN(s.ssAvg)?'-':s.ssAvg.toFixed(1))+'</div></div>'
+    +'<div class="modal-stat"><div class="lbl">원점수 평균</div><div class="val" style="color:var(--blue)">'+(isNaN(s.rawAvg)?'-':s.rawAvg.toFixed(1))+'</div></div>'
+    +'<div class="modal-stat"><div class="lbl">최고점</div><div class="val" style="color:var(--org)">'+(ms.length?Math.max.apply(null,ms):'-')+'</div></div>'
+    +'<div class="modal-stat"><div class="lbl">시험 횟수</div><div class="val" style="color:var(--sub)">'+s.n+'</div></div>';
+  var cr = analyzeAndComment(s.chartData);
+  document.getElementById('modal-comment').innerHTML = cr
+    ? '<strong>['+cr.tag+']</strong>'+cr.text
+    : '<span style="color:var(--dim)">데이터가 부족하여 분석이 어렵습니다.</span>';
+  document.getElementById('modalOverlay').classList.add('show');
+  setTimeout(function(){
+    if(MODAL_CH){ MODAL_CH.destroy(); MODAL_CH=null; }
+    var ctx = document.getElementById('modal-chart').getContext('2d');
+    var lb = s.chartData.map(function(x){ return shortDate(x.date); });
+    var my = s.chartData.map(function(x){ return x.myScore; });
+    var cl = s.chartData.map(function(x){ return x.classAvg; });
+    var gc = isDark()?'rgba(255,255,255,0.05)':'rgba(0,0,0,0.06)';
+    var tc = isDark()?'#5a5f7a':'#9ca3af';
+    MODAL_CH = new Chart(ctx,{type:'line',data:{labels:lb,datasets:[
+      {label:'점수',data:my,borderColor:'#d93248',backgroundColor:'rgba(217,50,72,0.1)',borderWidth:2.5,pointRadius:4,pointHoverRadius:6,pointBackgroundColor:'#d93248',pointBorderColor:'transparent',tension:0.35,spanGaps:true,fill:true},
+      {label:'반 평균',data:cl,borderColor:isDark()?'#3a3f60':'#c0c6d8',backgroundColor:'transparent',borderWidth:1.5,pointRadius:3,pointBackgroundColor:isDark()?'#3a3f60':'#c0c6d8',pointBorderColor:'transparent',tension:0.35,spanGaps:true,borderDash:[4,3]}
+    ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:isDark()?'rgba(18,22,40,.97)':'rgba(255,255,255,.97)',borderColor:isDark()?'rgba(255,255,255,.08)':'rgba(0,0,0,.1)',borderWidth:1,titleColor:isDark()?'#f0f2fc':'#1a1d2e',bodyColor:isDark()?'#7a7f9a':'#6b7280',padding:10,cornerRadius:8}},scales:{x:{grid:{color:gc},border:{display:false},ticks:{font:{size:11},color:tc}},y:{grid:{color:gc},border:{display:false},ticks:{font:{size:11},color:tc}}}}});
+  }, 100);
+}
+
+function closeModal(){
+  document.getElementById('modalOverlay').classList.remove('show');
+  if(MODAL_CH){ MODAL_CH.destroy(); MODAL_CH=null; }
+}
+document.getElementById('modalOverlay').addEventListener('click', function(e){ if(e.target===this)closeModal(); });
+
+/* ════════════════════════════════════════
+   AI 성적 분석 코멘트 (대폭 확장)
+════════════════════════════════════════ */
 function analyzeAndComment(chartData){
-  var valid=chartData.filter(function(x){return x.standardScore!==null&&x.maxStandardScore!==null;});
-  if(valid.length<3) return null;
-  var myScores=valid.map(function(x){return x.standardScore;});
-  var maxScores=valid.map(function(x){return x.maxStandardScore;});
-  var n=valid.length;
-  var myAvg=myScores.reduce(function(a,b){return a+b;},0)/n;
-  var maxAvg=maxScores.reduce(function(a,b){return a+b;},0)/n;
-  var myMin=Math.min.apply(null,myScores);
-  var myMax=Math.max.apply(null,myScores);
-  var myRange=myMax-myMin;
-  var myStd=Math.sqrt(myScores.reduce(function(s,v){return s+Math.pow(v-myAvg,2);},0)/n);
-  function slope(arr,baseAvg){var xm=(arr.length-1)/2;var num=0,den=0;arr.forEach(function(v,i){num+=(i-xm)*(v-baseAvg);den+=(i-xm)*(i-xm);});return den===0?0:num/den;}
-  var mySlope=slope(myScores,myAvg);
-  var maxSlope=slope(maxScores,maxAvg);
-  var maxAvg2=maxScores.reduce(function(a,b){return a+b;},0)/n;
-  var corNum=0,corD1=0,corD2=0;
-  myScores.forEach(function(v,i){corNum+=(v-myAvg)*(maxScores[i]-maxAvg2);corD1+=Math.pow(v-myAvg,2);corD2+=Math.pow(maxScores[i]-maxAvg2,2);});
-  var corr=(corD1*corD2===0)?0:corNum/Math.sqrt(corD1*corD2);
-  var half=Math.floor(n/2);
-  var earlyAvg=myScores.slice(0,half).reduce(function(a,b){return a+b;},0)/half;
-  var lateAvg=myScores.slice(n-half).reduce(function(a,b){return a+b;},0)/half;
-  var recentTrend=lateAvg-earlyAvg;
-  var last3=myScores.slice(-3);
-  var last3Up=(last3[2]>last3[1]&&last3[1]>last3[0]);
-  var last3Down=(last3[2]<last3[1]&&last3[1]<last3[0]);
-  var HIGH=110,MID_H=103,MID=100,MID_L=97,LOW=90;
-  var SLOPE_UP=1.5,SLOPE_DOWN=-1.5;
-  var STD_STABLE=5,STD_UNSTABLE=12;
-  var CORR_POS=0.4,CORR_NEG=-0.4;
-  var MAX_HIGH=115,MAX_MID=105;
-  var myLv=myAvg>=HIGH?'HIGH':myAvg>=MID_H?'MID_H':myAvg>=MID?'MID':myAvg>=MID_L?'MID_L':myAvg>=LOW?'LOW':'VLOW';
-  var maxLv=maxAvg>=MAX_HIGH?'HIGH':maxAvg>=MAX_MID?'MID':'LOW';
-  var trendLv=mySlope>=SLOPE_UP?'UP':mySlope<=SLOPE_DOWN?'DOWN':'FLAT';
-  var stableLv=myStd<=STD_STABLE?'STABLE':myStd<=STD_UNSTABLE?'NORMAL':'UNSTABLE';
-  var corrLv=corr>=CORR_POS?'POS':corr<=CORR_NEG?'NEG':'NEUTRAL';
-  var recentLv=recentTrend>=5?'UP':recentTrend<=-5?'DOWN':'FLAT';
-  var myAvgStr=myAvg.toFixed(1);
-  var maxAvgStr=maxAvg.toFixed(1);
-  var rules=[
-    {c:myLv==='HIGH'&&maxLv==='HIGH'&&corrLv==='POS',tag:'압도적 상위권',text:'전체 표준점수 평균 '+myAvgStr+'점으로 반 최상위권에 해당하며, 시험 난이도가 높을수록 오히려 상대적 우위가 강화되는 패턴이 관측됨. 경쟁이 치열한 환경에서 실력이 더욱 발현되는 유형으로 추정됨. 현재 학습 방향을 유지하되, 심화 개념 선행 및 고난도 문항 위주의 훈련을 병행하여 수준을 더 끌어올릴 것을 권장함.'},
-    {c:myLv==='HIGH'&&maxLv==='HIGH'&&corrLv==='NEUTRAL',tag:'안정적 최상위',text:'전체 표준점수 평균 '+myAvgStr+'점으로 쉬운 시험과 어려운 시험 모두에서 일관되게 상위권을 유지하는 것으로 분석됨. 실력 자체가 탄탄하게 형성된 유형으로 추정됨. 현재 상태를 유지하면서 약점 과목 집중 보완을 통해 추가적인 성장을 도모할 것을 권장함.'},
-    {c:myLv==='HIGH'&&maxLv==='LOW'&&stableLv==='STABLE',tag:'쉬운 시험 특화',text:'전체 표준점수 평균 '+myAvgStr+'점으로 수치상 우수하나, 만점 표준점수 평균이 낮아 응시한 시험들이 전반적으로 평이한 난이도였던 것으로 분석됨. 난이도가 높은 시험에서의 실제 경쟁력은 현재 수치보다 낮을 가능성이 있음. 고난도 문항 풀이 훈련 및 실전 모의고사를 통해 어려운 환경에서의 대응력을 검증할 것을 권장함.'},
-    {c:myLv==='HIGH'&&trendLv==='DOWN'&&n>=5,tag:'하락 추세 경고',text:'표준점수 평균은 '+myAvgStr+'점으로 상위권이나, 전체적인 추세선이 하락 방향으로 형성되고 있음. 초반에 비해 후반부 성적이 저하되는 패턴이 관측됨. 학습 피로 누적 또는 방심에 의한 집중력 저하가 원인일 가능성이 있음. 학습 루틴을 점검하고 취약 단원을 즉시 재정비할 것을 강력히 권장함.'},
-    {c:myLv==='HIGH'&&trendLv==='UP',tag:'상승 중인 상위권',text:'표준점수 평균 '+myAvgStr+'점으로 이미 상위권이며, 추세가 지속적으로 상승하고 있음. 학습 효율이 높은 시기로 판단됨. 이 시기를 최대한 활용하여 취약 영역을 공략하면 더 높은 수준으로의 도약이 가능할 것으로 추정됨.'},
-    {c:myLv==='MID_H'&&trendLv==='UP'&&recentLv==='UP',tag:'빠른 성장세',text:'표준점수 평균 '+myAvgStr+'점으로 중상위권에 위치하며, 최근 시험들에서 연속적으로 점수가 상승하는 패턴이 관측됨. 학습이 효과적으로 누적되고 있는 것으로 추정됨. 현재 방향을 유지하되 오답 분석에 더 시간을 투자하면 단기간 내 상위권 진입이 가능할 것으로 판단됨.'},
-    {c:myLv==='MID_H'&&stableLv==='STABLE'&&corrLv==='NEG',tag:'안정적이나 난이도 취약',text:'표준점수 평균 '+myAvgStr+'점으로 안정적인 중상위권을 유지하고 있으나, 시험 난이도가 높아질수록 상대적 점수가 하락하는 경향이 분석됨. 기본기는 탄탄하나 고난도 문항에 대한 대응력이 부족한 유형으로 추정됨. 고난도 문항 비중을 높인 자체 훈련을 통해 어려운 환경에서의 경쟁력을 강화할 것을 권장함.'},
-    {c:myLv==='MID_H'&&stableLv==='UNSTABLE',tag:'실력 편차 큰 중상위권',text:'표준점수 평균은 '+myAvgStr+'점으로 중상위권이나, 시험별 편차가 매우 크게 나타남. 컨디션이나 시험 유형에 따라 결과가 크게 달라지는 불안정한 패턴으로 추정됨. 학습의 양보다 일관성과 복습 체계를 정비하는 데 집중할 것을 권장함.'},
-    {c:myLv==='MID_H'&&maxLv==='HIGH'&&corrLv==='POS',tag:'어려운 시험에 강한 잠재력',text:'표준점수 평균 '+myAvgStr+'점이나, 난이도 높은 시험에서 상대적으로 선전하는 패턴이 관측됨. 어려운 문제를 즐기거나 집중력이 높은 상황에서 역량이 발현되는 유형으로 추정됨. 쉬운 시험에서 방심하는 경향이 있을 수 있으므로, 기본 문제의 실수를 줄이는 훈련을 병행할 것을 권장함.'},
-    {c:myLv==='MID'&&trendLv==='FLAT'&&stableLv==='STABLE',tag:'정체된 중위권',text:'표준점수 평균 '+myAvgStr+'점으로 반 평균 수준에서 오랜 기간 정체되어 있는 것으로 분석됨. 학습은 하고 있으나 성적 변화로 이어지지 않는 상태로 추정됨. 단순 반복보다 이해 중심의 학습으로 전환하고, 취약 단원을 집중 공략하는 전략을 권장함.'},
-    {c:myLv==='MID'&&trendLv==='UP',tag:'성장 중인 중위권',text:'표준점수 평균 '+myAvgStr+'점으로 중위권에 위치하나 지속적인 상승 추세가 확인됨. 노력이 성과로 전환되고 있는 긍정적인 흐름으로 분석됨. 현재의 학습 방향을 유지하면서 오답 노트 관리와 반복 학습을 강화할 것을 권장함.'},
-    {c:myLv==='MID'&&trendLv==='DOWN',tag:'하락 중인 중위권',text:'표준점수 평균 '+myAvgStr+'점으로 중위권이나 점수가 지속적으로 하락하는 추세가 관측됨. 학습 의욕 저하 또는 누적된 개념 미이해가 원인일 가능성이 높음. 최근 시험에서 틀린 문제를 중심으로 기초 개념을 다시 정리하는 것을 최우선으로 권장함.'},
-    {c:myLv==='MID'&&corrLv==='NEG'&&maxLv==='HIGH',tag:'쉬울 때만 강한 중위권',text:'표준점수 평균 '+myAvgStr+'점이며, 시험 난이도가 높아질수록 점수가 하락하는 뚜렷한 패턴이 분석됨. 기본 문제는 풀어내나 응용 및 고난도 문항에서 어려움을 겪는 유형으로 추정됨. 개념 원리 중심의 학습과 고난도 문제 반복 훈련을 권장함.'},
-    {c:myLv==='MID'&&stableLv==='UNSTABLE',tag:'기복이 심한 중위권',text:'표준점수 평균 '+myAvgStr+'점이나 시험별 편차가 매우 불규칙하게 나타남. 꾸준한 학습 루틴이 형성되지 않은 상태일 가능성이 높음. 매일 일정한 시간의 학습 루틴을 구축하고, 시험 전 컨디션 관리에 주의할 것을 권장함.'},
-    {c:myLv==='MID'&&last3Up&&n>=5,tag:'최근 상승 징후',text:'표준점수 평균은 '+myAvgStr+'점으로 중위권이나, 최근 3회 연속 상승하는 패턴이 관측됨. 학습 효과가 나타나기 시작하는 시점으로 분석됨. 이 흐름을 이어가기 위해 현재 학습 방식을 유지하고 복습 주기를 단축하는 전략을 권장함.'},
-    {c:myLv==='MID_L'&&trendLv==='UP'&&recentLv==='UP',tag:'저점 탈출 시도',text:'표준점수 평균 '+myAvgStr+'점으로 중하위권에 위치하나, 최근 들어 점수가 상승하는 긍정적인 신호가 감지됨. 기초 개념 완성을 최우선 목표로 설정하고 매일 꾸준히 실천하는 것을 권장함.'},
-    {c:myLv==='MID_L'&&trendLv==='FLAT',tag:'장기 정체 중하위권',text:'표준점수 평균 '+myAvgStr+'점으로 중하위권에서 장기간 머물고 있는 것으로 분석됨. 현재 공부 방식을 전면 재검토하고, 기초부터 다시 쌓는 구조적 재정비가 필요함.'},
-    {c:myLv==='MID_L'&&corrLv==='NEG',tag:'난이도 상승 시 급락',text:'표준점수 평균 '+myAvgStr+'점이며, 시험이 어려워질수록 점수가 급격히 하락하는 패턴이 관측됨. 개념서를 처음부터 다시 정독하고 원리 이해 중심의 학습으로 전환할 것을 강력히 권장함.'},
-    {c:myLv==='MID_L'&&stableLv==='STABLE'&&trendLv==='DOWN',tag:'안정적 하락세',text:'표준점수 평균 '+myAvgStr+'점으로 일관되게 중하위권을 유지하면서도 점진적으로 하락하고 있음. 담당 선생님과의 상담을 통해 취약 부분을 정확히 파악하고 맞춤형 보완 계획을 수립할 것을 권장함.'},
-    {c:myLv==='MID_L'&&maxLv==='LOW',tag:'쉬운 시험도 힘든 중하위권',text:'표준점수 평균 '+myAvgStr+'점으로 시험 난이도가 낮은 상황에서도 중하위권에 머물고 있음. 기초 학습량 자체가 부족한 것으로 추정됨. 매일 최소 학습량을 정해 꾸준히 실천하는 습관 형성을 최우선으로 권장함.'},
-    {c:myLv==='LOW'&&trendLv==='UP'&&last3Up,tag:'반등 조짐',text:'표준점수 평균 '+myAvgStr+'점으로 하위권에 해당하나, 최근 연속 상승 패턴이 포착됨. 기초 개념 중심의 학습을 매일 일정 시간 실천하고, 작은 성취를 꾸준히 쌓아나가는 전략을 권장함.'},
-    {c:myLv==='LOW'&&corrLv==='POS'&&maxLv==='HIGH',tag:'어려운 시험에서만 분전',text:'표준점수 평균 '+myAvgStr+'점으로 하위권이나, 시험 난이도가 높을 때 오히려 상대적 순위가 올라가는 특이한 패턴이 관측됨. 장점을 살리되 기초 학습 시간을 대폭 늘려 전체 평균을 끌어올리는 것이 시급함.'},
-    {c:myLv==='LOW'&&trendLv==='FLAT',tag:'장기 하위권 정체',text:'표준점수 평균 '+myAvgStr+'점으로 하위권에서 장기간 변화 없이 머물고 있음. 선생님 또는 보호자와 즉시 학습 상황을 점검하고 기초부터 체계적으로 재정비할 것을 강력히 권장함.'},
-    {c:myLv==='LOW'&&trendLv==='DOWN',tag:'지속적 하락 경고',text:'표준점수 평균 '+myAvgStr+'점으로 하위권이며 점수가 지속적으로 하락하고 있음. 현재 수준에서 풀 수 있는 가장 기초적인 문제부터 시작하여 성공 경험을 쌓고, 학습 동기를 회복하는 것을 최우선 과제로 삼을 것을 권장함.'},
-    {c:myLv==='LOW'&&stableLv==='UNSTABLE',tag:'불안정한 하위권',text:'표준점수 평균 '+myAvgStr+'점으로 하위권이며 시험별 편차까지 매우 큼. 학습 계획을 세우고 매일 일정량을 실천하는 루틴 구축이 가장 시급함.'},
-    {c:myLv==='VLOW'&&trendLv==='UP',tag:'최하위권 상승 시도',text:'표준점수 평균 '+myAvgStr+'점으로 최하위권에 해당하나 상승 추세가 감지됨. 하루에 풀 수 있는 문제 수를 정해 반드시 실천하고, 틀린 문제는 반드시 이해하고 넘어가는 습관을 형성할 것을 권장함.'},
-    {c:myLv==='VLOW'&&trendLv!=='UP',tag:'긴급 개입 필요',text:'표준점수 평균 '+myAvgStr+'점으로 최하위권에 해당하며 개선 추세도 나타나지 않음. 담당 선생님과 즉시 면담하여 현재 이해 수준을 정확히 진단받고 1:1 보충 지도 등 추가적인 지원을 받을 것을 강력히 권장함.'},
-    {c:corrLv==='NEG'&&maxLv==='HIGH'&&stableLv!=='STABLE',tag:'난이도 민감형',text:'표준점수 평균 '+myAvgStr+'점이며, 시험 난이도가 높아질수록 점수가 하락하고 편차도 불규칙한 패턴이 관측됨. 고난도 문제를 많이 접하여 실패에 대한 내성을 키우고, 시험 전 루틴을 만들어 심리적 안정을 확보할 것을 권장함.'},
-    {c:last3Down&&myLv!=='VLOW'&&recentTrend<=-8,tag:'최근 급격한 하락',text:'전체 평균은 '+myAvgStr+'점이나 최근 3회 연속 하락하는 급격한 패턴이 포착됨. 최근 시험에서 틀린 개념을 즉시 복습하고 학습 루틴을 점검할 것을 권장함.'},
-    {c:last3Up&&recentTrend>=8&&myLv!=='HIGH',tag:'최근 급격한 상승',text:'전체 평균은 '+myAvgStr+'점이나 최근 3회 연속 점수가 급상승하고 있음. 현재 학습 방식이 본인에게 잘 맞는 방식임을 인지하고, 자만하지 않고 꾸준히 지속할 것을 권장함.'},
-    {c:stableLv==='UNSTABLE'&&myRange>=30,tag:'극단적 기복',text:'표준점수 범위가 '+myRange+'점에 달할 정도로 시험별 편차가 극단적으로 나타남. 점수의 천장을 높이기보다 바닥을 높이는 데 집중하는 전략을 권장함.'},
-    {c:stableLv==='STABLE'&&mySlope>=0&&myLv==='MID_H',tag:'안정적 우상향',text:'표준점수 평균 '+myAvgStr+'점으로 편차 없이 안정적으로 성장하고 있음. 이 안정성을 기반으로 취약한 유형에 집중 투자하면 상위권 진입이 충분히 가능함.'},
-    {c:maxLv==='HIGH'&&corrLv==='POS'&&myLv==='MID',tag:'어려운 시험에 강한 숨은 실력',text:'표준점수 평균 '+myAvgStr+'점으로 중위권이나, 난이도 높은 시험에서 상대적으로 선전하는 패턴이 관측됨. 기본 문제에서의 실수를 줄이는 훈련과 기초 문제 반복 풀이를 병행하면 평균 이상의 성과를 낼 수 있을 것으로 판단됨.'},
-    {c:myLv==='MID_H'&&trendLv==='FLAT'&&stableLv==='STABLE',tag:'안정적 중상위 정체',text:'표준점수 평균 '+myAvgStr+'점으로 중상위권을 안정적으로 유지하고 있으나 성장이 멈춘 상태로 분석됨. 학습의 난이도와 질을 한 단계 높이는 시도가 필요한 시점으로 판단됨.'},
-    {c:n>=7&&myLv==='MID'&&stableLv==='STABLE'&&trendLv==='FLAT',tag:'장기 중위권 고착',text:'7회 이상의 시험 데이터에서 표준점수 평균 '+myAvgStr+'점으로 중위권에 고착된 패턴이 명확히 관측됨. 학습 방법, 시간 배분, 우선순위 전략 전체를 재검토하고 외부 피드백을 적극적으로 받아들이는 자세가 필요함.'},
-    {c:maxSlope>=2&&corrLv==='NEG',tag:'시험이 점점 어려워지는 환경',text:'최근 시험들이 점점 어려워지는 추세임에도 불구하고 표준점수가 하락하고 있음. 단순 공부량을 늘리기보다 고난도 문항 중심의 질적 학습으로 전환하고, 실전과 유사한 환경에서 연습하는 것을 권장함.'},
-    {c:myLv==='HIGH'&&stableLv==='UNSTABLE'&&n>=4,tag:'실력은 있으나 불안정',text:'표준점수 평균 '+myAvgStr+'점으로 상위권이나 시험별 편차가 큰 것이 특징적으로 관측됨. 시험 당일 컨디션 관리, 시험 전 루틴 확립, 실수 유형 파악 및 제거에 집중하면 안정적인 최상위권 유지가 가능할 것으로 판단됨.'},
-    {c:myLv==='MID_L'&&last3Up,tag:'하위권 탈출 시도 중',text:'표준점수 평균 '+myAvgStr+'점으로 중하위권이나 최근 연속 상승 패턴이 감지됨. 복습 주기를 단축하고 오답을 반드시 이해하고 넘어가는 습관을 강화할 것을 권장함.'},
-    {c:myLv==='MID'&&maxLv==='LOW'&&corrLv==='NEUTRAL',tag:'평이한 시험 환경의 중위권',text:'표준점수 평균 '+myAvgStr+'점이나, 응시한 시험들의 전반적인 난이도가 낮아 현재 수치가 실제 실력을 과대평가하고 있을 가능성이 있음. 고난도 문제 풀이 경험을 늘려 실제 경쟁력을 파악하고 강화할 것을 권장함.'},
-    {c:myLv==='HIGH',tag:'상위권',text:'표준점수 평균 '+myAvgStr+'점으로 반 상위권에 해당함. 현재의 학습 방향을 유지하면서 심화 학습을 병행할 것을 권장함.'},
-    {c:myLv==='MID_H',tag:'중상위권',text:'표준점수 평균 '+myAvgStr+'점으로 중상위권에 위치함. 취약 단원을 집중 보완하면 상위권 진입이 가능한 수준으로 판단됨.'},
-    {c:myLv==='MID',tag:'중위권',text:'표준점수 평균 '+myAvgStr+'점으로 반 평균 수준에 위치함. 학습 방향을 점검하고 취약 부분을 파악하여 보완할 것을 권장함.'},
-    {c:myLv==='MID_L',tag:'중하위권',text:'표준점수 평균 '+myAvgStr+'점으로 중하위권에 해당함. 기초 개념 정리와 꾸준한 학습 루틴 구축이 필요한 시점으로 판단됨.'},
-    {c:true,tag:'하위권',text:'표준점수 평균 '+myAvgStr+'점으로 하위권에 해당함. 기초부터 체계적으로 재정비하고, 담당 선생님과 면담을 통해 구체적인 보완 계획을 수립할 것을 강력히 권장함.'}
+  var valid = chartData.filter(function(x){ return x.standardScore!==null&&x.maxStandardScore!==null; });
+  if(valid.length < 2) return null;
+
+  var SS   = valid.map(function(x){ return x.standardScore; });
+  var MSS  = valid.map(function(x){ return x.maxStandardScore; });
+  var RAW  = valid.filter(function(x){return x.myScore!==null;}).map(function(x){return x.myScore;});
+  var n = SS.length;
+
+  var ssAvg  = SS.reduce(function(a,b){return a+b;},0)/n;
+  var maxAvg = MSS.reduce(function(a,b){return a+b;},0)/n;
+  var ssMin  = Math.min.apply(null,SS), ssMax=Math.max.apply(null,SS);
+  var ssRange = ssMax - ssMin;
+  var ssStd  = Math.sqrt(SS.reduce(function(s,v){return s+Math.pow(v-ssAvg,2);},0)/n);
+
+  function linSlope(arr){
+    var am=arr.reduce(function(a,b){return a+b;},0)/arr.length, xm=(arr.length-1)/2;
+    var num=0,den=0;
+    arr.forEach(function(v,i){ num+=(i-xm)*(v-am); den+=(i-xm)*(i-xm); });
+    return den===0?0:num/den;
+  }
+  var slope = linSlope(SS);
+  var maxSlope = linSlope(MSS);
+
+  // 전반/후반 평균
+  var half = Math.floor(n/2);
+  var ssEarly = SS.slice(0,half).reduce(function(a,b){return a+b;},0)/half;
+  var ssLate  = SS.slice(n-half).reduce(function(a,b){return a+b;},0)/(n-half);
+  var recentDiff = ssLate - ssEarly;
+
+  // 최근 3회 방향
+  var last3 = SS.slice(-3);
+  var l3Up   = last3.length===3 && last3[2]>last3[1]&&last3[1]>last3[0];
+  var l3Down = last3.length===3 && last3[2]<last3[1]&&last3[1]<last3[0];
+  var l3Flat = !l3Up && !l3Down;
+
+  // 상관계수 (내 점수 vs 만점 표준점수)
+  var mAvg2 = MSS.reduce(function(a,b){return a+b;},0)/n;
+  var cN=0,cD1=0,cD2=0;
+  SS.forEach(function(v,i){ cN+=(v-ssAvg)*(MSS[i]-mAvg2); cD1+=Math.pow(v-ssAvg,2); cD2+=Math.pow(MSS[i]-mAvg2,2); });
+  var corr = (cD1*cD2===0)?0:cN/Math.sqrt(cD1*cD2);
+
+  // 원점수 변동성
+  var rawStd = 0;
+  if(RAW.length>1){
+    var rawAvg2=RAW.reduce(function(a,b){return a+b;},0)/RAW.length;
+    rawStd=Math.sqrt(RAW.reduce(function(s,v){return s+Math.pow(v-rawAvg2,2);},0)/RAW.length);
+  }
+
+  // 레벨 분류
+  var myLv = ssAvg>=115?'S':ssAvg>=110?'A':ssAvg>=105?'B':ssAvg>=100?'C':ssAvg>=95?'D':ssAvg>=88?'E':'F';
+  var mxLv = maxAvg>=120?'hard':maxAvg>=110?'mid':'easy';
+  var trLv = slope>=2.5?'SUP':slope>=1?'UP':slope<=-2.5?'SDOWN':slope<=-1?'DOWN':'FLAT';
+  var stLv = ssStd<=4?'VERY_STABLE':ssStd<=8?'STABLE':ssStd<=14?'NORMAL':'UNSTABLE';
+  var crLv = corr>=0.5?'STRONG_POS':corr>=0.2?'POS':corr<=-0.5?'STRONG_NEG':corr<=-0.2?'NEG':'NEU';
+  var rcLv = recentDiff>=8?'BIG_UP':recentDiff>=3?'UP':recentDiff<=-8?'BIG_DOWN':recentDiff<=-3?'DOWN':'FLAT';
+
+  var rules = [
+
+/* ────────── S등급 (115+) ────────── */
+{c: myLv==='S'&&trLv==='SUP'&&stLv==='VERY_STABLE',
+ tag:'독보적 최상위 – 상승 지속',
+ text:'<p>현재 반 내에서 사실상 최상위에 해당하며, 이 수준에서 더욱 가파른 상승 곡선을 그리고 있다는 점은 매우 이례적이다. 일반적으로 고득점 구간에 진입한 학생은 성장 속도가 둔화되는 경향이 있음에도 불구하고, 이 학생은 그런 정체 없이 계속 올라가고 있다.</p>'
++'<p>이는 단순히 열심히 공부한 결과가 아니라, 학습 방식 자체가 매우 고도화되어 있을 가능성이 높다. 개념을 이해한 뒤 스스로 변형 문제를 만들어 풀거나, 오답보다 정답 과정의 논리 흐름을 재검토하는 방식으로 공부하고 있을 것으로 추정된다.</p>'
++'<p>앞으로는 시험에서 틀린 한 문제의 원인을 단순 실수가 아닌 개념의 빈틈에서 찾는 습관을 강화하고, 경쟁이 치열한 외부 모의고사에도 정기적으로 도전하여 현재 실력의 객관적인 위치를 확인하는 것이 장기적으로 큰 도움이 될 것이다.</p>'},
+
+{c: myLv==='S'&&trLv==='FLAT'&&stLv==='VERY_STABLE',
+ tag:'흔들림 없는 최정상',
+ text:'<p>표준점수 평균이 최상위 구간에서 거의 흔들림 없이 유지되고 있다. 이 정도의 안정성은 단기적인 집중 학습이 아닌, 오랜 기간에 걸쳐 형성된 탄탄한 기초 위에 세워진 실력임을 뜻한다.</p>'
++'<p>매시험마다 일정한 점수를 유지한다는 것은 시험 당일의 컨디션이나 문제 유형 변화에 거의 영향을 받지 않는다는 의미이기도 하다. 이는 개념뿐 아니라 시험 전략적인 측면도 잘 갖춰진 상태임을 시사한다.</p>'
++'<p>현재 수준에서 더 성장하려면 반 내의 비교를 벗어나 더 넓은 범위의 고난도 문제를 꾸준히 접하는 것이 핵심이다. 이미 알고 있는 것을 다시 공부하는 시간을 줄이고, 아직 한 번도 접해보지 않은 유형을 발굴하는 데 더 집중할 것을 권한다.</p>'},
+
+{c: myLv==='S'&&(trLv==='DOWN'||trLv==='SDOWN'),
+ tag:'최정상에서의 균열 – 즉각 점검 필요',
+ text:'<p>표준점수가 최상위 구간임에도 불구하고 하락 추세가 명확히 감지된다. 최정상에서의 하락은 단순한 일시적 침체가 아니라 학습 구조상의 문제일 가능성이 높다.</p>'
++'<p>이 수준의 학생이 하락하는 경우는 대개 세 가지 패턴 중 하나다. 첫째, 학습량은 유지되지만 난이도가 높아짐에 따라 기존 방식이 더 이상 통하지 않는 경우. 둘째, 성취에 대한 자만 또는 외부 자극의 부재로 긴장감이 떨어진 경우. 셋째, 학습 에너지가 다른 곳에 분산되어 이 과목에 투입되는 실질적인 집중 시간이 줄어든 경우다.</p>'
++'<p>우선 최근 시험에서 틀린 문제의 유형을 분류해보자. 실수성 오답인지, 개념 미숙인지, 시간 부족인지를 구분하는 것만으로도 원인이 명확해질 것이다. 하락이 시작된 시점과 학습 패턴 변화 시점이 일치하는지 스스로 점검해보는 것도 중요하다.</p>'},
+
+/* ────────── A등급 (110~114) ────────── */
+{c: myLv==='A'&&trLv==='SUP'&&n>=4,
+ tag:'상위권 가파른 상승 – 잠재력 폭발',
+ text:'<p>표준점수 평균이 이미 반 최상위권이지만, 그보다 더 주목할 것은 최근의 가파른 상승 기울기다. 이는 특정 시점에서 학습 방법 또는 집중도에 결정적인 변화가 있었음을 강하게 시사한다.</p>'
++'<p>흔히 이런 패턴은 개념 이해 방식을 바꿨거나, 자신에게 맞는 복습 루틴을 새롭게 확립했거나, 오답을 단순히 넘기지 않고 철저히 분해하는 습관이 생겼을 때 나타난다. 지금 하고 있는 방식이 무엇이든 그것이 본인에게 효과적이라는 명확한 신호다.</p>'
++'<p>이 시기에 가장 중요한 것은 현재 방식을 그대로 유지하는 것이다. 성과가 올라올수록 방법을 바꾸거나 더 많은 것을 욕심내다 기존 루틴이 흐트러지는 경우가 종종 발생한다. 지금은 양을 늘리기보다 깊이를 더하는 방향으로 학습을 정밀화하는 것이 이상적이다.</p>'},
+
+{c: myLv==='A'&&mxLv==='hard'&&crLv==='STRONG_POS',
+ tag:'고난도 환경에서 빛나는 실력',
+ text:'<p>시험 난이도가 높아질수록 이 학생의 상대적 점수가 오히려 올라가는 독특한 패턴이 관찰된다. 이는 평소에 어려운 문제를 회피하지 않고 정면으로 부딪히는 학습 습관을 가졌을 가능성이 높다.</p>'
++'<p>많은 학생들이 어려운 시험에서 당황하거나 시간 배분에 실패하는 반면, 이 학생은 그런 상황에서 오히려 차분하게 판단하는 능력이 갖춰진 것으로 추정된다. 고난도 문항에서의 경험이 쌓이면서 오답을 줄이는 전략적 판단력도 함께 성장한 결과일 것이다.</p>'
++'<p>반면 상대적으로 쉬운 시험에서는 집중력이 분산되거나 방심으로 인한 실수가 생길 수 있다. 쉬운 시험일수록 처음 풀이 후 반드시 검토 시간을 확보하고, 확인 없이 제출하는 습관을 지양하는 것이 현재 수준에서 더 중요한 과제다.</p>'},
+
+{c: myLv==='A'&&stLv==='UNSTABLE'&&n>=4,
+ tag:'상위권이지만 불안정한 기복',
+ text:'<p>평균 자체는 반 상위권에 해당하지만, 시험마다 점수 편차가 크다는 것은 실력이 완전히 내면화되지 않았음을 나타낸다. 어떤 시험에서는 매우 잘 보고, 어떤 시험에서는 상당히 아쉬운 결과가 나오는 패턴이다.</p>'
++'<p>이런 유형은 대개 특정 단원이나 문제 유형에 강점이 집중되어 있고, 시험마다 그 강점이 얼마나 출제되느냐에 따라 결과가 크게 달라지는 경우다. 또는 학습 컨디션에 따라 집중도가 들쭉날쭉하거나, 시험 전날 벼락치기가 잘 먹히는 날과 그렇지 않은 날의 차이가 극명한 경우이기도 하다.</p>'
++'<p>지금 필요한 것은 점수의 천장을 더 높이는 것이 아니라 바닥을 높이는 것이다. 취약한 단원을 파악해 꾸준히 보완하고, 시험 직전 벼락치기보다는 매주 일정 분량을 반복 복습하는 루틴을 만드는 것이 장기적으로 훨씬 더 큰 효과를 낳는다.</p>'},
+
+/* ────────── B등급 (105~109) ────────── */
+{c: myLv==='B'&&trLv==='UP'&&rcLv==='BIG_UP',
+ tag:'가파른 후반 상승 – 전략 전환 성공',
+ text:'<p>전반부 성적에 비해 후반부에서 눈에 띄는 점수 상승이 나타나고 있다. 이는 어떤 시점에서 학습 방식이나 접근 전략이 긍정적으로 변화했음을 강하게 나타낸다.</p>'
++'<p>이런 후반 상승 패턴은 보통 두 가지 경우다. 하나는 오랫동안 쌓아온 개념 학습이 시간이 지나며 서서히 성과로 나타나는 경우, 또 하나는 특정 계기를 통해 공부 방법 자체가 바뀐 경우다. 어느 쪽이든 지금 하고 있는 방향이 맞다는 신호다.</p>'
++'<p>이 기세를 잃지 않으려면 지금 자신이 어떤 방식으로 공부하고 있는지를 의식적으로 확인하고 정리해두는 것이 좋다. 성적이 오를 때 방법을 바꾸는 것은 가장 흔한 실수다. 변화를 주고 싶다면 지금 방식을 유지하면서 부족한 단원만 보완하는 방향으로 접근할 것을 권한다.</p>'},
+
+{c: myLv==='B'&&mxLv==='hard'&&crLv==='STRONG_NEG',
+ tag:'쉬운 시험엔 강하지만 고난도에서 흔들림',
+ text:'<p>전반적인 표준점수 평균은 양호한 편이지만, 시험이 어려워질수록 점수가 하락하는 뚜렷한 경향이 보인다. 이는 겉보기에는 실력 있어 보이지만, 심화 개념이나 응용 능력에서 아직 한계가 있음을 드러내는 패턴이다.</p>'
++'<p>평소 공부할 때 교과서나 기본 문제집 위주로 학습하고, 어려운 문제는 답지를 먼저 보거나 빠르게 넘기는 경향이 있을 가능성이 높다. 기본기는 충분히 쌓였지만 그것을 낯선 문제에 적용하는 훈련이 부족한 상태다.</p>'
++'<p>당장 해야 할 것은 어려운 문제를 풀다가 막혔을 때 최소 10분 이상은 스스로 고민한 뒤 답을 확인하는 훈련이다. 이 과정 없이 빠르게 넘어가는 습관은 쉬운 문제만 쌓이는 공부를 만들고, 결국 시험이 어려울 때 속수무책이 되는 원인이 된다.</p>'},
+
+{c: myLv==='B'&&trLv==='FLAT'&&stLv==='STABLE',
+ tag:'안정적이지만 성장이 멈춘 중상위권',
+ text:'<p>성적 자체는 반 중상위권으로 안정적이지만, 상당 기간 동안 의미 있는 성장이 없는 정체 구간에 들어선 것으로 보인다. 이 정도 수준에서 오래 머무는 것은 학습이 습관화되어 있지만, 그 습관이 현재 수준 이상으로 성장시키지는 못하는 상태임을 의미한다.</p>'
++'<p>이런 정체는 보통 지금 하는 공부의 난이도가 본인에게 너무 익숙해졌을 때 발생한다. 매번 비슷한 유형의 문제를 풀고, 익숙한 개념을 반복하며 안도감을 느끼는 공부를 하고 있을 가능성이 있다. 이는 심리적으로는 편하지만 실력 향상에는 도움이 되지 않는다.</p>'
++'<p>성장을 위해서는 지금의 공부 루틴에 의도적인 불편함을 추가해야 한다. 풀었던 문제를 다시 푸는 것이 아니라, 본인이 틀렸거나 헷갈렸던 개념을 중심으로 유사 변형 문제를 스스로 찾아서 풀어보는 방식이 가장 효과적이다.</p>'},
+
+/* ────────── C등급 (100~104) ────────── */
+{c: myLv==='C'&&trLv==='UP'&&l3Up,
+ tag:'반 평균권 – 최근 3회 연속 상승 중',
+ text:'<p>전체 평균은 반 평균 수준이지만, 최근 3회 연속으로 점수가 올라가고 있다는 점이 매우 긍정적이다. 이런 흐름은 학습 방식에 변화를 주었거나, 이전보다 집중도가 올라갔을 때 나타나는 신호다.</p>'
++'<p>지금 본인이 하고 있는 방법이 효과를 내고 있음이 숫자로 확인된 셈이다. 가장 중요한 것은 지금의 흐름을 끊지 않는 것이다. 시험이 끝난 후 결과에 관계없이 오답을 빠르게 정리하고, 다음 시험까지의 복습 주기를 짧게 유지하는 것이 이 상승세를 이어가는 핵심이다.</p>'
++'<p>이 구간에서 상위권으로 도약하는 학생들의 공통점은 "왜 틀렸는가"를 단순히 확인하는 수준을 넘어, "어떤 사고 과정에서 실수가 발생했는가"를 파악하고 같은 사고 오류가 반복되지 않도록 스스로 점검하는 습관을 가진 학생들이다.</p>'},
+
+{c: myLv==='C'&&trLv==='DOWN'&&rcLv==='BIG_DOWN',
+ tag:'반 평균권 – 최근 급격한 하락',
+ text:'<p>전체 평균은 반 평균 수준이지만, 특히 최근 들어 점수 하락 폭이 크게 벌어지고 있다. 단순한 일시적 슬럼프가 아니라, 학습 습관이나 이해도에서 누적된 문제가 한꺼번에 표면으로 드러나고 있을 가능성이 높다.</p>'
++'<p>이런 패턴의 가장 흔한 원인은 특정 단원부터 이해가 완전히 되지 않은 채로 다음 진도를 나간 경우다. 개념들이 서로 연결되는 과목에서는 이 문제가 특히 심각하게 작용하는데, 앞 단원의 빈틈이 뒤 단원에서 복합적인 오류로 나타나기 때문이다.</p>'
++'<p>지금 당장 최근 3회의 시험 오답 문제를 펼쳐놓고 유형별로 분류해보자. 같은 유형에서 계속 틀리고 있다면 그 단원의 개념을 처음부터 다시 정리해야 한다. 새 내용을 공부하기 전에 현재 이해하지 못한 부분을 먼저 해결하는 것이 지금 가장 시급한 과제다.</p>'},
+
+{c: myLv==='C'&&stLv==='UNSTABLE'&&crLv==='NEU',
+ tag:'반 평균권 – 기복이 너무 심한 불안정',
+ text:'<p>평균은 반 평균 수준이지만, 시험마다 점수 차이가 너무 크다. 잘 볼 때는 상위권에 근접하고, 못 볼 때는 하위권에 가까운 결과가 반복되고 있는 패턴이다.</p>'
++'<p>이런 불규칙한 패턴은 보통 공부를 시험 직전에 몰아서 하는 습관과 관련이 깊다. 시험 직전 집중이 잘 이루어진 경우에는 점수가 올라가고, 그렇지 않은 경우에는 크게 떨어지는 구조다. 이 방식은 단기적으로 어느 정도 효과가 있어 보이지만, 시험 범위가 넓어지거나 응용력을 요구하는 문제가 많아지면 급격히 한계를 드러낸다.</p>'
++'<p>근본적인 해결책은 매일 적은 양이라도 꾸준히 복습하는 루틴을 만드는 것이다. 특히 시험 직전이 아닌 평소에 문제를 풀고 오답을 확인하는 습관이 형성되어야 한다. 당장 내일부터 하루 30분만 이전 내용을 복습하는 시간을 고정해보는 것을 권한다.</p>'},
+
+{c: myLv==='C'&&n>=6&&trLv==='FLAT'&&stLv==='STABLE',
+ tag:'장기 반 평균 고착 – 방법론 전환 필요',
+ text:'<p>6회 이상의 시험 데이터에서 표준점수 평균이 반 평균 수준에 거의 그대로 고착되어 있다. 공부 자체를 하지 않는 것이 아니라, 하고 있지만 그 방법이 성장으로 연결되지 않는 상태다.</p>'
++'<p>이 정도 기간 동안 같은 수준을 유지한다는 것은 현재의 학습 방식이 "현재 수준을 유지하는 데는 충분하지만, 그 이상으로 올라가게 하지는 않는" 방식임을 강하게 시사한다. 즉, 편안한 범위 안에서의 학습만 이루어지고 있을 가능성이 높다.</p>'
++'<p>당장 해야 할 것은 자신이 절대 틀리지 않을 것이라 생각했다가 틀린 문제, 즉 자신도 몰랐던 개념의 빈틈을 찾아내는 작업이다. 이 빈틈을 찾는 데 가장 좋은 방법은 다음 시험에서 틀린 문제에 대해 "왜 이 답을 선택했는가"를 문장으로 써보는 것이다.</p>'},
+
+/* ────────── D등급 (95~99) ────────── */
+{c: myLv==='D'&&trLv==='UP'&&rcLv!=='DOWN',
+ tag:'중하위권 – 상승 전환 감지',
+ text:'<p>표준점수 평균은 아직 반 평균 이하지만, 최근 들어 분명한 상승 흐름이 감지되고 있다. 이 구간에서의 상승은 단순한 운이 아니라 실질적인 학습 변화가 있을 때 나타난다.</p>'
++'<p>이 구간에서 성장하는 학생들의 공통점은 스스로의 오답 원인을 단순히 "몰라서 틀렸다"가 아닌, "어디서부터 이해가 안 됐는지"로 좁혀가는 능력이 생긴 학생들이다. 지금 그 과정이 진행 중이라면 이 상승세는 충분히 지속될 수 있다.</p>'
++'<p>다만 이 구간에서 상승이 멈추는 가장 흔한 이유는 조금 오르고 나서 다시 이전 방식으로 돌아가는 것이다. 성적이 조금 올랐다는 안도감이 긴장을 풀게 하고, 이전의 느슨한 루틴으로 돌아가는 패턴이다. 현재의 집중 상태를 최소 3회 이상의 시험에서 지속해야 진정한 레벨 이동이 이루어진다.</p>'},
+
+{c: myLv==='D'&&trLv==='DOWN'&&rcLv==='BIG_DOWN',
+ tag:'중하위권 급락 – 학습 구조 점검 시급',
+ text:'<p>이미 반 평균 이하이던 성적이 최근 더욱 크게 떨어지고 있다. 이 정도의 하락 폭은 단순히 공부를 적게 한 것만으로는 설명되지 않는다. 공부 자체를 하고 있더라도 그 방향이 크게 어긋나 있을 가능성이 높다.</p>'
++'<p>가장 먼저 확인해야 할 것은 수업 내용을 그날 이해하고 있는지 여부다. 수업을 들으면서 "이해됐다"고 느끼지만 막상 혼자 풀면 안 되는 경우, 이는 이해가 아닌 수동적 인식만 이루어진 상태다. 듣는 것과 스스로 할 수 있는 것은 완전히 다르다.</p>'
++'<p>지금 당장 할 수 있는 가장 효과적인 방법은 새 내용을 배우기 전날, 다음 날 배울 내용을 교과서에서 먼저 한 번 읽어보는 것이다. 이미 한 번 눈으로 훑은 내용을 수업에서 들으면 이해도가 확실히 달라진다. 이 작은 습관 하나가 학습 구조 자체를 바꾸는 시작점이 될 수 있다.</p>'},
+
+{c: myLv==='D'&&stLv==='UNSTABLE'&&n>=4,
+ tag:'중하위권 – 불규칙하고 불안정한 기복',
+ text:'<p>표준점수 평균이 반 평균 이하인 데다 시험마다 편차까지 크다. 이는 공부 자체가 단편적이고 일회성으로 이루어지고 있을 가능성을 시사한다. 이번 시험을 위해 열심히 하고, 시험이 끝나면 완전히 쉬고, 다시 다음 시험 직전에 공부하는 사이클이 반복되고 있을 것으로 추정된다.</p>'
++'<p>이 방식의 가장 큰 문제는 배운 내용이 기억에 정착되기 전에 다음 내용이 쌓이면서, 결국 모든 것이 얕게만 남는다는 것이다. 시험마다 처음 보는 것처럼 느껴지는 내용이 늘어나는 원인이기도 하다.</p>'
++'<p>가장 현실적인 개선책은 주 1회, 단 20분이라도 지난 2주 내 배운 내용 중 헷갈렸던 것만 모아서 복습하는 시간을 고정하는 것이다. 이 한 가지만으로도 기억 잔존율이 크게 달라지고, 시험 직전 공부의 효율도 함께 올라간다.</p>'},
+
+{c: myLv==='D'&&mxLv==='easy'&&crLv==='NEG',
+ tag:'쉬운 시험도 힘든 중하위권',
+ text:'<p>이 반의 시험들이 전반적으로 쉬운 편임에도 불구하고 반 평균 이하에 머물고 있다. 이는 시험의 난이도가 문제가 아니라, 기초 개념 이해 자체에 빈틈이 있음을 강하게 나타낸다.</p>'
++'<p>쉬운 시험에서 낮은 점수가 나오는 경우는 보통 두 가지다. 개념 자체를 모르는 경우, 또는 알고는 있지만 문제 풀이 과정에서 적용을 못하는 경우다. 후자라면 개념을 익힌 직후 반드시 간단한 예제를 스스로 풀어보는 확인 과정이 없이 넘어가는 습관이 원인일 수 있다.</p>'
++'<p>교과서나 기본 문제집에서 가장 쉬운 예제부터 시작해서 스스로 풀고, 막히는 부분이 생기면 그 단원의 핵심 개념을 다시 정리하는 방식으로 접근할 것을 권한다. 속도보다 정확성을 우선시하는 학습 습관을 지금 만들어야 한다.</p>'},
+
+/* ────────── E등급 (88~94) ────────── */
+{c: myLv==='E'&&trLv==='UP'&&l3Up,
+ tag:'하위권 – 최근 연속 반등 중',
+ text:'<p>표준점수 평균은 아직 하위권에 해당하지만, 최근 3회 연속 점수가 오르고 있다는 것은 매우 유의미한 신호다. 이 구간에서 이런 흐름이 나타나는 것은 학습 동기나 방식에 실질적인 변화가 있을 때만 가능하다.</p>'
++'<p>하위권에서 반등하는 학생들이 공통적으로 하는 것이 있다면, 그것은 "전부 다 잘하려는 시도를 포기하고 한 가지부터 완벽히 해내는 경험을 쌓는 것"이다. 넓게 얕게 공부하는 것에서 벗어나 하나의 단원, 하나의 개념 유형이라도 완전히 이해하고 넘어가는 경험이 자신감과 실력 모두를 높인다.</p>'
++'<p>이 흐름을 유지하기 위해서는 지금 하고 있는 방식을 절대 갑자기 바꾸지 않는 것이 중요하다. 시험이 끝난 뒤 오답 분석에 최소 30분을 투자하고, 틀린 이유를 노트에 한 줄씩이라도 써두는 습관이 이 반등을 지속 가능한 성장으로 연결하는 핵심이다.</p>'},
+
+{c: myLv==='E'&&trLv==='DOWN'&&rcLv==='BIG_DOWN',
+ tag:'하위권 – 지속 하락, 기초 공백 의심',
+ text:'<p>표준점수 평균이 이미 하위권이면서 최근 하락 폭마저 커지고 있다. 이 패턴은 학습에서 일어나고 있는 문제가 단순한 노력 부족을 넘어서, 이해되지 않은 개념이 누적되면서 새로운 내용을 이해하는 기반 자체가 무너지고 있음을 시사한다.</p>'
++'<p>이런 상황에서 많은 학생들이 저지르는 실수는 현재 진도에 맞는 내용을 억지로 따라가려 하는 것이다. 이해되지 않은 채로 다음 내용을 공부하면 기억에 아무것도 남지 않고, 공부를 해도 성과가 없다는 허탈감만 쌓인다.</p>'
++'<p>지금 가장 중요한 것은 현재 진도를 잠시 내려놓고, 자신이 이해할 수 있는 가장 기초적인 수준의 내용부터 다시 쌓아가는 것이다. 처음에는 당장의 시험 점수에 반영되지 않더라도, 기초가 다시 세워지기 시작하면 이후의 성장 속도는 확연히 달라진다.</p>'},
+
+{c: myLv==='E'&&trLv==='FLAT'&&stLv==='STABLE',
+ tag:'하위권 장기 정체 – 새로운 접근 필요',
+ text:'<p>하위권에서 편차도 작게 안정적으로 유지되고 있다는 것은, 어떤 의미에서는 지금 하는 방식이 하위권 수준을 유지하는 데 최적화되어 있음을 뜻한다. 즉, 공부를 하고는 있지만 그것이 성장이 아닌 현상 유지에 그치고 있는 상태다.</p>'
++'<p>이 패턴은 대개 학습이 수동적인 형태로만 이루어질 때 나타난다. 수업을 듣고, 필기를 하고, 교과서를 읽고, 문제집을 풀지만 그 모든 과정에서 스스로 생각하고 판단하는 능동적인 학습이 부재한 경우다. 학습이 "하는 행위"에 머물고 "이해하는 과정"으로 나아가지 못하는 것이다.</p>'
++'<p>당장 바꿀 수 있는 가장 단순한 방법은, 오늘 배운 내용을 수업이 끝난 뒤 노트를 덮고 핵심 개념을 스스로 말로 설명해보는 것이다. 말로 설명이 되지 않는다면 아직 완전히 이해하지 못한 것이다. 이 간단한 확인 과정이 지금의 정체를 깨는 가장 강력한 첫 번째 습관이 될 수 있다.</p>'},
+
+{c: myLv==='E'&&stLv==='UNSTABLE'&&n>=4,
+ tag:'하위권 – 불안정하고 예측 불가',
+ text:'<p>하위권 성적에 더해 시험마다 점수가 크게 오르내리는 매우 불안정한 패턴이다. 이런 불규칙성은 학습 자체보다 시험에 임하는 태도나 컨디션의 영향을 과도하게 받고 있음을 시사한다.</p>'
++'<p>어떤 날은 갑자기 집중이 잘 되어 점수가 오르고, 어떤 날은 시험 자체에 대한 의욕이 낮거나 준비 부족으로 점수가 급락하는 사이클이 반복되는 패턴일 가능성이 높다. 실력이 일정 수준 이하에서 형성되면 컨디션과 준비 상태의 영향을 훨씬 더 크게 받는다.</p>'
++'<p>가장 우선해야 할 것은 점수를 올리는 것보다 점수를 안정화하는 것이다. 매 시험에서 최소한의 준비 기준선을 정해두고 그것만큼은 반드시 지키는 연습이 필요하다. 예를 들어 시험 이틀 전에는 반드시 핵심 개념 정리를 완료하는 등의 구체적인 최소 루틴을 만들어야 한다.</p>'},
+
+/* ────────── F등급 (88 미만) ────────── */
+{c: myLv==='F'&&trLv==='UP',
+ tag:'최하위권 – 상승 신호, 지금이 전환점',
+ text:'<p>표준점수 평균은 현재 최하위권에 해당하지만, 최근 상승 추세가 감지되고 있다는 점이 중요하다. 이 수준에서 상승 흐름이 나타난다는 것은 작은 변화에서 시작된 것이더라도, 그 방향이 올바르다는 신호다.</p>'
++'<p>최하위권에서 반등이 시작될 때 가장 많이 하는 실수는 지금의 흐름에 과도하게 고무되어 갑자기 모든 것을 다 잘하려 하는 것이다. 욕심을 내면 집중이 분산되고, 어느 것도 제대로 익히지 못하는 결과로 이어진다.</p>'
++'<p>지금은 단 하나만 집중해야 한다. 지금 가장 자신 없는 단원 한 개를 정하고, 그것만 완전히 이해할 때까지 반복하는 것이다. 한 단원이 완벽히 이해되는 경험은 자신감이 되고, 그 자신감이 다음 단원을 공부하는 에너지가 된다.</p>'},
+
+{c: myLv==='F'&&trLv==='FLAT',
+ tag:'최하위권 – 오랜 정체, 근본적 전환 필요',
+ text:'<p>최하위권 수준에서 오랜 기간 거의 변화 없이 유지되고 있다. 지금까지의 학습 방식으로는 이 구간을 벗어나기가 매우 어렵다는 것을 데이터가 보여주고 있다.</p>'
++'<p>이 구간에서 오래 머무는 학생들의 공통된 문제는 공부하는 시간이 실제로는 매우 적거나, 공부는 하지만 집중 없이 시간만 채우는 방식으로 이루어지고 있다는 것이다. 또한 기초 개념 이해 없이 문제 풀이를 시도하다 막히면 그냥 넘기는 패턴이 반복될 가능성이 높다.</p>'
++'<p>지금 해야 할 것은 하루에 딱 한 가지, 이해할 수 있는 가장 쉬운 내용을 골라 완전히 이해하고 잠드는 것이다. 거창한 계획이 아니라 매일 한 가지의 성공 경험이 이 상황을 바꾸는 유일한 방법이다.</p>'},
+
+{c: myLv==='F'&&(trLv==='DOWN'||trLv==='SDOWN'),
+ tag:'최하위권 – 지속 하락, 즉각 개입 필요',
+ text:'<p>최하위권에서 추가적인 하락이 계속되고 있다. 이는 매우 심각한 신호로, 지금 학습 구조 전체에 대한 근본적인 점검이 필요한 상황이다.</p>'
++'<p>지금 이 수준의 하락이 지속되는 경우, 학습 자체보다 학습에 임하는 심리적 상태가 더 큰 문제일 가능성이 있다. 반복된 낮은 점수로 인해 "어차피 해도 안 된다"는 무력감이 형성되어, 실제로 공부 자체에 투자하는 에너지가 점점 줄어드는 악순환이 발생하고 있을 수 있다.</p>'
++'<p>이 상황을 바꾸기 위해서는 성적 향상을 목표로 삼는 것을 잠시 내려놓고, 단 하나라도 완벽하게 이해해서 맞히는 경험을 만드는 것이 우선이다. 그 경험 하나가 "나도 할 수 있다"는 심리적 전환의 씨앗이 된다. 가장 쉬운 문제 유형을 찾아 그것만 집중하자.</p>'},
+
+/* ────────── 특수 패턴 ────────── */
+{c: stLv==='UNSTABLE'&&ssRange>=35&&n>=4,
+ tag:'극단적 기복 – 실력의 불균형',
+ text:'<p>표준점수의 최고점과 최저점 차이가 35점 이상에 달한다. 이는 단순한 기복이 아니라 실력이 매우 불균형하게 형성되어 있음을 의미한다. 잘 볼 때와 못 볼 때의 차이가 너무 크면, 평균 점수가 높더라도 실제 시험에서 무엇이 나올지 예측이 불가능해진다.</p>'
++'<p>이런 극단적인 기복은 보통 특정 유형이나 단원에만 지나치게 강하고, 나머지 부분은 크게 취약한 학습의 불균형에서 비롯된다. 어떤 시험에서 강점 단원이 많이 나오면 급등하고, 취약 단원이 많이 나오면 급락하는 패턴이 이를 만든다.</p>'
++'<p>가장 시급한 것은 본인의 가장 취약한 단원 2~3개를 파악하고, 다음 시험까지 그 단원들에 집중적으로 시간을 배분하는 것이다. 강점을 더 강화하는 것보다, 취약점을 보통 수준까지 끌어올리는 것이 평균 점수를 안정적으로 높이는 가장 확실한 방법이다.</p>'},
+
+{c: mxLv==='hard'&&trLv==='DOWN'&&crLv==='NEG',
+ tag:'시험 난이도 상승 중 – 적응 실패',
+ text:'<p>최근 시험들이 점점 어려워지는 상황에서, 이 학생의 점수는 반대로 하락하고 있다. 이는 시험 환경의 변화에 학습 방식이 따라가지 못하고 있음을 의미한다.</p>'
++'<p>시험이 어려워졌을 때 점수가 하락하는 학생들은 대개 기본 개념은 알지만 그것을 변형된 문제나 낯선 상황에 적용하는 훈련이 부족한 경우다. 단순히 정답을 맞히는 것을 목표로 공부했을 가능성이 있으며, "왜 이 풀이 방식이 맞는가"에 대한 이해 없이 풀이 과정만 암기하는 방식의 학습이 이어졌을 수 있다.</p>'
++'<p>지금부터는 문제를 풀 때마다 "이 개념의 어떤 원리가 이 문제에 적용됐는가"를 한 줄로 써보는 습관을 만들어야 한다. 이 한 가지 습관이 단순 암기를 진짜 이해로 전환하는 결정적인 방법이다.</p>'},
+
+{c: rcLv==='BIG_UP'&&l3Up&&myLv!=='S'&&myLv!=='A',
+ tag:'최근 급격한 도약 – 전략 교체 성공',
+ text:'<p>전체 평균은 아직 상위권이 아니지만, 최근 단기간에 매우 큰 폭의 상승이 이루어지고 있다. 이 정도의 단기 변화는 단순히 열심히 한 것만으로는 설명되지 않는다. 공부 방법 자체에 매우 긍정적인 변화가 있었을 가능성이 높다.</p>'
++'<p>흔히 이런 급격한 상승은 오답을 철저히 분석하기 시작했거나, 개념을 이해하지 못한 채 넘어가던 습관을 바꾸었거나, 문제 풀이 후 왜 맞았는지·왜 틀렸는지를 확인하는 과정이 생겼을 때 나타난다.</p>'
++'<p>이 급상승을 유지하려면 지금 하고 있는 방식을 성급하게 바꾸지 않는 것이 핵심이다. 성과가 눈에 보이기 시작하면 다른 방법을 시도하고 싶은 충동이 생기는데, 지금은 그 충동을 억제하고 현재 방식을 더 정교하게 다듬는 데 집중해야 한다.</p>'},
+
+{c: rcLv==='BIG_DOWN'&&l3Down&&myLv!=='F',
+ tag:'최근 급격한 하락 – 원인 파악이 최우선',
+ text:'<p>최근 단기간에 눈에 띄는 점수 하락이 연속으로 나타나고 있다. 이 수준의 단기 하락은 반드시 특정한 원인이 있다. 단순히 "갑자기 어려워진 것"이 아니라, 학습 과정 내에서 무언가 달라진 것이 있다.</p>'
++'<p>가장 흔한 원인은 세 가지다. 첫째, 이전에 이해했다고 생각했던 개념들의 빈틈이 난이도 상승과 함께 드러나는 경우. 둘째, 다른 일이나 과목에 에너지가 분산되어 이 과목에 투자하는 집중 시간이 줄어든 경우. 셋째, 최근 시험의 출제 경향이 변화했는데 그에 대응하지 못한 경우.</p>'
++'<p>먼저 최근 3회 시험의 오답을 모두 꺼내 놓고, 어느 단원과 어느 유형에서 집중적으로 틀리고 있는지를 파악하는 것이 첫 번째 할 일이다. 패턴이 보인다면 그것이 원인이고, 패턴이 없다면 전반적인 학습 시간 감소가 문제일 가능성이 높다.</p>'},
+
+{c: crLv==='STRONG_POS'&&mxLv==='hard'&&myLv==='C',
+ tag:'어려운 시험에서 빛나는 숨은 실력',
+ text:'<p>전체 평균은 반 평균 수준이지만, 시험 난이도가 높을 때 상대적으로 선전하는 독특한 패턴이 관찰된다. 이는 기본 문제에서의 실수는 많지만, 어려운 문제를 풀 때의 집중력과 사고력이 오히려 높다는 것을 의미한다.</p>'
++'<p>이런 패턴을 보이는 학생들은 대개 깊이 생각하는 것은 잘하지만 쉬운 문제에서 방심하거나 빠르게 넘어가다 실수하는 경향이 있다. 쉬운 문제를 대할 때 오히려 집중력이 떨어지고, 어려운 문제에서 진지해지는 유형이다.</p>'
++'<p>가장 빠르게 점수를 높이는 방법은 어려운 문제를 더 잘 푸는 것이 아니라, 쉬운 문제에서의 실수를 줄이는 것이다. 시험에서 쉬운 문제를 풀 때도 어려운 문제를 풀 듯이 꼼꼼하게 한 번 더 확인하는 습관을 만드는 것만으로도 점수가 크게 오를 수 있다.</p>'},
+
+{c: n>=2,
+ tag:'종합 분석',
+ text:'<p>현재까지의 데이터를 바탕으로 학습 방향을 점검할 필요가 있다. 매 시험 이후 오답 원인을 파악하고 취약한 개념을 보완하는 습관을 지속할 것을 권한다. 꾸준함이 가장 강력한 무기다.</p>'}
   ];
+
   for(var i=0;i<rules.length;i++){
-    if(rules[i].c) return {tag:rules[i].tag,text:rules[i].text,myAvg:myAvg,maxAvg:maxAvg,myStd:myStd,n:n};
+    if(rules[i].c) return {tag:rules[i].tag, text:rules[i].text, myAvg:ssAvg, maxAvg:maxAvg, myStd:ssStd, n:n};
   }
   return null;
 }
 
-function renderComment(result,isMobile){
+function renderComment(result, mobile){
   if(!result) return '';
-  if(isMobile){
-    return '<div class="m-comment-card"><div class="m-comment-title">AI 성적 분석</div><div class="m-comment-badge"><span>'+result.tag+'</span></div><div class="m-comment-text">'+result.text+'</div><div class="m-comment-meta"><span>분석 기준: '+result.n+'회 시험</span><span>표준점수 평균: '+result.myAvg.toFixed(1)+'</span><span>만점 평균: '+result.maxAvg.toFixed(1)+'</span></div></div>';
-  } else {
-    return '<div class="p-comment-card"><div class="p-comment-title">AI 성적 분석</div><div class="p-comment-badge"><span>'+result.tag+'</span></div><div class="p-comment-text">'+result.text+'</div><div class="p-comment-meta"><span>분석 기준: '+result.n+'회 시험</span><span>표준점수 평균: '+result.myAvg.toFixed(1)+'</span><span>만점 평균: '+result.maxAvg.toFixed(1)+'</span></div></div>';
+  if(mobile){
+    return '<div class="m-comment-card">'
+      +'<div class="m-comment-label">AI 성적 분석</div>'
+      +'<div class="m-comment-tag"><span>'+esc(result.tag)+'</span></div>'
+      +'<div class="m-comment-body">'+result.text+'</div>'
+      +'<div class="m-comment-meta">'
+      +'<span>분석 기준: '+result.n+'회</span>'
+      +'<span>표준점수 평균: '+result.myAvg.toFixed(1)+'</span>'
+      +'<span>표준편차: '+result.myStd.toFixed(1)+'</span>'
+      +'</div></div>';
   }
+  return '<div class="comment-card">'
+    +'<div class="comment-label">AI 성적 분석</div>'
+    +'<div class="comment-tag"><span>'+esc(result.tag)+'</span></div>'
+    +'<div class="comment-body">'+result.text+'</div>'
+    +'<div class="comment-meta">'
+    +'<span>분석 기준: '+result.n+'회 시험</span>'
+    +'<span>표준점수 평균: '+result.myAvg.toFixed(1)+'</span>'
+    +'<span>표준편차: '+result.myStd.toFixed(1)+'</span>'
+    +'<span>만점 표준점수 평균: '+result.maxAvg.toFixed(1)+'</span>'
+    +'</div></div>';
 }
 
+/* ════════════════════════════════════════
+   학생 대시보드 렌더
+════════════════════════════════════════ */
 function showDash(){
-  var ms=D.chartData.map(function(x){return x.myScore;}).filter(function(v){return v!==null&&!isNaN(+v);});
-  var cs=D.chartData.map(function(x){return x.classAvg;}).filter(function(v){return v!==null&&!isNaN(+v);});
-  var ps=D.chartData.map(function(x){return x.percentile;}).filter(function(v){return v!==null&&!isNaN(+v);});
-  var b=ms.length?Math.max.apply(null,ms):NaN;
-  var sA=isNaN(avg(ms))?'-':avg(ms).toFixed(2);
-  var sC=isNaN(avg(cs))?'-':avg(cs).toFixed(2);
-  var sB=isNaN(b)?'-':b;
-  var sP=isNaN(avg(ps))?'-':Math.round(avg(ps))+'%';
-  var commentResult=analyzeAndComment(D.chartData);
-
-  // 반 변경 버튼: 반이 2개 이상일 때만 표시
-  var multiClass = RAW && RAW.matchedRows.map(function(r){return String(r[2]||'').trim();}).filter(function(v,i,a){return a.indexOf(v)===i;}).length>=2;
+  var ms = D.chartData.map(function(x){return x.myScore;}).filter(function(v){return v!==null&&!isNaN(+v);});
+  var cs = D.chartData.map(function(x){return x.classAvg;}).filter(function(v){return v!==null&&!isNaN(+v);});
+  var ps = D.chartData.map(function(x){return x.percentile;}).filter(function(v){return v!==null&&!isNaN(+v);});
+  var b  = ms.length ? Math.max.apply(null,ms) : NaN;
+  var sA = isNaN(avg(ms))?'-':avg(ms).toFixed(2);
+  var sC = isNaN(avg(cs))?'-':avg(cs).toFixed(2);
+  var sB = isNaN(b)?'-':b;
+  var sP = isNaN(avg(ps))?'-':Math.round(avg(ps))+'%';
+  var cr = analyzeAndComment(D.chartData);
+  var multi = RAW&&RAW.matchedRows.map(function(r){return String(r[2]||'').trim();})
+    .filter(function(v,i,a){return a.indexOf(v)===i;}).length>=2;
 
   if(IS_MOBILE){
-    document.getElementById('m-uname').textContent=D.studentName+'님';
-    document.getElementById('m-ucls').textContent=D.studentClass+' 반';
-    document.getElementById('m-sA').textContent=sA;
-    document.getElementById('m-sC').textContent=sC;
-    document.getElementById('m-sB').textContent=sB;
-    document.getElementById('m-sP').textContent=sP;
-    document.getElementById('m-btn-switch').style.display=multiClass?'':'none';
-    document.getElementById('m-comment-wrap').innerHTML=renderComment(commentResult,true);
+    document.getElementById('m-uname').textContent = D.studentName;
+    document.getElementById('m-ucls').textContent  = D.studentClass;
+    document.getElementById('m-sA').textContent = sA;
+    document.getElementById('m-sC').textContent = sC;
+    document.getElementById('m-sB').textContent = sB;
+    document.getElementById('m-sP').textContent = sP;
+    document.getElementById('m-btn-switch').style.display = multi?'':'none';
+    document.getElementById('m-comment-wrap').innerHTML  = renderComment(cr, true);
     show('mDash');
     requestAnimationFrame(function(){mDraw0();mDraw1();mDraw2();});
   } else {
-    document.getElementById('p-uname').textContent=D.studentName+'님';
-    document.getElementById('p-ucls').textContent=D.studentClass+' 반';
-    document.getElementById('p-sA').textContent=sA;
-    document.getElementById('p-sC').textContent=sC;
-    document.getElementById('p-sB').textContent=sB;
-    document.getElementById('p-sP').textContent=sP;
-    document.getElementById('p-btn-switch').style.display=multiClass?'':'none';
-    document.getElementById('p-comment-wrap').innerHTML=renderComment(commentResult,false);
+    document.getElementById('p-uname').textContent = D.studentName;
+    document.getElementById('p-ucls').textContent  = D.studentClass;
+    document.getElementById('p-sA').textContent = sA;
+    document.getElementById('p-sC').textContent = sC;
+    document.getElementById('p-sB').textContent = sB;
+    document.getElementById('p-sP').textContent = sP;
+    document.getElementById('p-btn-switch').style.display = multi?'':'none';
+    document.getElementById('p-comment-wrap').innerHTML  = renderComment(cr, false);
     show('pDash');
     requestAnimationFrame(function(){pDraw0();pDraw1();pDraw2();});
   }
@@ -678,46 +1548,53 @@ function pTab(n,btn){
   document.getElementById('pp'+n).style.display='block';btn.className='p-tab on';
   setTimeout(function(){if(PCH[n])PCH[n].resize();},60);
 }
-function killCH(ch){[0,1,2].forEach(function(k){if(ch[k]){ch[k].destroy();delete ch[k];}});}
+function killCH(ch){ [0,1,2].forEach(function(k){if(ch[k]){ch[k].destroy();delete ch[k];}}); }
+
+/* ════════════════════════════════════════
+   차트 그리기
+════════════════════════════════════════ */
+function gc(){ return isDark()?'rgba(255,255,255,0.05)':'rgba(0,0,0,0.06)'; }
+function tc(){ return isDark()?'#5a5f7a':'#9ca3af'; }
+function avgColor(){ return isDark()?'#3a3f60':'#c0c6d8'; }
 
 function baseOpts(yLbl,yMin,yMax,rev,fs){
   fs=fs||11;
-  var o={responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
-    plugins:{legend:{display:false},tooltip:{backgroundColor:'rgba(18,22,40,0.97)',borderColor:'rgba(255,255,255,0.08)',borderWidth:1,titleColor:'#f0f2fc',bodyColor:'#7a7f9a',padding:12,cornerRadius:10,titleFont:{size:fs+1,weight:'700'},bodyFont:{size:fs}}},
+  return {responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+    plugins:{legend:{display:false},tooltip:{
+      backgroundColor:isDark()?'rgba(15,17,23,.97)':'rgba(255,255,255,.97)',
+      borderColor:isDark()?'rgba(255,255,255,.08)':'rgba(0,0,0,.10)',borderWidth:1,
+      titleColor:isDark()?'#f0f2fc':'#1a1d2e',bodyColor:isDark()?'#7a7f9a':'#6b7280',
+      padding:11,cornerRadius:9,titleFont:{size:fs+1,weight:'800'},bodyFont:{size:fs}}},
     scales:{
-      x:{grid:{color:'rgba(255,255,255,0.04)',drawBorder:false},border:{display:false},ticks:{font:{size:fs},maxRotation:40,minRotation:0,color:'#5a5f7a',maxTicksLimit:8}},
-      y:{reverse:!!rev,grid:{color:'rgba(255,255,255,0.04)',drawBorder:false},border:{display:false},ticks:{font:{size:fs},color:'#5a5f7a'},title:yLbl?{display:true,text:yLbl,font:{size:fs},color:'#5a5f7a'}:{display:false}}
-    }
-  };
-  if(yMin!=null)o.scales.y.min=yMin;
-  if(yMax!=null)o.scales.y.max=yMax;
-  return o;
+      x:{grid:{color:gc()},border:{display:false},ticks:{font:{size:fs},color:tc(),maxRotation:40,minRotation:0,maxTicksLimit:9}},
+      y:{reverse:!!rev,grid:{color:gc()},border:{display:false},ticks:{font:{size:fs},color:tc()},
+        title:yLbl?{display:true,text:yLbl,font:{size:fs},color:tc()}:{display:false},
+        ...(yMin!=null?{min:yMin}:{}), ...(yMax!=null?{max:yMax}:{}) }
+    }};
 }
-function makeScore(ctx,h,lb,my,cl,chObj,key,fs){
-  if(chObj[key])chObj[key].destroy();
-  var g=ctx.createLinearGradient(0,0,0,h);g.addColorStop(0,'rgba(232,57,77,0.18)');g.addColorStop(1,'rgba(232,57,77,0)');
+
+function makeScore(ctx,h,lb,my,cl,ch,key,fs){
+  if(ch[key])ch[key].destroy();
+  var g=ctx.createLinearGradient(0,0,0,h);g.addColorStop(0,'rgba(217,50,72,.18)');g.addColorStop(1,'rgba(217,50,72,0)');
   var o=baseOpts('점수',0,null,false,fs);
   o.plugins.tooltip.callbacks={label:function(i){var v=i.parsed.y;return(v===null||v===undefined)?' '+i.dataset.label+': 결석':' '+i.dataset.label+': '+v+'점';}};
-  chObj[key]=new Chart(ctx,{type:'line',data:{labels:lb,datasets:[
-    {label:'내 점수',data:my,borderColor:'#e8394d',backgroundColor:g,borderWidth:2.5,pointRadius:4,pointHoverRadius:6,pointBackgroundColor:'#e8394d',pointBorderColor:'#0f1117',pointBorderWidth:2,tension:0.35,spanGaps:true,fill:true},
-    {label:'반 평균',data:cl,borderColor:'#3a3f60',backgroundColor:'transparent',borderWidth:2,pointRadius:3,pointHoverRadius:5,pointBackgroundColor:'#3a3f60',pointBorderColor:'#0f1117',pointBorderWidth:1,tension:0.35,spanGaps:true,borderDash:[5,3]}
+  ch[key]=new Chart(ctx,{type:'line',data:{labels:lb,datasets:[
+    {label:'내 점수',data:my,borderColor:'#d93248',backgroundColor:g,borderWidth:2.5,pointRadius:4,pointHoverRadius:6,pointBackgroundColor:'#d93248',pointBorderColor:'transparent',tension:.35,spanGaps:true,fill:true},
+    {label:'반 평균',data:cl,borderColor:avgColor(),backgroundColor:'transparent',borderWidth:2,pointRadius:3,pointHoverRadius:5,pointBackgroundColor:avgColor(),pointBorderColor:'transparent',tension:.35,spanGaps:true,borderDash:[5,3]}
   ]},options:o});
 }
-function makePct(ctx,h,lb,pc,chObj,key,fs){
-  if(chObj[key])chObj[key].destroy();
-  var g=ctx.createLinearGradient(0,0,0,h);g.addColorStop(0,'rgba(108,124,224,0.22)');g.addColorStop(1,'rgba(108,124,224,0)');
+function makePct(ctx,h,lb,pc,ch,key,fs){
+  if(ch[key])ch[key].destroy();
+  var g=ctx.createLinearGradient(0,0,0,h);g.addColorStop(0,'rgba(79,95,196,.2)');g.addColorStop(1,'rgba(79,95,196,0)');
   var o=baseOpts('순위(%)',0,100,true,fs);
-  o.scales.y.ticks={font:{size:fs},color:'#5a5f7a',callback:function(v){return v+'%';}};
-  o.plugins.tooltip.callbacks={label:function(i){var v=i.parsed.y;if(v===null||isNaN(v))return ' 결석';return ' 순위: '+(v===0?'1등 (최상위)':v+'%');}};
-  chObj[key]=new Chart(ctx,{type:'line',data:{labels:lb,datasets:[
-    {label:'순위',data:pc,borderColor:'#6c7ce0',backgroundColor:g,borderWidth:2.5,pointRadius:4,pointHoverRadius:6,pointBackgroundColor:'#6c7ce0',pointBorderColor:'#0f1117',pointBorderWidth:2,tension:0.35,fill:true,spanGaps:true}
+  o.scales.y.ticks={font:{size:fs},color:tc(),callback:function(v){return v+'%';}};
+  o.plugins.tooltip.callbacks={label:function(i){var v=i.parsed.y;if(v===null||isNaN(v))return ' 결석';return ' 순위: '+(v===0?'1등':v+'%');}};
+  ch[key]=new Chart(ctx,{type:'line',data:{labels:lb,datasets:[
+    {label:'순위',data:pc,borderColor:isDark()?'#6c7ce0':'#4f5fc4',backgroundColor:g,borderWidth:2.5,pointRadius:4,pointHoverRadius:6,pointBackgroundColor:isDark()?'#6c7ce0':'#4f5fc4',pointBorderColor:'transparent',tension:.35,fill:true,spanGaps:true}
   ]},options:o});
 }
-function makeStd(ctx,lb,vd,chObj,key,fs){
-  if(chObj[key])chObj[key].destroy();
-  var my=vd.map(function(x){return x.standardScore;});
-  var mx=vd.map(function(x){return x.maxStandardScore;});
-  var bl=vd.map(function(){return 100;});
+function makeStd(ctx,lb,vd,ch,key,fs){
+  if(ch[key])ch[key].destroy();
   var o=baseOpts('표준점수',null,null,false,fs);
   o.plugins.tooltip.callbacks={
     title:function(it){return vd[it[0].dataIndex].date;},
@@ -725,18 +1602,19 @@ function makeStd(ctx,lb,vd,chObj,key,fs){
     afterBody:function(it){var inf=vd[it[0].dataIndex];return[' ────────',' 반 평균: '+inf.mean+'점',' 표준편차: '+inf.stdDev];},
     filter:function(i){return i.dataset.label!=='기준선';}
   };
-  chObj[key]=new Chart(ctx,{type:'line',data:{labels:lb,datasets:[
-    {label:'내 표준점수',data:my,borderColor:'#e8394d',backgroundColor:'rgba(232,57,77,0.07)',borderWidth:2.5,pointRadius:4,pointHoverRadius:6,pointBackgroundColor:'#e8394d',pointBorderColor:'#0f1117',pointBorderWidth:2,tension:0.35,spanGaps:true,fill:false,order:1},
-    {label:'만점 표준점수',data:mx,borderColor:'#f5a623',backgroundColor:'transparent',borderWidth:1.8,pointRadius:3,pointHoverRadius:5,pointBackgroundColor:'#f5a623',pointBorderColor:'#0f1117',pointBorderWidth:1,tension:0.35,spanGaps:true,borderDash:[5,3],order:2},
-    {label:'기준선',data:bl,borderColor:'rgba(255,255,255,0.1)',backgroundColor:'transparent',borderWidth:1,pointRadius:0,tension:0,borderDash:[2,6],order:3}
+  ch[key]=new Chart(ctx,{type:'line',data:{labels:lb,datasets:[
+    {label:'내 표준점수',data:vd.map(function(x){return x.standardScore;}),borderColor:'#d93248',backgroundColor:'rgba(217,50,72,.07)',borderWidth:2.5,pointRadius:4,pointHoverRadius:6,pointBackgroundColor:'#d93248',pointBorderColor:'transparent',tension:.35,spanGaps:true,fill:false},
+    {label:'만점 표준점수',data:vd.map(function(x){return x.maxStandardScore;}),borderColor:isDark()?'#f5a623':'#e08c00',backgroundColor:'transparent',borderWidth:1.8,pointRadius:3,pointHoverRadius:5,pointBackgroundColor:isDark()?'#f5a623':'#e08c00',pointBorderColor:'transparent',tension:.35,spanGaps:true,borderDash:[5,3]},
+    {label:'기준선',data:vd.map(function(){return 100;}),borderColor:isDark()?'rgba(255,255,255,.1)':'rgba(0,0,0,.1)',backgroundColor:'transparent',borderWidth:1,pointRadius:0,tension:0,borderDash:[2,6]}
   ]},options:o});
 }
-function mDraw0(){var lb=D.chartData.map(function(x){return x.date.slice(5);});var my=D.chartData.map(function(x){return x.myScore;});var cl=D.chartData.map(function(x){return x.classAvg;});var c=document.getElementById('mc0');makeScore(c.getContext('2d'),c.parentElement.offsetHeight||200,lb,my,cl,MCH,0,10);}
-function mDraw1(){var lb=D.chartData.map(function(x){return x.date.slice(5);});var pc=D.chartData.map(function(x){return x.percentile;});var c=document.getElementById('mc1');makePct(c.getContext('2d'),c.parentElement.offsetHeight||200,lb,pc,MCH,1,10);}
-function mDraw2(){var vd=D.chartData.filter(function(x){return x.stdDev>=0.01;});if(!vd.length)return;var lb=vd.map(function(x){return x.date.slice(5);});makeStd(document.getElementById('mc2').getContext('2d'),lb,vd,MCH,2,10);}
-function pDraw0(){var lb=D.chartData.map(function(x){return x.date.slice(5);});var my=D.chartData.map(function(x){return x.myScore;});var cl=D.chartData.map(function(x){return x.classAvg;});var c=document.getElementById('pc0');makeScore(c.getContext('2d'),c.parentElement.offsetHeight||300,lb,my,cl,PCH,0,12);}
-function pDraw1(){var lb=D.chartData.map(function(x){return x.date.slice(5);});var pc=D.chartData.map(function(x){return x.percentile;});var c=document.getElementById('pc1');makePct(c.getContext('2d'),c.parentElement.offsetHeight||300,lb,pc,PCH,1,12);}
-function pDraw2(){var vd=D.chartData.filter(function(x){return x.stdDev>=0.01;});if(!vd.length)return;var lb=vd.map(function(x){return x.date.slice(5);});makeStd(document.getElementById('pc2').getContext('2d'),lb,vd,PCH,2,12);}
+
+function mDraw0(){var lb=D.chartData.map(function(x){return shortDate(x.date);});var c=document.getElementById('mc0');makeScore(c.getContext('2d'),c.parentElement.offsetHeight||200,lb,D.chartData.map(function(x){return x.myScore;}),D.chartData.map(function(x){return x.classAvg;}),MCH,0,10);}
+function mDraw1(){var lb=D.chartData.map(function(x){return shortDate(x.date);});var c=document.getElementById('mc1');makePct(c.getContext('2d'),c.parentElement.offsetHeight||200,lb,D.chartData.map(function(x){return x.percentile;}),MCH,1,10);}
+function mDraw2(){var vd=D.chartData.filter(function(x){return x.stdDev>=0.01;});if(!vd.length)return;makeStd(document.getElementById('mc2').getContext('2d'),vd.map(function(x){return shortDate(x.date);}),vd,MCH,2,10);}
+function pDraw0(){var lb=D.chartData.map(function(x){return shortDate(x.date);});var c=document.getElementById('pc0');makeScore(c.getContext('2d'),c.parentElement.offsetHeight||300,lb,D.chartData.map(function(x){return x.myScore;}),D.chartData.map(function(x){return x.classAvg;}),PCH,0,12);}
+function pDraw1(){var lb=D.chartData.map(function(x){return shortDate(x.date);});var c=document.getElementById('pc1');makePct(c.getContext('2d'),c.parentElement.offsetHeight||300,lb,D.chartData.map(function(x){return x.percentile;}),PCH,1,12);}
+function pDraw2(){var vd=D.chartData.filter(function(x){return x.stdDev>=0.01;});if(!vd.length)return;makeStd(document.getElementById('pc2').getContext('2d'),vd.map(function(x){return shortDate(x.date);}),vd,PCH,2,12);}
 </script>
 </body>
 </html>
